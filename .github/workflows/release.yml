@@ -147,49 +147,49 @@ jobs:
             devOopsGitHubReleaseUploadArtifacts
 
 
-  publish-snapshot:
-    needs: build
-    if: startsWith(github.ref, 'refs/heads/')
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2.3.4
-        with:
-          fetch-depth: 0
-      - uses: olafurpg/setup-scala@v10
-        with:
-          java-version: ${{ env.GH_JAVA_VERSION }}
-      - uses: olafurpg/setup-gpg@v3
-
-      - name: Cache SBT
-        uses: actions/cache@v2.1.5
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.cache/coursier
-            ~/.sbt
-          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-sbt
-
-      - name: "sbt ci-release (no tag) - ${{ github.run_number }}"
-        if: startsWith(github.ref, 'refs/heads/')
-        env:
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
-        run: |
-          echo "Run] sbt ci-release"
-          export SOURCE_DATE_EPOCH=$(date +%s)
-          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
-          echo "JVM_OPTS=${JVM_OPTS}"
-          echo "SBT_OPTS=${SBT_OPTS}"
-          echo 'sbt -v clean +packagedArtifacts ci-release'
-          sbt \
-            -v \
-            clean \
-            +packagedArtifacts \
-            ci-release
+#  publish-snapshot:
+#    needs: build
+#    if: startsWith(github.ref, 'refs/heads/')
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2.3.4
+#        with:
+#          fetch-depth: 0
+#      - uses: olafurpg/setup-scala@v10
+#        with:
+#          java-version: ${{ env.GH_JAVA_VERSION }}
+#      - uses: olafurpg/setup-gpg@v3
+#
+#      - name: Cache SBT
+#        uses: actions/cache@v2.1.5
+#        with:
+#          path: |
+#            ~/.ivy2/cache
+#            ~/.cache/coursier
+#            ~/.sbt
+#          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-sbt
+#
+#      - name: "sbt ci-release (no tag) - ${{ github.run_number }}"
+#        if: startsWith(github.ref, 'refs/heads/')
+#        env:
+#          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+#          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+#          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+#          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+#          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
+#        run: |
+#          echo "Run] sbt ci-release"
+#          export SOURCE_DATE_EPOCH=$(date +%s)
+#          echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
+#          echo "JVM_OPTS=${JVM_OPTS}"
+#          echo "SBT_OPTS=${SBT_OPTS}"
+#          echo 'sbt -v clean +packagedArtifacts ci-release'
+#          sbt \
+#            -v \
+#            clean \
+#            +packagedArtifacts \
+#            ci-release
