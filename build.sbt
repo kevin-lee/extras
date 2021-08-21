@@ -1,15 +1,28 @@
 ThisBuild / scalaVersion       := props.ProjectScalaVersion
 ThisBuild / organization       := props.Org
 ThisBuild / crossScalaVersions := props.CrossScalaVersions
+ThisBuild / testFrameworks ~=
+  (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct)
 
 lazy val extras = (project in file("."))
   .settings(
     name                := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
-  .aggregate(catsExtra)
+  .aggregate(extrasConcurrent, extrasConcurrentTesting, extrasCats)
 
-lazy val catsExtra = subProject("cats", "cats")
+lazy val extrasConcurrent = subProject("concurrent")
+  .settings(
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+  )
+
+lazy val extrasConcurrentTesting = subProject("concurrent-testing")
+  .settings(
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+  )
+  .dependsOn(extrasConcurrent)
+
+lazy val extrasCats = subProject("cats")
   .settings(
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.catsLatest, libs.catsEffectLatest % Test)
@@ -20,16 +33,19 @@ lazy val catsExtra = subProject("cats", "cats")
                              }) ++ libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
+  .dependsOn(extrasConcurrentTesting % Test)
 
 // scalafmt: off
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
 // scalafmt: on
 
-def subProject(id: String, projectName: String): Project = {
+def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
-  Project(id, file(prefixedName))
+  Project(projectName, file(prefixedName))
     .settings(
       name := prefixedName,
+      testFrameworks ~=
+        (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
     )
 }
 
