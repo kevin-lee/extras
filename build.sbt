@@ -4,7 +4,8 @@ ThisBuild / crossScalaVersions := props.CrossScalaVersions
 
 lazy val catsExtra = (project in file("."))
   .settings(
-    name := props.RepoName
+    name                := props.RepoName,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .aggregate(core)
 
@@ -17,15 +18,23 @@ def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "
 def subProject(id: String, projectName: String, file: File): Project =
   Project(id, file)
     .settings(
-      name := prefixedProjectName(projectName),
+      name                := prefixedProjectName(projectName),
       libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                  List(libs.catsLatest)
                                } else if (scalaVersion.value.startsWith("2.11")) {
                                  List(libs.catsOld)
                                } else {
                                  List(libs.cats)
-                               }) ++ libs.hedgehog
+                               }) ++ libs.hedgehog,
+      libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
     )
+
+def removeScala3Incompatible(scalaVersion: String, libraryDependencies: Seq[ModuleID]): Seq[ModuleID] =
+  if (scalaVersion.startsWith("3")) {
+    libraryDependencies.filterNot(props.isScala3Incompatible)
+  } else {
+    libraryDependencies
+  }
 
 lazy val props = new {
 
@@ -36,6 +45,7 @@ lazy val props = new {
   final val Scala2Versions = List(
     "2.13.5",
     "2.12.13",
+    "2.11.12",
   )
   final val Scala2Version  = Scala2Versions.head
 
@@ -52,6 +62,15 @@ lazy val props = new {
   final val Cats2_0_0Version  = "2.0.0"
 
   final val HedgehogVersion = "0.7.0"
+
+  val isScala3Incompatible: ModuleID => Boolean =
+    m =>
+      m.name == "wartremover" ||
+        m.name == "ammonite" ||
+        m.name == "kind-projector" ||
+        m.name == "better-monadic-for" ||
+        m.name == "mdoc"
+
 }
 
 lazy val libs = new {

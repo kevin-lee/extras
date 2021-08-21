@@ -1,0 +1,59 @@
+name: "[Doc][A] Build Only"
+
+#on:
+#  push:
+#    branches:
+#      - "**"
+on:
+  workflow_dispatch:
+
+jobs:
+  build-docusaurus:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        scala:
+          - { version: "2.13.5", binary-version: "2.13", java-version: "adopt@1.11" }
+
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: ${{ matrix.scala.java-version }}
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14.4.0'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Cache SBT
+        uses: actions/cache@v2.1.5
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.cache/coursier
+            ~/.sbt
+          key: ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-
+
+      - name: Cache npm
+        uses: actions/cache@v2.1.5
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Render markdown and build website
+        run: |
+          sbt \
+            ++${{ matrix.scala.version }}! \
+            clean \
+            docs/mdoc \
+            docs/docusaurGenerateAlgoliaConfigFile \
+            docs/docusaurGenerateGoogleAnalyticsConfigFile \
+            docs/docusaurInstall \
+            docs/docusaurCleanBuild \
+            docs/docusaurBuild
