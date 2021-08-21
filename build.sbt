@@ -2,32 +2,36 @@ ThisBuild / scalaVersion       := props.ProjectScalaVersion
 ThisBuild / organization       := props.Org
 ThisBuild / crossScalaVersions := props.CrossScalaVersions
 
-lazy val catsExtra = (project in file("."))
+lazy val extras = (project in file("."))
   .settings(
     name                := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
-  .aggregate(core)
+  .aggregate(catsExtra)
 
-lazy val core = subProject("core", "core", file("core"))
+lazy val catsExtra = subProject("cats", "cats")
+  .settings(
+    libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
+                               List(libs.catsLatest, libs.catsEffectLatest % Test)
+                             } else if (scalaVersion.value.startsWith("2.11")) {
+                               List(libs.catsOld, libs.catsEffectOld % Test)
+                             } else {
+                               List(libs.cats, libs.catsEffect % Test)
+                             }) ++ libs.hedgehog,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+  )
 
 // scalafmt: off
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
 // scalafmt: on
 
-def subProject(id: String, projectName: String, file: File): Project =
-  Project(id, file)
+def subProject(id: String, projectName: String): Project = {
+  val prefixedName = prefixedProjectName(projectName)
+  Project(id, file(prefixedName))
     .settings(
-      name                := prefixedProjectName(projectName),
-      libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
-                                 List(libs.catsLatest)
-                               } else if (scalaVersion.value.startsWith("2.11")) {
-                                 List(libs.catsOld)
-                               } else {
-                                 List(libs.cats)
-                               }) ++ libs.hedgehog,
-      libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+      name := prefixedName,
     )
+}
 
 def removeScala3Incompatible(scalaVersion: String, libraryDependencies: Seq[ModuleID]): Seq[ModuleID] =
   if (scalaVersion.startsWith("3")) {
@@ -40,7 +44,7 @@ lazy val props = new {
 
   final val Org        = "io.kevinlee"
   final val GitHubUser = "Kevin-Lee"
-  final val RepoName   = "cats-extra"
+  final val RepoName   = "extras"
 
   final val Scala2Versions = List(
     "2.13.5",
@@ -52,7 +56,8 @@ lazy val props = new {
   final val Scala3Versions = List("3.0.0")
   final val Scala3Version  = Scala3Versions.head
 
-  final val ProjectScalaVersion = Scala2Version
+//  final val ProjectScalaVersion = Scala2Version
+  final val ProjectScalaVersion = Scala3Version
 
   final val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
@@ -60,6 +65,10 @@ lazy val props = new {
   final val CatsLatestVersion = "2.6.1"
   final val CatsVersion       = "2.3.1"
   final val Cats2_0_0Version  = "2.0.0"
+
+  final val CatsEffectLatestVersion = "3.2.2"
+  final val CatsEffectVersion       = "2.3.1"
+  final val CatsEffect2_0_0Version  = "2.0.0"
 
   final val HedgehogVersion = "0.7.0"
 
@@ -77,6 +86,10 @@ lazy val libs = new {
   lazy val catsLatest = "org.typelevel" %% "cats-core" % props.CatsLatestVersion
   lazy val cats       = "org.typelevel" %% "cats-core" % props.CatsVersion
   lazy val catsOld    = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
+
+  lazy val catsEffectLatest = "org.typelevel" %% "cats-effect" % props.CatsEffectLatestVersion
+  lazy val catsEffect       = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
+  lazy val catsEffectOld    = "org.typelevel" %% "cats-effect" % props.CatsEffect2_0_0Version
 
   lazy val hedgehog = List(
     "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion,

@@ -1,2 +1,2 @@
-# cats-extra
-A few little extra tools for Cats
+# extras
+A few little extra tools
