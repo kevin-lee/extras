@@ -9,6 +9,8 @@ lazy val extras = (project in file("."))
     name                := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
+  .settings(noPublish)
+  .settings(noDoc)
   .aggregate(extrasConcurrent, extrasConcurrentTesting, extrasCats)
 
 lazy val extrasConcurrent = subProject("concurrent")
