@@ -5,4 +5,5 @@ package extras.cats
   */
 package object syntax {
   object either extends EitherSyntax
+  object option extends OptionSyntax
 }
