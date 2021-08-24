@@ -1,10 +1,33 @@
 ThisBuild / scalaVersion       := props.ProjectScalaVersion
 ThisBuild / organization       := props.Org
+ThisBuild / organizationName   := "Kevin's Code"
 ThisBuild / crossScalaVersions := props.CrossScalaVersions
+
 ThisBuild / testFrameworks ~=
   (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct)
 
+ThisBuild / developers := List(
+  Developer(
+    props.GitHubUser,
+    "Kevin Lee",
+    "kevin.code@kevinlee.io",
+    url(s"https://github.com/${props.GitHubUser}"),
+  )
+)
+
+ThisBuild / homepage   := Some(url(s"https://github.com/${props.GitHubUser}/${props.RepoName}"))
+ThisBuild / scmInfo    :=
+  Some(
+    ScmInfo(
+      url(s"https://github.com/${props.GitHubUser}/${props.RepoName}"),
+      s"git@github.com:${props.GitHubUser}/${props.RepoName}.git",
+    )
+  )
+
+ThisBuild / licenses   := props.licenses
+
 lazy val extras = (project in file("."))
+  .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
     name                := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
@@ -24,7 +47,7 @@ lazy val extrasConcurrentTesting = subProject("concurrent-testing")
   )
   .dependsOn(extrasConcurrent)
 
-lazy val extrasCats = subProject("cats")
+lazy val extrasCats                   = subProject("cats")
   .settings(
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.catsLatest, libs.catsEffectLatest % Test)
@@ -63,6 +86,8 @@ lazy val props = new {
   final val Org        = "io.kevinlee"
   final val GitHubUser = "Kevin-Lee"
   final val RepoName   = "extras"
+
+  final val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   final val Scala2Versions = List(
     "2.13.5",
