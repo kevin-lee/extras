@@ -34,7 +34,12 @@ lazy val extras = (project in file("."))
   )
   .settings(noPublish)
   .settings(noDoc)
-  .aggregate(extrasConcurrent, extrasConcurrentTesting, extrasCats)
+  .aggregate(extrasScalaIo, extrasConcurrent, extrasConcurrentTesting, extrasCats)
+
+lazy val extrasScalaIo = subProject("scala-io")
+  .settings(
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+  )
 
 lazy val extrasConcurrent = subProject("concurrent")
   .settings(
@@ -47,7 +52,7 @@ lazy val extrasConcurrentTesting = subProject("concurrent-testing")
   )
   .dependsOn(extrasConcurrent)
 
-lazy val extrasCats                   = subProject("cats")
+lazy val extrasCats = subProject("cats")
   .settings(
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.catsLatest, libs.catsEffectLatest % Test)
@@ -56,11 +61,13 @@ lazy val extrasCats                   = subProject("cats")
                              } else {
                                List(libs.cats, libs.catsEffect % Test)
                              }) ++ libs.hedgehog,
-    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+    libraryDependencies :=
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
   .dependsOn(extrasConcurrentTesting % Test)
 
 // scalafmt: off
+
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
 // scalafmt: on
 
