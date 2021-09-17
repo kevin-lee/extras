@@ -90,9 +90,11 @@ def removeScala3Incompatible(scalaVersion: String, libraryDependencies: Seq[Modu
 
 lazy val props = new {
 
+  private val GitHubRepo = findRepoOrgAndName
+
   final val Org        = "io.kevinlee"
-  final val GitHubUser = "Kevin-Lee"
-  final val RepoName   = "extras"
+  final val GitHubUser = GitHubRepo.fold("Kevin-Lee")(_.orgToString)
+  final val RepoName   = GitHubRepo.fold("extras")(_.nameToString)
 
   final val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
