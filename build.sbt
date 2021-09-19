@@ -38,6 +38,7 @@ lazy val extras = (project in file("."))
 
 lazy val extrasScalaIo = subProject("scala-io")
   .settings(
+    libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
 
