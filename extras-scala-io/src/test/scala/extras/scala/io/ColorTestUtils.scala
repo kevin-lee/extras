@@ -21,7 +21,7 @@ object ColorTestUtils {
     Result.all(results)
   }
 
-  private val colors = List(
+  val colors = List(
     Color.Black      -> AnsiColor.BLACK,
     Color.Red        -> AnsiColor.RED,
     Color.Green      -> AnsiColor.GREEN,
