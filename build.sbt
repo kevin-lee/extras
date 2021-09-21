@@ -39,7 +39,25 @@ lazy val extras = (project in file("."))
 lazy val extrasScalaIo = subProject("scala-io")
   .settings(
     libraryDependencies ++= libs.hedgehog,
-    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    Compile / unmanagedSourceDirectories ++= {
+      val sharedSourceDir = baseDirectory.value / "src/main"
+      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
+        List(
+          sharedSourceDir / "scala-2.11_2.12",
+        )
+      else
+        Seq.empty
+    },
+    Test / unmanagedSourceDirectories ++= {
+      val sharedSourceDir = baseDirectory.value / "src/test"
+      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
+        List(
+          sharedSourceDir / "scala-2.11_2.12",
+        )
+      else
+        Seq.empty
+    },
   )
 
 lazy val extrasConcurrent = subProject("concurrent")
