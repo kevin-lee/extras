@@ -1,11 +1,9 @@
 name: "[Doc][A] Build Only"
 
-#on:
-#  push:
-#    branches:
-#      - "**"
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - "**"
 
 jobs:
   build-docusaurus:

@@ -79,11 +79,42 @@ lazy val extrasCats = subProject("cats")
                                List(libs.catsOld, libs.catsEffectOld % Test)
                              } else {
                                List(libs.cats, libs.catsEffect % Test)
-                             }) ++ libs.hedgehog,
+                             }) ++ libs.hedgehog ++ List("org.slf4j" % "slf4j-api" % "1.7.32")
+    ,
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
   .dependsOn(extrasConcurrentTesting % Test)
+
+lazy val docs       = (project in file("generated-docs"))
+  .enablePlugins(MdocPlugin, DocusaurPlugin)
+  .settings(
+    name                := prefixedProjectName("docs"),
+    mdocIn              := file("docs"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    mdocVariables       := Map(
+      "VERSION"                  -> {
+        import sys.process._
+        "git fetch --tags".!
+        val tag = "git rev-list --tags --max-count=1".!!.trim
+        s"git describe --tags $tag".!!.trim.stripPrefix("v")
+      },
+      "SUPPORTED_SCALA_VERSIONS" -> {
+        val versions = props
+          .CrossScalaVersions
+          .map(CrossVersion.binaryScalaVersion)
+          .map(binVer => s"`$binVer`")
+        if (versions.length > 1)
+          s"${versions.init.mkString(", ")} and ${versions.last}"
+        else
+          versions.mkString
+      },
+    ),
+    docusaurDir         := (ThisBuild / baseDirectory).value / "website",
+    docusaurBuildDir    := docusaurDir.value / "build",
+  )
+  .settings(noPublish)
+  .dependsOn(extrasConcurrent, extrasConcurrentTesting, extrasCats)
 
 // scalafmt: off
 
