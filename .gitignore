@@ -3,7 +3,7 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
-generated-docs/
+generated-docs*/
 
 .history
 .cache
