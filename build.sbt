@@ -79,8 +79,7 @@ lazy val extrasCats = subProject("cats")
                                List(libs.catsOld, libs.catsEffectOld % Test)
                              } else {
                                List(libs.cats, libs.catsEffect % Test)
-                             }) ++ libs.hedgehog ++ List("org.slf4j" % "slf4j-api" % "1.7.32")
-    ,
+                             }) ++ List("org.slf4j" % "slf4j-api" % "1.7.32"),
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
@@ -126,6 +125,7 @@ def subProject(projectName: String): Project = {
   Project(projectName, file(prefixedName))
     .settings(
       name := prefixedName,
+      libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
     )
@@ -158,8 +158,8 @@ lazy val props = new {
   final val Scala3Versions = List("3.0.0")
   final val Scala3Version  = Scala3Versions.head
 
-  final val ProjectScalaVersion = Scala2Version
-//  final val ProjectScalaVersion = Scala3Version
+//  final val ProjectScalaVersion = Scala2Version
+  final val ProjectScalaVersion = Scala3Version
 
   final val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
