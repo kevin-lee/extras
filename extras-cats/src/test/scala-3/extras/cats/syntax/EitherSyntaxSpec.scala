@@ -76,7 +76,7 @@ class EitherSyntaxSpec extends Properties {
 
   object EitherTEitherOpsSpec {
 
-    val es              = ConcurrentSupport.newExecutorService()
+    val es              = ConcurrentSupport.newExecutorService(2)
     given rt: IORuntime = IoAppUtils.runtime(es)
 
     import cats.*
@@ -105,7 +105,7 @@ class EitherSyntaxSpec extends Properties {
 
   object EitherTFAOpsSpec {
 
-    val es              = ConcurrentSupport.newExecutorService()
+    val es              = ConcurrentSupport.newExecutorService(2)
     given rt: IORuntime = IoAppUtils.runtime(es)
 
     import cats.data.EitherT
@@ -153,7 +153,7 @@ class EitherSyntaxSpec extends Properties {
 
   object EitherTAOpsSpec {
 
-    val es              = ConcurrentSupport.newExecutorService()
+    val es              = ConcurrentSupport.newExecutorService(2)
     given rt: IORuntime = IoAppUtils.runtime(es)
 
     import cats.data.EitherT
@@ -201,7 +201,7 @@ class EitherSyntaxSpec extends Properties {
 
   object EitherTSupportAllSpec {
 
-    val es              = ConcurrentSupport.newExecutorService()
+    val es              = ConcurrentSupport.newExecutorService(2)
     given rt: IORuntime = IoAppUtils.runtime(es)
 
     def testAll: Property = for {
