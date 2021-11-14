@@ -1,6 +1,7 @@
 package extras.concurrent.testing
 
 import extras.concurrent.ExecutorServiceOps
+import extras.concurrent.testing.types.{ErrorLogger, WaitFor}
 import hedgehog._
 import hedgehog.runner._
 import hedgehog.sbt.MessageOnlyException
@@ -33,6 +34,8 @@ object ConcurrentSupportSpec extends Properties {
   )
 
   val halfOfAvailableProcessors: Int = Runtime.getRuntime.availableProcessors() >> 1
+
+  implicit val defaultErrorLogger: ErrorLogger[Throwable] = ErrorLogger.printlnDefaultErrorLogger
 
   def testConcurrentSupportNewExecutorService: Property = for {
     numThread <- Gen.int(Range.linear(1, halfOfAvailableProcessors + 2)).log("numThread")
@@ -67,7 +70,7 @@ object ConcurrentSupportSpec extends Properties {
   } yield {
     val executorService = ConcurrentSupport.newExecutorService(2)
 
-    val actual = ConcurrentSupport.runAndShutdown(executorService, 1.second) {
+    val actual = ConcurrentSupport.runAndShutdown(executorService, WaitFor(1.second)) {
       n
     }
     actual ==== n and Result
@@ -78,11 +81,13 @@ object ConcurrentSupportSpec extends Properties {
   def testConcurrentSupportFutureToValue: Property = for {
     n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
   } yield {
-    val executorService               = ConcurrentSupport.newExecutorService(2)
-    implicit val ec: ExecutionContext = ConcurrentSupport.newExecutionContext(executorService)
+    val executorService               =
+      ConcurrentSupport.newExecutorService(2)
+    implicit val ec: ExecutionContext =
+      ConcurrentSupport.newExecutionContext(executorService, ErrorLogger.printlnExecutionContextErrorLogger)
 
     try {
-      val actual = ConcurrentSupport.futureToValue(Future(n), 1.second)
+      val actual = ConcurrentSupport.futureToValue(Future(n), WaitFor(1.second))
       actual ==== n and Result
         .assert(!executorService.isTerminated)
         .log("executorService shouldn't have been terminated yet but it was.")
@@ -95,9 +100,10 @@ object ConcurrentSupportSpec extends Properties {
     n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
   } yield {
     val executorService               = ConcurrentSupport.newExecutorService(2)
-    implicit val ec: ExecutionContext = ConcurrentSupport.newExecutionContext(executorService)
+    implicit val ec: ExecutionContext =
+      ConcurrentSupport.newExecutionContext(executorService, ErrorLogger.printlnExecutionContextErrorLogger)
 
-    val actual = ConcurrentSupport.futureToValueAndTerminate(executorService, 1.second) {
+    val actual = ConcurrentSupport.futureToValueAndTerminate(executorService, WaitFor(1.second)) {
       Future(n)
     }
     actual ==== n and Result
