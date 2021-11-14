@@ -14,8 +14,16 @@ object EitherSyntaxSpec extends Properties {
       EitherSyntaxSpec.testEitherT
     ),
     property(
+      "EitherSyntaxSpec.testT",
+      EitherSyntaxSpec.testT
+    ),
+    property(
       "EitherTEitherOpsSpec.testEitherT",
       EitherTEitherOpsSpec.testEitherT
+    ),
+    property(
+      "EitherTEitherOpsSpec.testT",
+      EitherTEitherOpsSpec.testT
     ),
     property(
       "EitherTFAOpsSpec.testRightT",
@@ -63,6 +71,21 @@ object EitherSyntaxSpec extends Properties {
       )
     }
 
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input       = fab[IO, String, Int](n.asRight[String])
+      val expected    = EitherT(input)
+      val actual      = input.t
+      val actualValue = actual.value.unsafeRunSync()
+      Result.all(
+        List(
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          actualValue ==== expected.value.unsafeRunSync()
+        )
+      )
+    }
+
   }
 
   object EitherTEitherOpsSpec {
@@ -89,6 +112,24 @@ object EitherSyntaxSpec extends Properties {
         )
       )
     }
+
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input: Either[String, Int] = n.asRight[String]
+
+      val expected = EitherT(Applicative[IO].pure(input))
+
+      val actual      = input.t[IO]
+      val actualValue = actual.value.unsafeRunSync()
+      Result.all(
+        List(
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          actualValue ==== expected.value.unsafeRunSync()
+        )
+      )
+    }
+
   }
 
   object EitherTFAOpsSpec {
@@ -199,12 +240,18 @@ object EitherSyntaxSpec extends Properties {
       val actual1      = input1.eitherT
       val actual1Value = actual1.value.unsafeRunSync()
 
+      val actual1_1      = input1.t
+      val actual1_1Value = actual1_1.value.unsafeRunSync()
+
       val input2: Either[String, Int] = n.asRight[String]
       val expected2                   = EitherT(Applicative[IO].pure(input2))
       val expected2Value              = expected2.value.unsafeRunSync()
 
       val actual2      = input2.eitherT[IO]
       val actual2Value = actual2.value.unsafeRunSync()
+
+      val actual2_1      = input2.t[IO]
+      val actual2_1Value = actual2_1.value.unsafeRunSync()
 
       val input3         = IO(n)
       val expected3      = EitherT(input3.map(_.asRight[String]))
@@ -238,8 +285,12 @@ object EitherSyntaxSpec extends Properties {
         List(
           Result.assert(actual1Value.isRight).log(s"actual1Value should be Right. actual1Value: $actual1Value"),
           actual1Value ==== expected1Value,
+          Result.assert(actual1_1Value.isRight).log(s"actual1_1Value should be Right. actual1_1Value: $actual1_1Value"),
+          actual1_1Value ==== expected1Value,
           Result.assert(actual2Value.isRight).log(s"actual2Value should be Right. actual2Value: $actual2Value"),
           actual2Value ==== expected2Value,
+          Result.assert(actual2_1Value.isRight).log(s"actual2_1Value should be Right. actual2_1Value: $actual2_1Value"),
+          actual2_1Value ==== expected2Value,
           Result.assert(actual3Value.isRight).log(s"actual3Value should be Right. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,
           Result.assert(actual4Value.isLeft).log(s"actual4Value should be Left. actual4Value: $actual4Value"),

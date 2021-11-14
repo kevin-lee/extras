@@ -16,8 +16,16 @@ object OptionSyntaxSpec extends Properties {
       OptionTFOptionOpsSpec.testOptionT
     ),
     property(
+      "OptionTFOptionOpsSpec.testT",
+      OptionTFOptionOpsSpec.testT
+    ),
+    property(
       "OptionTOptionOpsSpec.testOptionT",
       OptionTOptionOpsSpec.testOptionT
+    ),
+    property(
+      "OptionTOptionOpsSpec.testT",
+      OptionTOptionOpsSpec.testT
     ),
     property(
       "OptionTFAOpsSpec.testOptionT",
@@ -40,7 +48,7 @@ object OptionSyntaxSpec extends Properties {
     import cats.data.*
     import cats.effect.*
     import cats.syntax.option.*
-    import extras.cats.syntax.option.optionT
+    import extras.cats.syntax.option.{optionT, t}
 
     def fab[F[_]: Sync, A](oa: Option[A]): F[Option[A]] = Sync[F].delay(oa)
 
@@ -62,6 +70,24 @@ object OptionSyntaxSpec extends Properties {
       )
     }
 
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input         = fab[IO, Int](n.some)
+      val expected      = OptionT(input)
+      val expectedValue = expected.value.unsafeRunSync()
+
+      val actual      = input.t
+      val actualValue = actual.value.unsafeRunSync()
+
+      Result.all(
+        List(
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          actualValue ==== expectedValue
+        )
+      )
+    }
+
   }
 
   object OptionTOptionOpsSpec {
@@ -72,7 +98,7 @@ object OptionSyntaxSpec extends Properties {
     import cats.data.OptionT
     import cats.effect.IO
     import cats.syntax.option.*
-    import extras.cats.syntax.option.optionT
+    import extras.cats.syntax.option.{optionT, t}
 
     def testOptionT: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
@@ -82,6 +108,24 @@ object OptionSyntaxSpec extends Properties {
       val expectedValue = expected.value.unsafeRunSync()
 
       val actual      = input.optionT[IO]
+      val actualValue = actual.value.unsafeRunSync()
+
+      Result.all(
+        List(
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          actualValue ==== expectedValue
+        )
+      )
+    }
+
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input         = n.some
+      val expected      = OptionT(Applicative[IO].pure(input))
+      val expectedValue = expected.value.unsafeRunSync()
+
+      val actual      = input.t[IO]
       val actualValue = actual.value.unsafeRunSync()
 
       Result.all(
@@ -175,12 +219,18 @@ object OptionSyntaxSpec extends Properties {
       val actual1      = input1.optionT
       val actual1Value = actual1.value.unsafeRunSync()
 
+      val actual1_1      = input1.optionT
+      val actual1_1Value = actual1_1.value.unsafeRunSync()
+
       val input2         = n.some
       val expected2      = OptionT(Applicative[IO].pure(input2))
       val expected2Value = expected2.value.unsafeRunSync()
 
       val actual2      = input2.optionT[IO]
       val actual2Value = actual2.value.unsafeRunSync()
+
+      val actual2_1      = input2.optionT[IO]
+      val actual2_1Value = actual2_1.value.unsafeRunSync()
 
       val input3         = Applicative[IO].pure(n)
       val expected3      = OptionT.liftF(input3)
@@ -200,8 +250,12 @@ object OptionSyntaxSpec extends Properties {
         List(
           Result.assert(actual1Value.isDefined).log(s"actual1Value should be Some. actual1Value: $actual1Value"),
           actual1Value ==== expected1Value,
+          Result.assert(actual1_1Value.isDefined).log(s"actual1_1Value should be Some. actual1_1Value: $actual1_1Value"),
+          actual1_1Value ==== expected1Value,
           Result.assert(actual2Value.isDefined).log(s"actual2Value should be Some. actual2Value: $actual2Value"),
           actual2Value ==== expected2Value,
+          Result.assert(actual2_1Value.isDefined).log(s"actual2_1Value should be Some. actual2_1Value: $actual2_1Value"),
+          actual2_1Value ==== expected2Value,
           Result.assert(actual3Value.isDefined).log(s"actual3Value should be Some. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,
           Result.assert(actual4Value.isDefined).log(s"actual4Value should be Some. actual4Value: $actual4Value"),
