@@ -17,16 +17,24 @@ object AllSyntaxSpec extends Properties {
       OptionTFOptionOpsSpec.testOptionT
     ),
     property(
+      "OptionTFOptionOpsSpec.testT",
+      OptionTFOptionOpsSpec.testT
+    ),
+    property(
       "OptionTOptionOpsSpec.testOptionT",
       OptionTOptionOpsSpec.testOptionT
     ),
     property(
-      "OptionTFAOpsSpec.testOptionT",
-      OptionTFAOpsSpec.testOptionT
+      "OptionTOptionOpsSpec.testT",
+      OptionTOptionOpsSpec.testT
     ),
     property(
-      "OptionTAOpsSpec.testOptionTF",
-      OptionTAOpsSpec.testOptionTF
+      "OptionTFAOpsSpec.testSomeT",
+      OptionTFAOpsSpec.testSomeT
+    ),
+    property(
+      "OptionTAOpsSpec.testSomeTF",
+      OptionTAOpsSpec.testSomeTF
     ),
     property(
       "OptionTSupportAllSpec.testAll",
@@ -69,7 +77,7 @@ object AllSyntaxSpec extends Properties {
     import cats.data.*
     import cats.effect.*
     import cats.syntax.option.*
-    import extras.cats.syntax.option.optionT
+    import extras.cats.syntax.option.{optionT, t}
 
     def fab[F[_]: Sync, A](oa: Option[A]): F[Option[A]] = Sync[F].delay(oa)
 
@@ -91,6 +99,24 @@ object AllSyntaxSpec extends Properties {
       )
     }
 
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input         = fab[IO, Int](n.some)
+      val expected      = OptionT(input)
+      val expectedValue = expected.value.unsafeRunSync()
+
+      val actual      = input.t
+      val actualValue = actual.value.unsafeRunSync()
+
+      Result.all(
+        List(
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          actualValue ==== expectedValue
+        )
+      )
+    }
+
   }
 
   object OptionTOptionOpsSpec {
@@ -101,7 +127,7 @@ object AllSyntaxSpec extends Properties {
     import cats.data.OptionT
     import cats.effect.IO
     import cats.syntax.option.*
-    import extras.cats.syntax.option.optionT
+    import extras.cats.syntax.option.{optionT, t}
 
     def testOptionT: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
@@ -111,6 +137,24 @@ object AllSyntaxSpec extends Properties {
       val expectedValue = expected.value.unsafeRunSync()
 
       val actual      = input.optionT[IO]
+      val actualValue = actual.value.unsafeRunSync()
+
+      Result.all(
+        List(
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          actualValue ==== expectedValue
+        )
+      )
+    }
+
+    def testT: Property = for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      val input         = n.some
+      val expected      = OptionT(Applicative[IO].pure(input))
+      val expectedValue = expected.value.unsafeRunSync()
+
+      val actual      = input.t[IO]
       val actualValue = actual.value.unsafeRunSync()
 
       Result.all(
@@ -132,7 +176,7 @@ object AllSyntaxSpec extends Properties {
     import cats.effect.IO
     import extras.cats.syntax.option.someT
 
-    def testOptionT: Property = for {
+    def testSomeT: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
     } yield {
       val input         = Applicative[IO].pure(n)
@@ -162,7 +206,7 @@ object AllSyntaxSpec extends Properties {
     import cats.syntax.option.*
     import extras.cats.syntax.option.someTF
 
-    def testOptionTF: Property = for {
+    def testSomeTF: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
     } yield {
       val input         = n
@@ -418,12 +462,18 @@ object AllSyntaxSpec extends Properties {
       val actual1      = input1.eitherT
       val actual1Value = actual1.value.unsafeRunSync()
 
+      val actual1_1      = input1.eitherT
+      val actual1_1Value = actual1_1.value.unsafeRunSync()
+
       val input2: Either[String, Int] = n.asRight[String]
       val expected2                   = EitherT(Applicative[IO].pure(input2))
       val expected2Value              = expected2.value.unsafeRunSync()
 
       val actual2      = input2.eitherT[IO]
       val actual2Value = actual2.value.unsafeRunSync()
+
+      val actual2_1      = input2.eitherT[IO]
+      val actual2_1Value = actual2_1.value.unsafeRunSync()
 
       val input3         = IO(n)
       val expected3      = EitherT(input3.map(_.asRight[String]))
@@ -457,8 +507,12 @@ object AllSyntaxSpec extends Properties {
         List(
           Result.assert(actual1Value.isRight).log(s"actual1Value should be Right. actual1Value: $actual1Value"),
           actual1Value ==== expected1Value,
+          Result.assert(actual1_1Value.isRight).log(s"actual1_1Value should be Right. actual1_1Value: $actual1_1Value"),
+          actual1_1Value ==== expected1Value,
           Result.assert(actual2Value.isRight).log(s"actual2Value should be Right. actual2Value: $actual2Value"),
           actual2Value ==== expected2Value,
+          Result.assert(actual2_1Value.isRight).log(s"actual2_1Value should be Right. actual2_1Value: $actual2_1Value"),
+          actual2_1Value ==== expected2Value,
           Result.assert(actual3Value.isRight).log(s"actual3Value should be Right. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,
           Result.assert(actual4Value.isLeft).log(s"actual4Value should be Left. actual4Value: $actual4Value"),
