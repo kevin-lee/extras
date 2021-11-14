@@ -1,10 +1,9 @@
 package extras.concurrent.testing
 
 import extras.concurrent.ExecutorServiceOps
+import extras.concurrent.testing.types.{ErrorLogger, ExecutionContextErrorLogger, WaitFor}
 
-import java.io.{PrintWriter, StringWriter}
 import java.util.concurrent.{ExecutorService, Executors, TimeoutException}
-import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.util.control.NonFatal
 
@@ -18,8 +17,11 @@ trait ConcurrentSupport {
     else
       throw new IllegalArgumentException(s"minThread must be greater than or equal to 1. [minThread: $minThread]")
 
-  def newExecutionContext(executorService: ExecutorService): ExecutionContext =
-    newExecutionContextWithLogger(executorService, println(_))
+  def newExecutionContext(
+    executorService: ExecutorService,
+    errorLogger: ExecutionContextErrorLogger
+  ): ExecutionContext =
+    newExecutionContextWithLogger(executorService, errorLogger)
 
   def newExecutionContextWithErrorMessageLogger(
     executorService: ExecutorService,
@@ -27,20 +29,12 @@ trait ConcurrentSupport {
   ): ExecutionContext =
     newExecutionContextWithLogger(
       executorService,
-      { th =>
-        val stringWriter = new StringWriter()
-        val printWriter  = new PrintWriter(stringWriter)
-        th.printStackTrace(printWriter)
-        errorLogger(s"""⚠️ Error in Executor - Error: ${th.getMessage}
-                       |# StackTrace:
-                       |${stringWriter.toString}
-                       |""".stripMargin)
-      }
+      ErrorLogger.defaultExecutionContextErrorLogger(errorLogger)
     )
 
   def newExecutionContextWithLogger(
     executorService: ExecutorService,
-    errorLogger: Throwable => Unit
+    errorLogger: ExecutionContextErrorLogger
   ): ExecutionContext =
     ExecutionContext
       .fromExecutor(
@@ -48,35 +42,38 @@ trait ConcurrentSupport {
         errorLogger
       )
 
-  def runAndShutdown[A](executorService: ExecutorService, waitFor: FiniteDuration)(a: => A): A =
+  def runAndShutdown[A](executorService: ExecutorService, waitFor: WaitFor)(
+    a: => A
+  )(
+    implicit errorLogger: ErrorLogger[Throwable]
+  ): A =
     try a
     finally {
       try {
-        ExecutorServiceOps.shutdownAndAwaitTermination(executorService, waitFor)
+        ExecutorServiceOps.shutdownAndAwaitTermination(executorService, waitFor.waitFor)
       } catch {
         case NonFatal(ex) =>
-          @SuppressWarnings(Array("org.wartremover.warts.ToString"))
-          val message = ex.toString
-          println(s"NonFatal: $message")
+//          @SuppressWarnings(Array("org.wartremover.warts.ToString"))
+//          val message = ex.toString
+//          println(s"NonFatal: $message")
+          errorLogger(ex)
       }
     }
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter", "org.wartremover.warts.Throw"))
-  def futureToValue[A](fa: Future[A], waitFor: FiniteDuration): A =
+  def futureToValue[A](fa: Future[A], waitFor: WaitFor)(implicit errorLogger: ErrorLogger[TimeoutException]): A =
     try {
-      Await.result(fa, waitFor)
+      Await.result(fa, waitFor.waitFor)
     } catch {
       case ex: TimeoutException =>
-        @SuppressWarnings(Array("org.wartremover.warts.ToString"))
-        val message = ex.toString
-        println(s"TimeoutException ⚠️: $message")
+        errorLogger(ex)
         throw ex
     }
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter", "org.wartremover.warts.Throw"))
-  def futureToValueAndTerminate[A](executorService: ExecutorService, waitFor: FiniteDuration)(
+  def futureToValueAndTerminate[A](executorService: ExecutorService, waitFor: WaitFor)(
     fa: => Future[A]
-  ): A =
+  )(implicit errorLogger: ErrorLogger[Throwable]): A =
     runAndShutdown(executorService, waitFor) {
       futureToValue(fa, waitFor)
     }

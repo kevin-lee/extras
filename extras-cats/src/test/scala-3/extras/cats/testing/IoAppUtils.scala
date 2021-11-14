@@ -2,6 +2,7 @@ package extras.cats.testing
 
 import cats.effect.unsafe.{IORuntime, IORuntimeConfig}
 import extras.concurrent.testing.ConcurrentSupport
+import extras.concurrent.testing.types.ErrorLogger
 
 import java.util.concurrent.ExecutorService
 
@@ -16,7 +17,7 @@ object IoAppUtils {
 //      val (compute, compDown) =
 //        IORuntime.createDefaultComputeThreadPool(runtime, threads = computeWorkerThreadCount)
 
-      val ec = ConcurrentSupport.newExecutionContextWithLogger(es, println(_))
+      val ec = ConcurrentSupport.newExecutionContextWithLogger(es, ErrorLogger.printlnExecutionContextErrorLogger)
 
       val (blocking, blockDown) =
         IORuntime.createDefaultBlockingExecutionContext()
