@@ -7,5 +7,5 @@ title: 'Get extras-cats'
 # Get `extras-cats`
 
 ```scala
-libraryDependencies += "io.kevinlee" %% "extras-cats" % "0.1.0"
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
 ```
