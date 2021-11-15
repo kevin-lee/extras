@@ -1,65 +1,15 @@
-# extras
-A few little extra tools
+# ![Extras Logo](https://extras.kevinly.dev/img/extras-logo-64x64.png) Extras
 
-# Get extras
-## `extras-cats`
+## Please visit [https://extras.kevinly.dev](https://extras.kevinly.dev)
 
-```sbt
-lazy val root = (project in file("."))
-  .settings(
-    name := "my-project",
-    libraryDependencies += "io.kevinlee" %% "extras-cats" % "0.1.0"
-  )
-```
-
-### Usage
-```scala
-import cats._
-import cats.syntax.all._
-import cats.effect._
-
-import extras.cats.syntax.all._
+[![Build Status](https://github.com/Kevin-Lee/extras/workflows/Build-All/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Build-All)
+[![Release Status](https://github.com/Kevin-Lee/extras/workflows/Release/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Release)
+[![Latest version](https://index.scala-lang.org/kevin-lee/extras/latest.svg)](https://index.scala-lang.org/kevin-lee/extras)
 
 
-final case class MyError(message: String)
-
-def divide[F[_]: Sync](a: Int, b: Int): F[Either[MyError, Int]] =
-  if (b == 0)
-    MyError(s"You can divide number by 0. [a: $a, b: $b]").asLeft.pure[F]
-  else
-    Sync[F].delay((a / b).asRight)
-
-
-def foo[F[_]: Sync](n: Int): F[Int] = Sync[F].pure(n * 2)
-
-
-def run[F[_]: Sync](): F[Either[MyError, Int]] = (for {
-  a <- foo(123).rightT
-  b <- 2.rightTF[F, MyError]
-  c <- divide(a, b).eitherT
-} yield c).value
-
-println(run[IO]().unsafeRunSync())
-
-// Right(123)
-```
-
-***
-
-## `extras-concurrent`
-```sbt
-lazy val root = (project in file("."))
-  .settings(
-    name := "my-project",
-    libraryDependencies += "io.kevinlee" %% "extras-concurrent" % "0.1.0"
-  )
-```
-
-## `extras-concurrent-testing`
-```sbt
-lazy val root = (project in file("."))
-  .settings(
-    name := "my-project",
-    libraryDependencies += "io.kevinlee" %% "extras-concurrent-testing" % "0.1.0" % Test
-  )
-```
+| Project | Maven Central |
+| ------: | ------------- |
+| extras-cats | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-cats_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-cats_2.13) |
+| extras-scala-io | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-scala-io_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-scala-io_2.13) |
+| extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13) |
+| extras-concurrent-testing | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent-testing_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent-testing_2.13) |
