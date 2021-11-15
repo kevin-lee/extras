@@ -7,12 +7,12 @@ title: 'Get extras-concurrent'
 # Get `extras-concurrent`
 ## Get `extras-concurrent`
 ```scala
-libraryDependencies += "io.kevinlee" %% "extras-concurrent" % "0.1.0"
+"io.kevinlee" %% "extras-concurrent" % "@VERSION@"
 ```
 
 ## Get `extras-concurrent-testing`
 ```scala
-libraryDependencies += "io.kevinlee" %% "extras-concurrent-testing" % "0.1.0" % Test
+"io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
 ```
 
 ## Usage

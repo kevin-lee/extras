@@ -91,6 +91,7 @@ lazy val docs       = (project in file("generated-docs"))
     name                := prefixedProjectName("docs"),
     mdocIn              := file("docs"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= List(libs.catsEffect),
     mdocVariables       := Map(
       "VERSION"                  -> {
         import sys.process._
