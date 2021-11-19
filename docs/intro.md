@@ -19,6 +19,10 @@ slug: '/'
 | extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13) |
 | extras-concurrent-testing | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent-testing_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent-testing_2.13) |
 
+:::info
+Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
+:::
+
 * [extras-cats](extras-cats/get.md)
 * [extras-scala-io](extras-scala-io/get.md)
 * [extras-concurrent](extras-concurrent/get.md)
