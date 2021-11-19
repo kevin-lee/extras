@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
-id: 'either'
-title: 'Either'
+id: 'eithert'
+title: 'EitherT'
 ---
 
 ## Extension Methods for EitherT
