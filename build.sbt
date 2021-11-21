@@ -114,7 +114,7 @@ lazy val docs       = (project in file("generated-docs"))
     docusaurBuildDir    := docusaurDir.value / "build",
   )
   .settings(noPublish)
-  .dependsOn(extrasConcurrent, extrasConcurrentTesting, extrasCats)
+  .dependsOn(extrasConcurrent, extrasConcurrentTesting, extrasCats, extrasScalaIo)
 
 // scalafmt: off
 
