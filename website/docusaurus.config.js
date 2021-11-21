@@ -16,7 +16,7 @@ const hasGoogleAnalytics = !isEmptyObject(googleAnalyticsConfig);
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const websiteConfig = {
   title: 'Extras',
-  tagline: 'A few little extra tools',
+  tagline: 'A few extra tools',
   url: 'https://extras.kevinly.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -44,6 +44,7 @@ const websiteConfig = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      image: 'img/poster.png',
       navbar: {
         title: 'Extras',
         logo: {
