@@ -34,11 +34,19 @@ lazy val extras = (project in file("."))
   .settings(noPublish)
   .settings(noDoc)
   .aggregate(
+    extrasCore,
     extrasScalaIo,
     extrasConcurrent,
     extrasConcurrentTesting,
     extrasCats,
     extrasHedgehogCatsEffect3
+  )
+
+lazy val extrasCore = subProject("core")
+  .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 
 lazy val extrasScalaIo = subProject("scala-io")
@@ -77,7 +85,7 @@ lazy val extrasConcurrentTesting = subProject("concurrent-testing")
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
-  .dependsOn(extrasConcurrent)
+  .dependsOn(extrasCore, extrasConcurrent)
 
 lazy val extrasCats = subProject("cats")
   .settings(
@@ -100,13 +108,13 @@ lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
     libraryDependencies ++= List(
       libs.catsLatest,
       libs.catsEffect3,
-      libs.libCatsEffectTestKit excludeAll("org.scalacheck"),
-      libs.hedgehogCore
-    ),
+      libs.libCatsEffectTestKit excludeAll ("org.scalacheck"),
+      libs.hedgehogCore,
+    ) ++ libs.hedgehog,
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
-  .dependsOn(extrasCats, extrasConcurrentTesting % Test)
+  .dependsOn(extrasCore, extrasCats)
 
 lazy val docs = (project in file("generated-docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
@@ -149,6 +157,7 @@ def subProject(projectName: String): Project = {
   Project(projectName, file(prefixedName))
     .settings(
       name := prefixedName,
+      Test / fork := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),

@@ -2,10 +2,9 @@ package extras
 
 import java.io.{PrintWriter, StringWriter}
 
-/**
- * @author Kevin Lee
- * @since 2021-05-16
- */
+/** @author Kevin Lee
+  * @since 2021-05-16
+  */
 object tools {
 
   implicit final class ThrowableOps(private val throwable: Throwable) extends AnyVal {
