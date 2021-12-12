@@ -20,10 +20,7 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { name: "Scala 2", version: "2.11.12", binary-version: "2.11", java-version: "adopt@1.11", report: "" }
-          - { name: "Scala 2", version: "2.12.13", binary-version: "2.12", java-version: "adopt@1.11", report: "" }
-          - { name: "Scala 2", version: "2.13.5",  binary-version: "2.13", java-version: "adopt@1.11", report: "" }
-          - { name: "Scala 3", version: "3.0.0",   binary-version: "3",    java-version: "adopt@1.11", report: "" }
+          - { name: "Scala", java-version: "adopt@1.11", report: "" }
 
     steps:
       - uses: actions/checkout@v2.4.0
@@ -38,11 +35,11 @@ jobs:
             ~/.ivy2/cache
             ~/.cache/coursier
             ~/.sbt
-          key: ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('**/build.properties') }}
           restore-keys: |
-            ${{ runner.os }}-sbt-${{ matrix.scala.binary-version }}-
+            ${{ runner.os }}-sbt
 
-      - name: "[Push] Build All for ${{ matrix.scala.name }} ${{ matrix.scala.version }} - ${{ github.run_number }}"
+      - name: "[Push] Build All for ${{ matrix.scala.name }} - ${{ github.run_number }}"
         if: github.event_name == 'push'
         env:
           CURRENT_BRANCH_NAME: ${{ github.ref }}
@@ -60,10 +57,9 @@ jobs:
           echo "SBT_OPTS=${SBT_OPTS}"
           java -version
           sbt \
-            ++${{ matrix.scala.version }}! \
             -v \
             clean \
-            test
+            +test
 
   gh-release:
     needs: build
@@ -139,13 +135,12 @@ jobs:
           echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH"
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
-          echo 'sbt -v clean +packagedArtifacts ci-release devOopsGitHubReleaseUploadArtifacts'
+          echo 'sbt -v clean +packagedArtifacts ci-release'
           sbt \
             -v \
             clean \
             +packagedArtifacts \
-            ci-release \
-            devOopsGitHubReleaseUploadArtifacts
+            ci-release
 
 
   publish-snapshot:
