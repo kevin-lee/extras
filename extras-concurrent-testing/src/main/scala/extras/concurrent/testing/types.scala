@@ -1,6 +1,7 @@
 package extras.concurrent.testing
 
-import java.io.{PrintWriter, StringWriter}
+import extras.tools._
+
 import scala.concurrent.TimeoutException
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.NonFatal
@@ -19,12 +20,10 @@ object types {
         extends ExecutionContextErrorLogger {
 
       override def apply(throwable: Throwable): Unit = {
-        val stringWriter = new StringWriter()
-        val printWriter  = new PrintWriter(stringWriter)
-        throwable.printStackTrace(printWriter)
+        val stackTrace = throwable.stackTraceString
         errorLogger(s"""⚠️ Error in ExecutionContext: ${throwable.getMessage}
                        |# StackTrace:
-                       |${stringWriter.toString}
+                       |$stackTrace
                        |""".stripMargin)
       }
 
