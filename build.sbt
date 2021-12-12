@@ -1,7 +1,6 @@
-ThisBuild / scalaVersion       := props.ProjectScalaVersion
-ThisBuild / organization       := props.Org
-ThisBuild / organizationName   := "Kevin's Code"
-ThisBuild / crossScalaVersions := props.CrossScalaVersions
+ThisBuild / scalaVersion     := props.ProjectScalaVersion
+ThisBuild / organization     := props.Org
+ThisBuild / organizationName := "Kevin's Code"
 
 ThisBuild / testFrameworks ~=
   (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct)
@@ -34,10 +33,17 @@ lazy val extras = (project in file("."))
   )
   .settings(noPublish)
   .settings(noDoc)
-  .aggregate(extrasScalaIo, extrasConcurrent, extrasConcurrentTesting, extrasCats)
+  .aggregate(
+    extrasScalaIo,
+    extrasConcurrent,
+    extrasConcurrentTesting,
+    extrasCats,
+    extrasHedgehogCatsEffect3
+  )
 
 lazy val extrasScalaIo = subProject("scala-io")
   .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
@@ -62,19 +68,22 @@ lazy val extrasScalaIo = subProject("scala-io")
 
 lazy val extrasConcurrent = subProject("concurrent")
   .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
 
 lazy val extrasConcurrentTesting = subProject("concurrent-testing")
   .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
   .dependsOn(extrasConcurrent)
 
 lazy val extrasCats = subProject("cats")
   .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
-                               List(libs.catsLatest, libs.catsEffectLatest % Test)
+                               List(libs.catsLatest, libs.catsEffect3 % Test)
                              } else if (scalaVersion.value.startsWith("2.11")) {
                                List(libs.catsOld, libs.catsEffectOld % Test)
                              } else {
@@ -85,7 +94,21 @@ lazy val extrasCats = subProject("cats")
   )
   .dependsOn(extrasConcurrentTesting % Test)
 
-lazy val docs       = (project in file("generated-docs"))
+lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
+  .settings(
+    crossScalaVersions  := props.CrossScalaVersionsWithout_2_11,
+    libraryDependencies ++= List(
+      libs.catsLatest,
+      libs.catsEffect3,
+      libs.libCatsEffectTestKit excludeAll("org.scalacheck"),
+      libs.hedgehogCore
+    ),
+    libraryDependencies :=
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+  )
+  .dependsOn(extrasCats, extrasConcurrentTesting % Test)
+
+lazy val docs = (project in file("generated-docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
   .settings(
     name                := prefixedProjectName("docs"),
@@ -143,37 +166,40 @@ lazy val props = new {
 
   private val GitHubRepo = findRepoOrgAndName
 
-  final val Org        = "io.kevinlee"
-  final val GitHubUser = GitHubRepo.fold("Kevin-Lee")(_.orgToString)
-  final val RepoName   = GitHubRepo.fold("extras")(_.nameToString)
+  val Org        = "io.kevinlee"
+  val GitHubUser = GitHubRepo.fold("Kevin-Lee")(_.orgToString)
+  val RepoName   = GitHubRepo.fold("extras")(_.nameToString)
 
-  final val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
+  val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-  final val Scala2Versions = List(
+  val Scala2Versions = List(
     "2.13.5",
     "2.12.13",
     "2.11.12",
   )
-  final val Scala2Version  = Scala2Versions.head
+  val Scala2Version  = Scala2Versions.head
 
-  final val Scala3Versions = List("3.0.0")
-  final val Scala3Version  = Scala3Versions.head
+  val Scala3Versions = List("3.0.0")
+  val Scala3Version  = Scala3Versions.head
 
-  final val ProjectScalaVersion = Scala2Version
-//  final val ProjectScalaVersion = Scala3Version
+  val ProjectScalaVersion = Scala2Version
+//  val ProjectScalaVersion = Scala3Version
 
-  final val CrossScalaVersions =
+  val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
 
-  final val CatsLatestVersion = "2.6.1"
-  final val CatsVersion       = "2.3.1"
-  final val Cats2_0_0Version  = "2.0.0"
+  val CrossScalaVersionsWithout_2_11 =
+    CrossScalaVersions.distinct.filterNot(_.startsWith("2.11"))
 
-  final val CatsEffectLatestVersion = "3.2.2"
-  final val CatsEffectVersion       = "2.3.1"
-  final val CatsEffect2_0_0Version  = "2.0.0"
+  val CatsLatestVersion = "2.7.0"
+  val CatsVersion       = "2.6.1"
+  val Cats2_0_0Version  = "2.0.0"
 
-  final val HedgehogVersion = "0.7.0"
+  val CatsEffect3Version     = "3.2.9"
+  val CatsEffectVersion      = "2.5.4"
+  val CatsEffect2_0_0Version = "2.0.0"
+
+  val HedgehogVersion = "0.8.0"
 
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
@@ -190,14 +216,20 @@ lazy val libs = new {
   lazy val cats       = "org.typelevel" %% "cats-core" % props.CatsVersion
   lazy val catsOld    = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
 
-  lazy val catsEffectLatest = "org.typelevel" %% "cats-effect" % props.CatsEffectLatestVersion
-  lazy val catsEffect       = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
-  lazy val catsEffectOld    = "org.typelevel" %% "cats-effect" % props.CatsEffect2_0_0Version
+  lazy val catsEffect3   = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
+  lazy val catsEffect    = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
+  lazy val catsEffectOld = "org.typelevel" %% "cats-effect" % props.CatsEffect2_0_0Version
+
+  lazy val libCatsEffectTestKit = "org.typelevel" %% "cats-effect-testkit" % props.CatsEffect3Version
+
+  lazy val hedgehogCore   = "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion
+  lazy val hedgehogRunner = "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion
+  lazy val hedgehogSbt    = "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion
 
   lazy val hedgehog = List(
-    "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion,
-    "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion,
-    "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion,
+    hedgehogCore,
+    hedgehogRunner,
+    hedgehogSbt,
   ).map(_ % Test)
 
 }
