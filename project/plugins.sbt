@@ -2,7 +2,7 @@ import sbt.Defaults.sbtPluginExtra
 
 logLevel := sbt.Level.Warn
 
-addSbtPlugin("com.geirsson" % "sbt-ci-release" % "1.5.7")
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.10")
 
 libraryDependencies ++= {
   if (scalaVersion.value.startsWith("3.0")) {
