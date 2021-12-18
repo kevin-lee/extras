@@ -25,12 +25,15 @@ ThisBuild / scmInfo    :=
 
 ThisBuild / licenses   := props.licenses
 
+ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
+
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
     name                := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
+  .settings(mavenCentralPublishSettings)
   .settings(noPublish)
   .settings(noDoc)
   .aggregate(
@@ -152,6 +155,13 @@ lazy val docs = (project in file("generated-docs"))
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
 // scalafmt: on
 
+lazy val mavenCentralPublishSettings: SettingsDefinition = List(
+  /* Publish to Maven Central { */
+  sonatypeCredentialHost := props.SonatypeCredentialHost,
+  sonatypeRepository     := props.SonatypeRepository,
+  /* } Publish to Maven Central */
+)
+
 def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(prefixedName))
@@ -161,6 +171,9 @@ def subProject(projectName: String): Project = {
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
+    )
+    .settings(
+      mavenCentralPublishSettings
     )
 }
 
@@ -199,6 +212,9 @@ lazy val props = new {
 
   val CrossScalaVersionsWithout_2_11 =
     CrossScalaVersions.distinct.filterNot(_.startsWith("2.11"))
+
+  val SonatypeCredentialHost = "s01.oss.sonatype.org"
+  val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
 
   val CatsLatestVersion = "2.7.0"
   val CatsVersion       = "2.6.1"
