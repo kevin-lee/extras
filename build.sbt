@@ -127,7 +127,7 @@ lazy val docs = (project in file("generated-docs"))
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(libs.catsEffect),
     mdocVariables       := Map(
-      "VERSION"                  -> {
+      "VERSION" -> {
         import sys.process._
         "git fetch --tags".!
         val tag = "git rev-list --tags --max-count=1".!!.trim
@@ -166,7 +166,7 @@ def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(prefixedName))
     .settings(
-      name := prefixedName,
+      name        := prefixedName,
       Test / fork := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
