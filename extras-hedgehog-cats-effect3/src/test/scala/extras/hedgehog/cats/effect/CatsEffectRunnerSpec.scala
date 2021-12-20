@@ -10,10 +10,11 @@ import hedgehog.runner._
 object CatsEffectRunnerSpec extends Properties {
 
   override def tests: List[Test] = List(
-    property("testCatsEffectRunner", testCatsEffectRunner)
+    property("test CatsEffectRunner and IO.completeAs", testCatsEffectRunnerWithCompleteAs),
+    property("test CatsEffectRunner and IO.completeThen", testCatsEffectRunnerWithCompleteThen)
   )
 
-  def testCatsEffectRunner: Property = for {
+  def testCatsEffectRunnerWithCompleteAs: Property = for {
     n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
   } yield {
     import CatsEffectRunner._
@@ -23,6 +24,20 @@ object CatsEffectRunnerSpec extends Properties {
     val actual   = IO(n)
 
     actual.completeAs(expected)
+  }
+
+  def testCatsEffectRunnerWithCompleteThen: Property = for {
+    n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+  } yield {
+    import CatsEffectRunner._
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected = n
+    val actual   = IO(n)
+
+    actual.completeThen { actual =>
+      actual ==== expected
+    }
   }
 
 }

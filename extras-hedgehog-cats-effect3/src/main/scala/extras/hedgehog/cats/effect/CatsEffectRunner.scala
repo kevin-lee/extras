@@ -112,6 +112,21 @@ object CatsEffectRunner {
     def completeAndEqualTo(expected: A)(implicit ticker: Ticker, eq: Eq[A], sh: Show[A]): Boolean =
       tickTo(Outcome.Succeeded(Some(expected)))
 
+    def completeThen(assertion: A => Result)(implicit ticker: Ticker): Result =
+      unsafeRun(ioa) match {
+        case Outcome.Succeeded(Some(actual)) =>
+          assertion(actual)
+
+        case Outcome.Succeeded(None) =>
+          Result.failure.log("No result has been returned")
+
+        case Outcome.Errored(err) =>
+          Result.failure.log(s"Unexpected error: \n${err.stackTraceString}")
+
+        case Outcome.Canceled() =>
+          Result.failure.log("Cancelled")
+      }
+
     def expectError(expected: Throwable*)(implicit ticker: Ticker): Result = {
       val moreThanOne              = expected.length > 1
       val expectedThrowableMessage =
@@ -135,7 +150,8 @@ object CatsEffectRunner {
       val a = ioa.unsafeRunSync()
       Result.assert(a eqv expected).log(s"${a.show} !== ${expected.show}")
     }
-    def completeAsEqualToSync(expected: A)(implicit eq: Eq[A]): Boolean      = {
+
+    def completeAsEqualToSync(expected: A)(implicit eq: Eq[A]): Boolean = {
       val a = ioa.unsafeRunSync()
       a eqv expected
     }
