@@ -139,10 +139,39 @@ object CatsEffectRunner {
             .assert(expected.contains(e))
             .log(expectedThrowableMessage + s" but ${e.getClass.getName} was thrown instead.\n${e.stackTraceString}")
 
-        case _ =>
-          Result.failure.log(expectedThrowableMessage + " but no Throwable was thrown.")
+        case Outcome.Canceled() =>
+          Result.failure.log("Cancelled")
+
+        case Outcome.Succeeded(Some(value)) =>
+          Result
+            .failure
+            .log(
+              expectedThrowableMessage + s" but no Throwable was thrown and some value has been returned. result: $value."
+            )
+
+        case Outcome.Succeeded(None) =>
+          Result.failure.log(expectedThrowableMessage + " but no Throwable was thrown nor did it return anything.")
       }
     }
+
+    def errorThen(assertion: Throwable => Result)(implicit ticker: Ticker): Result =
+      unsafeRun(ioa) match {
+        case Outcome.Errored(e) =>
+          assertion(e)
+
+        case Outcome.Canceled() =>
+          Result.failure.log("Cancelled")
+
+        case Outcome.Succeeded(Some(value)) =>
+          Result
+            .failure
+            .log(s"Expected some error, but no Throwable was thrown and some value has been returned. result: $value.")
+
+        case Outcome.Succeeded(None) =>
+          Result.failure.log("Expected some error, but no Throwable was thrown nor did it return anything.")
+
+      }
+
   }
 
   implicit final class SyncIoOps[A](private val ioa: SyncIO[A]) extends AnyVal {
