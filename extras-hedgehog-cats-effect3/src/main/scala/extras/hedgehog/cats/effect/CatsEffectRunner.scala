@@ -8,6 +8,7 @@ import hedgehog._
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
+import scala.reflect.ClassTag
 
 /** The code inside CatsEffectRunner was not entirely but mostly copied from
   * https://git.io/JDcCP and was modified for Hedgehog
@@ -127,16 +128,20 @@ object CatsEffectRunner {
           Result.failure.log("Cancelled")
       }
 
-    def expectError(expected: Throwable*)(implicit ticker: Ticker): Result = {
-      val moreThanOne              = expected.length > 1
-      val expectedThrowableMessage =
-        s"${if (moreThanOne) "One of " else ""}${expected.map(_.getClass.getName).mkString("[", ", ", "]")} " +
-          s"${if (moreThanOne) "were" else "was"} expected"
+    def expectError[E <: Throwable: ClassTag](expected: E)(implicit ticker: Ticker, eq: Eq[E], sh: Show[E]): Result = {
+      val expectedThrowableMessage = s"${expected.getClass.getName} was expected"
 
       unsafeRun(ioa) match {
+        case Outcome.Errored(e: E) =>
+          Result
+            .diffNamed("actual should be equal to expected", e, expected)(_ eqv _)
+            .log(
+              expectedThrowableMessage + s" and it was thrown but not equal to the expected. [actual: ${e.show}, expected: ${expected.show}] \n${e.stackTraceString}"
+            )
+
         case Outcome.Errored(e) =>
           Result
-            .assert(expected.contains(e))
+            .failure
             .log(expectedThrowableMessage + s" but ${e.getClass.getName} was thrown instead.\n${e.stackTraceString}")
 
         case Outcome.Canceled() =>
