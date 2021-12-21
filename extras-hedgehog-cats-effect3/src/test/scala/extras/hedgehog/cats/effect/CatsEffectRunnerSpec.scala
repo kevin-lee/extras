@@ -1,6 +1,6 @@
 package extras.hedgehog.cats.effect
 
-import cats.Eq
+import cats.{Eq, Show}
 import cats.effect.IO
 import hedgehog._
 import hedgehog.runner._
@@ -89,6 +89,7 @@ object CatsEffectRunnerSpec extends Properties {
     def anotherTestError(message: String): TestError = AnotherTestError(message)
     def someTestError(message: String): TestError    = SomeTestError(message)
 
-    implicit val testErrorEq: Eq[TestError] = Eq.fromUniversalEquals
+    implicit val testErrorEq: Eq[TestError]     = Eq.fromUniversalEquals
+    implicit val testErrorShow: Show[TestError] = Show.fromToString
   }
 }
