@@ -23,7 +23,7 @@ slug: '/'
 Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
 :::
 
-* [extras-cats](extras-cats/get.md)
-* [extras-scala-io](extras-scala-io/get.md)
-* [extras-concurrent](extras-concurrent/get.md)
+* [extras-cats](extras-cats/getting-started.md)
+* [extras-scala-io](extras-scala-io/getting-started.md)
+* [extras-concurrent](extras-concurrent/getting-started.md)
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->

@@ -115,7 +115,8 @@ lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
       libs.hedgehogCore,
     ) ++ libs.hedgehog,
     libraryDependencies :=
-      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    Test / console / scalacOptions := List.empty,
   )
   .dependsOn(extrasCore, extrasCats)
 
