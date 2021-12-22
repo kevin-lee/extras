@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
-id: 'get'
-title: 'Get extras-concurrent'
+id: 'getting-started'
+title: 'Getting Started'
 ---
 
 # Get `extras-concurrent`
