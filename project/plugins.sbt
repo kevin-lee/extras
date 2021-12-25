@@ -5,7 +5,7 @@ logLevel := sbt.Level.Warn
 addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.5.10")
 
 libraryDependencies ++= {
-  if (scalaVersion.value.startsWith("3.0")) {
+  if (scalaVersion.value.startsWith("3.")) {
     List.empty[ModuleID]
   } else {
     val sbtV   = (pluginCrossBuild / sbtBinaryVersion).value
@@ -15,7 +15,7 @@ libraryDependencies ++= {
 }
 
 addSbtPlugin("org.scalameta" % "sbt-mdoc"     % "2.2.22")
-addSbtPlugin("io.kevinlee"   % "sbt-docusaur" % "0.8.0")
+addSbtPlugin("io.kevinlee"   % "sbt-docusaur" % "0.8.1")
 
 val sbtDevOopsVersion = "2.14.0"
 addSbtPlugin("io.kevinlee" % "sbt-devoops-scala"     % sbtDevOopsVersion)
