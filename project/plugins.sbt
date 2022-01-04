@@ -14,8 +14,9 @@ libraryDependencies ++= {
   }
 }
 
-addSbtPlugin("org.scalameta" % "sbt-mdoc"     % "2.2.22")
-addSbtPlugin("io.kevinlee"   % "sbt-docusaur" % "0.8.1")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.9.2")
+addSbtPlugin("org.scalameta" % "sbt-mdoc"      % "2.2.22")
+addSbtPlugin("io.kevinlee"   % "sbt-docusaur"  % "0.8.1")
 
 val sbtDevOopsVersion = "2.14.0"
 addSbtPlugin("io.kevinlee" % "sbt-devoops-scala"     % sbtDevOopsVersion)
