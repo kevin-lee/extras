@@ -25,12 +25,12 @@ object OptionSyntax {
 
   final class OptionTFOptionOps[F[_], A](private val fOfOption: F[Option[A]]) extends AnyVal {
     @inline def optionT: OptionT[F, A] = OptionT[F, A](fOfOption)
-    @inline def t: OptionT[F, A] = optionT
+    @inline def t: OptionT[F, A]       = optionT
   }
 
   final class OptionTOptionOps[A](private val option: Option[A]) extends AnyVal {
     @inline def optionT[F[_]: Applicative]: OptionT[F, A] = OptionT.fromOption[F](option)
-    @inline def t[F[_]: Applicative]: OptionT[F, A] = optionT[F]
+    @inline def t[F[_]: Applicative]: OptionT[F, A]       = optionT[F]
   }
 
   final class OptionTFAOps[F[_], A](private val fa: F[A]) extends AnyVal {
