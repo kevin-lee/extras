@@ -14,7 +14,7 @@ object types {
   final case class WaitFor(waitFor: FiniteDuration) extends AnyVal
 
   sealed trait ErrorLogger[-A <: Throwable] extends (A => Unit)
-  sealed trait ExecutionContextErrorLogger  extends ErrorLogger[Throwable]
+  sealed trait ExecutionContextErrorLogger extends ErrorLogger[Throwable]
   object ErrorLogger {
     final case class DefaultExecutionContextErrorLogger(errorLogger: String => Unit)
         extends ExecutionContextErrorLogger {

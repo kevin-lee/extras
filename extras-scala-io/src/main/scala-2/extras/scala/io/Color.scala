@@ -5,28 +5,28 @@ import scala.io.AnsiColor
 sealed trait Color
 
 object Color {
-  case object Black      extends Color
-  case object Red        extends Color
-  case object Green      extends Color
-  case object Yellow     extends Color
-  case object Blue       extends Color
-  case object Magenta    extends Color
-  case object Cyan       extends Color
-  case object White      extends Color
-  case object BlackBg    extends Color
-  case object RedBg      extends Color
-  case object GreenBg    extends Color
-  case object YellowBg   extends Color
-  case object BlueBg     extends Color
-  case object MagentaBg  extends Color
-  case object CyanBg     extends Color
-  case object WhiteBg    extends Color
-  case object Reset      extends Color
-  case object Bold       extends Color
+  case object Black extends Color
+  case object Red extends Color
+  case object Green extends Color
+  case object Yellow extends Color
+  case object Blue extends Color
+  case object Magenta extends Color
+  case object Cyan extends Color
+  case object White extends Color
+  case object BlackBg extends Color
+  case object RedBg extends Color
+  case object GreenBg extends Color
+  case object YellowBg extends Color
+  case object BlueBg extends Color
+  case object MagentaBg extends Color
+  case object CyanBg extends Color
+  case object WhiteBg extends Color
+  case object Reset extends Color
+  case object Bold extends Color
   case object Underlined extends Color
-  case object Blink      extends Color
-  case object Reversed   extends Color
-  case object Invisible  extends Color
+  case object Blink extends Color
+  case object Reversed extends Color
+  case object Invisible extends Color
 
   def black: Color = Black
 

@@ -25,12 +25,12 @@ object EitherSyntax {
 
   final class EitherTFEitherOps[F[_], A, B](private val fOfEither: F[Either[A, B]]) extends AnyVal {
     @inline def eitherT: EitherT[F, A, B] = EitherT[F, A, B](fOfEither)
-    @inline def t: EitherT[F, A, B] = eitherT
+    @inline def t: EitherT[F, A, B]       = eitherT
   }
 
   final class EitherTEitherOps[A, B](private val either: Either[A, B]) extends AnyVal {
     @inline def eitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither[F](either)
-    @inline def t[F[_]: Applicative]: EitherT[F, A, B] = eitherT[F]
+    @inline def t[F[_]: Applicative]: EitherT[F, A, B]       = eitherT[F]
   }
 
   final class EitherTFAOps[F[_], A](private val fa: F[A]) extends AnyVal {

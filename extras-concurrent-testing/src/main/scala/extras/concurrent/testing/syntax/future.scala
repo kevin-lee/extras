@@ -6,10 +6,9 @@ import extras.concurrent.testing.types.{ErrorLogger, WaitFor}
 
 import scala.concurrent.{Future, TimeoutException}
 
-/**
- * @author Kevin Lee
- * @since 2021-11-14
- */
+/** @author Kevin Lee
+  * @since 2021-11-14
+  */
 object future extends FutureSyntax
 
 trait FutureSyntax {
