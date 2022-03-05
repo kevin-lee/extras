@@ -27,6 +27,11 @@ ThisBuild / licenses   := props.licenses
 
 ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
 
+ThisBuild / scalafixConfig := (
+  if (scalaVersion.value.startsWith("3")) file(".scalafix-scala3.conf").some
+  else file(".scalafix-scala2.conf").some
+)
+
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
@@ -107,14 +112,14 @@ lazy val extrasCats = subProject("cats")
 
 lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
   .settings(
-    crossScalaVersions  := props.CrossScalaVersionsWithout_2_11,
+    crossScalaVersions             := props.CrossScalaVersionsWithout_2_11,
     libraryDependencies ++= List(
       libs.catsLatest,
       libs.catsEffect3,
       libs.libCatsEffectTestKit excludeAll ("org.scalacheck"),
       libs.hedgehogCore,
     ) ++ libs.hedgehog,
-    libraryDependencies :=
+    libraryDependencies            :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Test / console / scalacOptions := List.empty,
   )
@@ -128,7 +133,7 @@ lazy val docs = (project in file("generated-docs"))
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(libs.catsEffect),
     mdocVariables       := Map(
-      "VERSION" -> {
+      "VERSION"                  -> {
         import sys.process._
         "git fetch --tags".!
         val tag = "git rev-list --tags --max-count=1".!!.trim
@@ -167,11 +172,17 @@ def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(prefixedName))
     .settings(
-      name        := prefixedName,
-      Test / fork := true,
+      name           := prefixedName,
+      Test / fork    := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
+      scalafixConfig := (
+        if (scalaVersion.value.startsWith("3"))
+          ((ThisBuild / baseDirectory).value / ".scalafix-scala3.conf").some
+        else
+          ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
+      ),
     )
     .settings(
       mavenCentralPublishSettings

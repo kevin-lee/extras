@@ -14,6 +14,6 @@ object CanClose {
 
   def apply[A: CanClose]: CanClose[A] = implicitly[CanClose[A]]
 
-  implicit final val autoCloseableCanClose: CanClose[AutoCloseable] = _.close()
+  implicit val autoCloseableCanClose: CanClose[AutoCloseable] = _.close()
 
 }

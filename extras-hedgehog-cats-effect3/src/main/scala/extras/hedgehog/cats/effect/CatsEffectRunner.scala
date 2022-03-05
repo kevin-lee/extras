@@ -46,7 +46,7 @@ object CatsEffectRunner {
 
   def unsafeRun[A](ioa: IO[A])(implicit ticker: Ticker): Outcome[Option, Throwable, A] =
     try {
-      var results: Outcome[Option, Throwable, A] = Outcome.Succeeded(None)
+      var results: Outcome[Option, Throwable, A] = Outcome.Succeeded(None) // scalafix:ok DisableSyntax.var
 
       ioa
         .flatMap(IO.pure(_))
@@ -62,7 +62,7 @@ object CatsEffectRunner {
     } catch {
       case t: Throwable =>
         t.printStackTrace()
-        throw t
+        throw t // scalafix:ok DisableSyntax.throw
     }
 
   def unsafeRunSync[A](ioa: SyncIO[A]): Outcome[Id, Throwable, A] =

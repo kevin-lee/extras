@@ -22,7 +22,7 @@ object CanCloseSpec extends Properties {
     finally CanClose[A].close(a)
 
   final case class MyResource(value: String) {
-    private[this] var _closed: Boolean     = false
+    private[this] var _closed: Boolean     = false  // scalafix:ok DisableSyntax.var
     def closed: Boolean                    = _closed
     def closed_=(newClosed: Boolean): Unit = {
       _closed = newClosed
@@ -30,12 +30,12 @@ object CanCloseSpec extends Properties {
     }
   }
   object MyResource {
-    implicit final val myResourceCanClose: CanClose[MyResource] =
+    implicit val myResourceCanClose: CanClose[MyResource] =
       _.closed = true
   }
 
   def testAutoCloseableCanClose: Result = {
-    var result: Option[String] = None
+    var result: Option[String] = None // scalafix:ok DisableSyntax.var
     val autoCloseable          = new AutoCloseable {
       override def close(): Unit = {
         result = Some("Closed")
@@ -54,7 +54,7 @@ object CanCloseSpec extends Properties {
   }
 
   def testSourceCanClose: Result = {
-    var result: Option[String] = None
+    var result: Option[String] = None // scalafix:ok DisableSyntax.var
 
     val expected = "abcde"
 
