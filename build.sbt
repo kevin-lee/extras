@@ -195,7 +195,7 @@ lazy val mavenCentralPublishSettings: SettingsDefinition = List(
 
 def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
-  Project(projectName, file(prefixedName))
+  Project(projectName, file(s"modules/$prefixedName"))
     .settings(
       name           := prefixedName,
       Test / fork    := true,
@@ -217,7 +217,7 @@ def subProject(projectName: String): Project = {
 def crossSubProject(projectName: String, crossProject: CrossProject.Builder): CrossProject = {
   val prefixedName = prefixedProjectName(projectName)
   crossProject
-    .in(file(prefixedName))
+    .in(file(s"modules/$prefixedName"))
     .settings(
       name           := prefixedName,
       Test / fork    := true,
