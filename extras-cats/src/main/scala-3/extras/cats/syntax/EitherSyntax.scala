@@ -10,12 +10,12 @@ trait EitherSyntax {
 
   extension [F[_], A, B](fOfEither: F[Either[A, B]]) {
     inline def eitherT: EitherT[F, A, B] = EitherT[F, A, B](fOfEither)
-    inline def t: EitherT[F, A, B] = eitherT
+    inline def t: EitherT[F, A, B]       = eitherT
   }
 
   extension [A, B](either: Either[A, B]) {
     inline def eitherT[F[_]: Applicative]: EitherT[F, A, B] = EitherT.fromEither[F](either)
-    inline def t[F[_]: Applicative]: EitherT[F, A, B] = eitherT[F]
+    inline def t[F[_]: Applicative]: EitherT[F, A, B]       = eitherT[F]
   }
 
   extension [F[_], A](fa: F[A]) {

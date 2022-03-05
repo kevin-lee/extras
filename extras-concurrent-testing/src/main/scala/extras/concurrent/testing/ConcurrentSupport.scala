@@ -15,7 +15,9 @@ trait ConcurrentSupport {
     if (minThread >= 1)
       Executors.newFixedThreadPool(math.max(minThread, Runtime.getRuntime.availableProcessors() >> 1))
     else
-      throw new IllegalArgumentException(s"minThread must be greater than or equal to 1. [minThread: $minThread]") // scalafix:ok DisableSyntax.throw
+      throw new IllegalArgumentException(
+        s"minThread must be greater than or equal to 1. [minThread: $minThread]"
+      ) // scalafix:ok DisableSyntax.throw
 
   def newExecutionContext(
     executorService: ExecutorService,

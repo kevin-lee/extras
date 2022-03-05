@@ -15,6 +15,7 @@ libraryDependencies ++= {
 }
 
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix"  % "0.9.34")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt"  % "2.4.6")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.9.2")
 addSbtPlugin("org.scalameta" % "sbt-mdoc"      % "2.2.22")
 addSbtPlugin("io.kevinlee"   % "sbt-docusaur"  % "0.8.1")

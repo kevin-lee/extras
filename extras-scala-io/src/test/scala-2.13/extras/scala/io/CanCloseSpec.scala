@@ -22,7 +22,7 @@ object CanCloseSpec extends Properties {
     finally CanClose[A].close(a)
 
   final case class MyResource(value: String) {
-    private[this] var _closed: Boolean     = false  // scalafix:ok DisableSyntax.var
+    private[this] var _closed: Boolean     = false // scalafix:ok DisableSyntax.var
     def closed: Boolean                    = _closed
     def closed_=(newClosed: Boolean): Unit = {
       _closed = newClosed

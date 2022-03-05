@@ -1,9 +1,8 @@
 package extras.scala.io
 
-/**
- * @author Kevin Lee
- * @since 2021-09-20
- */
+/** @author Kevin Lee
+  * @since 2021-09-20
+  */
 trait CanClose[-A] extends scala.util.Using.Releasable[A] {
 
   override def release(resource: A): Unit = close(resource)
