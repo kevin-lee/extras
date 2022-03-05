@@ -1,3 +1,5 @@
+import sbtcrossproject.CrossProject
+
 ThisBuild / scalaVersion     := props.ProjectScalaVersion
 ThisBuild / organization     := props.Org
 ThisBuild / organizationName := "Kevin's Code"
@@ -42,22 +44,31 @@ lazy val extras = (project in file("."))
   .settings(noPublish)
   .settings(noDoc)
   .aggregate(
-    extrasCore,
-    extrasScalaIo,
-    extrasConcurrent,
-    extrasConcurrentTesting,
-    extrasCats,
-    extrasHedgehogCatsEffect3
+    extrasCoreJvm,
+    extrasCoreJs,
+    extrasScalaIoJvm,
+    extrasScalaIoJs,
+    extrasConcurrentJvm,
+    extrasConcurrentJs,
+    extrasConcurrentTestingJvm,
+    extrasConcurrentTestingJs,
+    extrasCatsJvm,
+    extrasCatsJs,
+    extrasHedgehogCatsEffect3Jvm,
+    extrasHedgehogCatsEffect3Js,
   )
 
-lazy val extrasCore = subProject("core")
+lazy val extrasCore = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 
-lazy val extrasScalaIo = subProject("scala-io")
+lazy val extrasCoreJvm = extrasCore.jvm
+lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
+
+lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
@@ -82,20 +93,28 @@ lazy val extrasScalaIo = subProject("scala-io")
     },
   )
 
-lazy val extrasConcurrent = subProject("concurrent")
+lazy val extrasScalaIoJvm = extrasScalaIo.jvm
+lazy val extrasScalaIoJs  = extrasScalaIo.js.settings(Test / fork := false)
+
+lazy val extrasConcurrent    = crossSubProject("concurrent", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
+lazy val extrasConcurrentJvm = extrasConcurrent.jvm
+lazy val extrasConcurrentJs  = extrasConcurrent.js.settings(Test / fork := false)
 
-lazy val extrasConcurrentTesting = subProject("concurrent-testing")
+lazy val extrasConcurrentTesting = crossSubProject("concurrent-testing", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
   .dependsOn(extrasCore, extrasConcurrent)
 
-lazy val extrasCats = subProject("cats")
+lazy val extrasConcurrentTestingJvm = extrasConcurrentTesting.jvm
+lazy val extrasConcurrentTestingJs  = extrasConcurrentTesting.js.settings(Test / fork := false)
+
+lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
@@ -110,7 +129,10 @@ lazy val extrasCats = subProject("cats")
   )
   .dependsOn(extrasConcurrentTesting % Test)
 
-lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
+lazy val extrasCatsJvm = extrasCats.jvm
+lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
+
+lazy val extrasHedgehogCatsEffect3 = crossSubProject("hedgehog-cats-effect3", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions             := props.CrossScalaVersionsWithout_2_11,
     libraryDependencies ++= List(
@@ -124,6 +146,9 @@ lazy val extrasHedgehogCatsEffect3 = subProject("hedgehog-cats-effect3")
     Test / console / scalacOptions := List.empty,
   )
   .dependsOn(extrasCore, extrasCats)
+
+lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCatsEffect3.jvm
+lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCatsEffect3.js.settings(Test / fork := false)
 
 lazy val docs = (project in file("generated-docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
@@ -154,7 +179,7 @@ lazy val docs = (project in file("generated-docs"))
     docusaurBuildDir    := docusaurDir.value / "build",
   )
   .settings(noPublish)
-  .dependsOn(extrasConcurrent, extrasConcurrentTesting, extrasCats, extrasScalaIo)
+  .dependsOn(extrasConcurrentJvm, extrasConcurrentTestingJvm, extrasCatsJvm, extrasScalaIoJvm)
 
 // scalafmt: off
 
@@ -171,6 +196,28 @@ lazy val mavenCentralPublishSettings: SettingsDefinition = List(
 def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(prefixedName))
+    .settings(
+      name           := prefixedName,
+      Test / fork    := true,
+      libraryDependencies ++= libs.hedgehog,
+      testFrameworks ~=
+        (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
+      scalafixConfig := (
+        if (scalaVersion.value.startsWith("3"))
+          ((ThisBuild / baseDirectory).value / ".scalafix-scala3.conf").some
+        else
+          ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
+      ),
+    )
+    .settings(
+      mavenCentralPublishSettings
+    )
+}
+
+def crossSubProject(projectName: String, crossProject: CrossProject.Builder): CrossProject = {
+  val prefixedName = prefixedProjectName(projectName)
+  crossProject
+    .in(file(prefixedName))
     .settings(
       name           := prefixedName,
       Test / fork    := true,
