@@ -44,9 +44,9 @@ object ConcurrentSupportSpec extends Properties {
     try {
       val threadPoolExecutor = executorService match {
         case _: ThreadPoolExecutor =>
-          executorService.asInstanceOf[ThreadPoolExecutor]
+          executorService.asInstanceOf[ThreadPoolExecutor] // scalafix:ok DisableSyntax.asInstanceOf
         case _ =>
-          throw new MessageOnlyException(
+          throw new MessageOnlyException( // scalafix:ok DisableSyntax.throw
             s"executorService should be ThreadPoolExecutor but ${executorService.getClass.getName}"
           )
       }

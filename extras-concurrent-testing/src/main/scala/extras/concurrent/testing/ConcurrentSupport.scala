@@ -15,7 +15,7 @@ trait ConcurrentSupport {
     if (minThread >= 1)
       Executors.newFixedThreadPool(math.max(minThread, Runtime.getRuntime.availableProcessors() >> 1))
     else
-      throw new IllegalArgumentException(s"minThread must be greater than or equal to 1. [minThread: $minThread]")
+      throw new IllegalArgumentException(s"minThread must be greater than or equal to 1. [minThread: $minThread]") // scalafix:ok DisableSyntax.throw
 
   def newExecutionContext(
     executorService: ExecutorService,
@@ -67,7 +67,7 @@ trait ConcurrentSupport {
     } catch {
       case ex: TimeoutException =>
         errorLogger(ex)
-        throw ex
+        throw ex // scalafix:ok DisableSyntax.throw
     }
 
   @SuppressWarnings(Array("org.wartremover.warts.ImplicitParameter", "org.wartremover.warts.Throw"))

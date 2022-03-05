@@ -12,7 +12,7 @@ object CanClose {
 
   def apply[A: CanClose]: CanClose[A] = implicitly[CanClose[A]]
 
-  implicit final val autoCloseableCanClose: CanClose[AutoCloseable] = new CanClose[AutoCloseable] {
+  implicit val autoCloseableCanClose: CanClose[AutoCloseable] = new CanClose[AutoCloseable] {
     override def close(a: AutoCloseable): Unit = a.close()
   }
 
