@@ -250,11 +250,15 @@ object OptionSyntaxSpec extends Properties {
         List(
           Result.assert(actual1Value.isDefined).log(s"actual1Value should be Some. actual1Value: $actual1Value"),
           actual1Value ==== expected1Value,
-          Result.assert(actual1_1Value.isDefined).log(s"actual1_1Value should be Some. actual1_1Value: $actual1_1Value"),
+          Result
+            .assert(actual1_1Value.isDefined)
+            .log(s"actual1_1Value should be Some. actual1_1Value: $actual1_1Value"),
           actual1_1Value ==== expected1Value,
           Result.assert(actual2Value.isDefined).log(s"actual2Value should be Some. actual2Value: $actual2Value"),
           actual2Value ==== expected2Value,
-          Result.assert(actual2_1Value.isDefined).log(s"actual2_1Value should be Some. actual2_1Value: $actual2_1Value"),
+          Result
+            .assert(actual2_1Value.isDefined)
+            .log(s"actual2_1Value should be Some. actual2_1Value: $actual2_1Value"),
           actual2_1Value ==== expected2Value,
           Result.assert(actual3Value.isDefined).log(s"actual3Value should be Some. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,

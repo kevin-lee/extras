@@ -57,7 +57,8 @@ jobs:
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
           sbt \
-            "+scalafixAll --check"
+            "+scalafixAll --check" \
+            +scalafmtCheckAll
 
       - name: "[PR] Build All for ${{ matrix.scala.name }} - PR-#${{ github.event.pull_request.number }} - ${{ github.run_number }}"
         if: github.event_name == 'pull_request'
@@ -76,5 +77,5 @@ jobs:
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
           sbt \
-            "+scalafixAll --check"
-
+            "+scalafixAll --check" \
+            +scalafmtCheckAll

@@ -29,7 +29,7 @@ object CanCloseSpec extends Properties {
       ()
     }
   }
-  object MyResource                          {
+  object MyResource {
     given myResourceCanClose: CanClose[MyResource] =
       _.closed = true
   }
