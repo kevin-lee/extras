@@ -92,7 +92,8 @@ lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatfo
     crossScalaVersions  := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
       libs.newtype,
-    ) ++ (if (scalaVersion.value.startsWith("2.11")) List(libs.catsOld, libs.refined_Scala2_11) else List(libs.cats, libs.refined)),
+    ) ++ (if (scalaVersion.value.startsWith("2.11")) List(libs.catsOld, libs.refined_Scala2_11)
+          else List(libs.cats, libs.refined)),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest, extrasReflects)
@@ -211,7 +212,14 @@ lazy val docs = (project in file("generated-docs"))
     docusaurBuildDir    := docusaurDir.value / "build",
   )
   .settings(noPublish)
-  .dependsOn(extrasConcurrentJvm, extrasConcurrentTestingJvm, extrasCatsJvm, extrasScalaIoJvm)
+  .dependsOn(
+    extrasConcurrentJvm,
+    extrasReflectsJvm,
+    extrasRefinementJvm,
+    extrasConcurrentTestingJvm,
+    extrasCatsJvm,
+    extrasScalaIoJvm
+  )
 
 // scalafmt: off
 
@@ -355,7 +363,7 @@ lazy val libs = new {
 
   def scalaReflect(scalaVersion: String): ModuleID = "org.scala-lang" % "scala-reflect" % scalaVersion
 
-  lazy val newtype           = "io.estatico" %% "newtype"      % props.NewtypeVersion
+  lazy val newtype           = "io.estatico" %% "newtype" % props.NewtypeVersion
   lazy val refined           = "eu.timepit"  %% "refined" % props.RefinedVersion
   lazy val refined_Scala2_11 = "eu.timepit"  %% "refined" % props.Refined_Scala2_11_Version
 
