@@ -46,6 +46,10 @@ lazy val extras = (project in file("."))
   .aggregate(
     extrasCoreJvm,
     extrasCoreJs,
+    extrasReflectsJvm,
+    extrasReflectsJs,
+    extrasRefinementJvm,
+    extrasRefinementJs,
     extrasScalaIoJvm,
     extrasScalaIoJs,
     extrasConcurrentJvm,
@@ -67,6 +71,34 @@ lazy val extrasCore = crossSubProject("core", crossProject(JVMPlatform, JSPlatfo
 
 lazy val extrasCoreJvm = extrasCore.jvm
 lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
+
+lazy val extrasReflects = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.Scala2Versions,
+    libraryDependencies ++= libs.hedgehog ++
+      (
+        if (isScala3(scalaVersion.value)) List.empty
+        else List(libs.scalaReflect(scalaVersion.value))
+      ),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(extrasCore % props.IncludeTest)
+
+lazy val extrasReflectsJvm = extrasReflects.jvm
+lazy val extrasReflectsJs  = extrasReflects.js.settings(Test / fork := false)
+
+lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.Scala2Versions,
+    libraryDependencies ++= libs.hedgehog ++ List(
+      libs.newtype,
+    ) ++ (if (scalaVersion.value.startsWith("2.11")) List(libs.catsOld, libs.refined_Scala2_11) else List(libs.cats, libs.refined)),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(extrasCore % props.IncludeTest, extrasReflects)
+
+lazy val extrasRefinementJvm = extrasRefinement.jvm
+lazy val extrasRefinementJs  = extrasRefinement.js.settings(Test / fork := false)
 
 lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
   .settings(
@@ -285,6 +317,10 @@ lazy val props = new {
 
   val HedgehogVersion = "0.8.0"
 
+  val NewtypeVersion            = "0.4.4"
+  val RefinedVersion            = "0.9.28"
+  val Refined_Scala2_11_Version = "0.9.12"
+
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
       m.name == "wartremover" ||
@@ -293,6 +329,7 @@ lazy val props = new {
         m.name == "better-monadic-for" ||
         m.name == "mdoc"
 
+  val IncludeTest = "compile->compile;test->test"
 }
 
 lazy val libs = new {
@@ -316,4 +353,12 @@ lazy val libs = new {
     hedgehogSbt,
   ).map(_ % Test)
 
+  def scalaReflect(scalaVersion: String): ModuleID = "org.scala-lang" % "scala-reflect" % scalaVersion
+
+  lazy val newtype           = "io.estatico" %% "newtype"      % props.NewtypeVersion
+  lazy val refined           = "eu.timepit"  %% "refined" % props.RefinedVersion
+  lazy val refined_Scala2_11 = "eu.timepit"  %% "refined" % props.Refined_Scala2_11_Version
+
 }
+
+def isScala3(scalaVersion: String): Boolean = scalaVersion.startsWith("3.")

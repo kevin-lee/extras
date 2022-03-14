@@ -1,0 +1,47 @@
+package extras.refinement.syntax
+
+import cats.data.EitherNel
+import cats.syntax.all._
+import eu.timepit.refined._
+import eu.timepit.refined.api._
+import extras.reflects.syntax.reflects._
+import io.estatico.newtype.Coercible
+import io.estatico.newtype.ops._
+
+trait refinement {
+  import refinement.{PartiallyAppliedRefinement, RefinementSyntax}
+
+  def validateAs[A]: PartiallyAppliedRefinement[A] = new PartiallyAppliedRefinement[A]()
+
+  implicit def refinementSyntax[T](value: T): RefinementSyntax[T] = new RefinementSyntax(value)
+}
+
+object refinement extends refinement { self =>
+  import scala.reflect.runtime.universe._
+
+  private[refinement] final class PartiallyAppliedRefinement[A](private val dummy: Boolean = false) extends AnyVal {
+    def apply[T, P](value: T)(
+      implicit coercible: Coercible[Refined[T, P], A],
+      validate: Validate[T, P],
+      tt: WeakTypeTag[A]
+    ): EitherNel[String, A] =
+      refineV[P](value)
+        .leftMap(err => s"Failed to create ${weakTypeTag[A].nestedTypeName}: $err")
+        .toEitherNel
+        .map(_.coerce[A])
+  }
+
+  private[refinement] final class PartiallyAppliedRefinementForSyntax[A, T](private val value: T) extends AnyVal {
+    def validate[P](
+      implicit coercible: Coercible[Refined[T, P], A],
+      validate: Validate[T, P],
+      tt: WeakTypeTag[A]
+    ): EitherNel[String, A] =
+      self.validateAs[A](value)
+  }
+
+  final class RefinementSyntax[T](private val t: T) extends AnyVal {
+    def as[A]: PartiallyAppliedRefinementForSyntax[A, T] = new PartiallyAppliedRefinementForSyntax[A, T](t)
+  }
+
+}
