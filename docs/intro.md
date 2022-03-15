@@ -30,3 +30,6 @@ Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
 * [extras-scala-io](extras-scala-io/getting-started.md)
 * [extras-concurrent](extras-concurrent/getting-started.md)
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->
+* [extras-hedgehog-cats-effect3](extras-hedgehog-cats-effect3/getting-started.md)
+* [extras-reflects](extras-reflects/getting-started.md) (n/a to Scala 3)
+* [extras-refinement](extras-refinement/getting-started.md) (n/a to Scala 3)

@@ -4,7 +4,9 @@ id: 'syntax'
 title: 'Refinement Syntax'
 ---
 ## Why `refinement` syntax?
-When you use `newtype` and `refined` together to have better type-safety, you often have some boilerplate code for runtime value validation when creating newtype + refinement type just like this.
+When you use [newtype](https://github.com/estatico/scala-newtype) and [refined](https://github.com/fthomas/refined) together 
+to have better type-safety, you often have some boilerplate code for runtime value validation 
+when creating newtype + refinement type just like this.
 
 ```scala
 YourRefinementType.from(value)
@@ -12,6 +14,29 @@ YourRefinementType.from(value)
   .map(YourNewtype(_))
   .leftMap(err => s"Failed to create YourNewtype: $err")
 ```
+
+In practice, it may look like
+```scala mdoc:reset-object
+import cats.syntax.all._
+import io.estatico.newtype.macros.newtype
+import eu.timepit.refined.types.string.NonEmptyString
+
+@newtype case class Name(value: NonEmptyString)
+
+val validNameValue = "Kevin"
+NonEmptyString.from(validNameValue)
+  .toEitherNel
+  .map(Name(_))
+  .leftMap(err => s"Failed to create Name: $err")
+
+val invalidNameValue = ""
+NonEmptyString.from(invalidNameValue)
+  .toEitherNel
+  .map(Name(_))
+  .leftMap(err => s"Failed to create Name: $err")
+```
+
+or this
 
 ```scala mdoc:reset-object
 import cats.syntax.all._
@@ -34,12 +59,18 @@ import Types._
 
 val idValue = 999
 
-val id  = PositiveInt.from(idValue).toEitherNel.map(Id(_)).leftMap(err => s"Failed to create Types.Id: $err")
+val id  = PositiveInt.from(idValue)
+            .toEitherNel
+            .map(Id(_))
+            .leftMap(err => s"Failed to create Types.Id: $err")
 println(id)
 
 val nameValue = "Kevin"
 
-val name  = NonEmptyString.from(nameValue).toEitherNel.map(Name(_)).leftMap(err => s"Failed to create Types.Name: $err")
+val name  = NonEmptyString.from(nameValue)
+            .toEitherNel
+            .map(Name(_))
+            .leftMap(err => s"Failed to create Types.Name: $err")
 println(name)
 
 val person = (id, name).parMapN(Person.apply)
@@ -67,6 +98,7 @@ value.validateAs[YourNewtype]
 
 :::note
 The idea of `validateAs[A](value)` and `value.validateAs[A]` is from [Practical FP in Scala](https://leanpub.com/pfp-scala).
+The syntax is not exactly the same, but the most important core logic of using `Coercible` is the same.
 :::
 
 ### Example: Valid Case
