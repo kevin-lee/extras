@@ -13,7 +13,7 @@ trait refinement {
 
   def validateAs[A]: PartiallyAppliedRefinement[A] = new PartiallyAppliedRefinement[A]()
 
-  implicit def refinementSyntax[T](value: T): RefinementSyntax[T] = new RefinementSyntax(value)
+  implicit def refinementSyntax[T, P](value: T): RefinementSyntax[T, P] = new RefinementSyntax(value)
 }
 
 object refinement extends refinement { self =>
@@ -31,17 +31,12 @@ object refinement extends refinement { self =>
         .map(_.coerce[A])
   }
 
-  private[refinement] final class PartiallyAppliedRefinementForSyntax[A, T](private val value: T) extends AnyVal {
-    def validate[P](
+  private[refinement] final class RefinementSyntax[T, P](private val value: T) extends AnyVal {
+    def validateAs[A](
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
       tt: WeakTypeTag[A]
-    ): EitherNel[String, A] =
-      self.validateAs[A](value)
-  }
-
-  final class RefinementSyntax[T](private val t: T) extends AnyVal {
-    def as[A]: PartiallyAppliedRefinementForSyntax[A, T] = new PartiallyAppliedRefinementForSyntax[A, T](t)
+    ): EitherNel[String, A] = self.validateAs[A](value)
   }
 
 }

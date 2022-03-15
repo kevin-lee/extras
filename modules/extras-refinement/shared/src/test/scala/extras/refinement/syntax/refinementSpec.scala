@@ -37,7 +37,7 @@ object refinementSpec extends Properties {
   } yield {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
-    val actual = nonEmptyString.as[Name].validate
+    val actual = nonEmptyString.validateAs[Name]
     actual ==== Right(Name(NonEmptyString.unsafeFrom(nonEmptyString)))
   }
 
@@ -53,7 +53,7 @@ object refinementSpec extends Properties {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
     val input  = ""
-    val actual = input.as[Name].validate
+    val actual = input.validateAs[Name]
     actual ==== Left(NonEmptyList.of("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
   }
 
@@ -71,7 +71,7 @@ object refinementSpec extends Properties {
   } yield {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
-    val actual = positiveInt.as[Id].validate
+    val actual = positiveInt.validateAs[Id]
     actual ==== Right(Id(PositiveInt.unsafeFrom(positiveInt)))
   }
 
@@ -89,7 +89,7 @@ object refinementSpec extends Properties {
   } yield {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
-    val actual = nonPositiveInt.as[Id].validate
+    val actual = nonPositiveInt.validateAs[Id]
     actual ==== Left(NonEmptyList.of(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
   }
 
