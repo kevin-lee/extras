@@ -326,7 +326,7 @@ lazy val props = new {
   val HedgehogVersion = "0.8.0"
 
   val NewtypeVersion            = "0.4.4"
-  val RefinedVersion            = "0.9.28"
+  val RefinedVersion            = "0.9.27"
   val Refined_Scala2_11_Version = "0.9.12"
 
   val isScala3Incompatible: ModuleID => Boolean =
