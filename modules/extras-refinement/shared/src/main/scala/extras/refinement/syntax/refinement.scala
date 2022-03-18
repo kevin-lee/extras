@@ -1,6 +1,6 @@
 package extras.refinement.syntax
 
-import cats.data.EitherNel
+import cats.data.EitherNec
 import cats.syntax.all._
 import eu.timepit.refined._
 import eu.timepit.refined.api._
@@ -24,10 +24,10 @@ object refinement extends refinement { self =>
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
       tt: WeakTypeTag[A]
-    ): EitherNel[String, A] =
+    ): EitherNec[String, A] =
       refineV[P](value)
         .leftMap(err => s"Failed to create ${weakTypeTag[A].nestedTypeName}: $err")
-        .toEitherNel
+        .toEitherNec
         .map(_.coerce[A])
   }
 
@@ -36,7 +36,7 @@ object refinement extends refinement { self =>
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
       tt: WeakTypeTag[A]
-    ): EitherNel[String, A] = self.validateAs[A](value)
+    ): EitherNec[String, A] = self.validateAs[A](value)
   }
 
 }
