@@ -260,6 +260,8 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
     .in(file(s"modules/$prefixedName"))
     .settings(
       name           := prefixedName,
+      semanticdbEnabled := true,
+      semanticdbVersion := scalafixSemanticdb.revision,
       Test / fork    := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
