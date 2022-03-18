@@ -1,6 +1,6 @@
 package extras.refinement.syntax
 
-import cats.data.NonEmptyList
+import cats.data.NonEmptyChain
 import eu.timepit.refined.api.{Refined, RefinedTypeOps}
 import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.types.string.NonEmptyString
@@ -46,7 +46,7 @@ object refinementSpec extends Properties {
     import extras.refinement.syntax.refinement._
     val input  = ""
     val actual = validateAs[Name](input)
-    actual ==== Left(NonEmptyList.of("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
+    actual ==== Left(NonEmptyChain("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
   }
 
   def testStringAsValidateToErrorSyntax: Result = {
@@ -54,7 +54,7 @@ object refinementSpec extends Properties {
     import extras.refinement.syntax.refinement._
     val input  = ""
     val actual = input.validateAs[Name]
-    actual ==== Left(NonEmptyList.of("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
+    actual ==== Left(NonEmptyChain("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
   }
 
   def testValidateAsAIntToAIntRefinedPositiveSyntax: Property = for {
@@ -81,7 +81,7 @@ object refinementSpec extends Properties {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
     val actual = validateAs[Id](nonPositiveInt)
-    actual ==== Left(NonEmptyList.of(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
+    actual ==== Left(NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
   }
 
   def testIntAsValidateToErrorSyntax: Property = for {
@@ -90,7 +90,7 @@ object refinementSpec extends Properties {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
     val actual = nonPositiveInt.validateAs[Id]
-    actual ==== Left(NonEmptyList.of(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
+    actual ==== Left(NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
   }
 
   object TypesForTesting {
