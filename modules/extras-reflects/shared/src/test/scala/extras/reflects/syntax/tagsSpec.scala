@@ -10,10 +10,38 @@ import scala.reflect.ClassTag
   */
 object tagsSpec extends Properties {
   override def tests: List[Test] = List(
+    example("test A.nestedTypeName[WeakTypeTag[A]]", testANestedTypeNameWeakTypeTagA),
     example("test weakTypeTag[A].nestedTypeName", testWeakTypeTagANestedTypeName),
     example("test (A with ClassTag[A]).nestedTypeName", testAWithClassTagANestedTypeName),
     example("test ClassTag[A].nestedTypeName", testClassTagANestedTypeName)
   )
+
+  def testANestedTypeNameWeakTypeTagA: Result = {
+    import SomeTestTypes._
+    import extras.reflects.syntax.tags._
+    val expected1t = "SomeTestTypes.Aaa"
+    val actual1t   = Aaa.bbb(123).nestedTypeName
+    val expected1  = "Aaa.Bbb"
+    val actual1    = Aaa.Bbb(123).nestedTypeName
+    val expected2t = "SomeTestTypes.Aaa"
+    val actual2t   = Aaa.ccc.nestedTypeName
+    val expected2  = "Aaa.Ccc"
+    val actual2    = Aaa.Ccc.nestedTypeName
+    val expected3  = "SomeTestTypes.Something[String]"
+    val actual3    = Something("abc").nestedTypeName
+    val expected4  = s"${this.getClass.getSimpleName.stripSuffix("$")}.SomeTestTypes"
+    val actual4    = SomeTestTypes.nestedTypeName
+    Result.all(
+      List(
+        (actual1t ==== expected1t).log("Failed actual1t ==== expected1t"),
+        (actual1 ==== expected1).log("Failed actual1 ==== expected1"),
+        (actual2t ==== expected2t).log("Failed actual2t ==== expected2t"),
+        (actual2 ==== expected2).log("Failed actual2 ==== expected2"),
+        (actual3 ==== expected3).log("Failed actual3 ==== expected3"),
+        (actual4 ==== expected4).log("Failed actual4 ==== expected4")
+      )
+    )
+  }
 
   def testWeakTypeTagANestedTypeName: Result = {
     import SomeTestTypes._
