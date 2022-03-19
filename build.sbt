@@ -189,7 +189,23 @@ lazy val docs = (project in file("generated-docs"))
     name                := prefixedProjectName("docs"),
     mdocIn              := file("docs"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
-    libraryDependencies ++= List(libs.catsEffect),
+    libraryDependencies ++= List(
+      libs.catsEffect,
+    ) ++ {
+      import sys.process._
+      "git fetch --tags".!
+      val tag           = "git rev-list --tags --max-count=1".!!.trim
+      val latestVersion = s"git describe --tags $tag".!!.trim.stripPrefix("v")
+
+      List(
+        "io.kevinlee" %% "extras-concurrent"         % latestVersion,
+        "io.kevinlee" %% "extras-reflects"           % latestVersion,
+        "io.kevinlee" %% "extras-refinement"         % latestVersion,
+        "io.kevinlee" %% "extras-concurrent-testing" % latestVersion,
+        "io.kevinlee" %% "extras-cats"               % latestVersion,
+        "io.kevinlee" %% "extras-scala-io"           % latestVersion,
+      )
+    },
     mdocVariables       := Map(
       "VERSION"                  -> {
         import sys.process._
@@ -212,14 +228,6 @@ lazy val docs = (project in file("generated-docs"))
     docusaurBuildDir    := docusaurDir.value / "build",
   )
   .settings(noPublish)
-  .dependsOn(
-    extrasConcurrentJvm,
-    extrasReflectsJvm,
-    extrasRefinementJvm,
-    extrasConcurrentTestingJvm,
-    extrasCatsJvm,
-    extrasScalaIoJvm
-  )
 
 // scalafmt: off
 
@@ -259,14 +267,14 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
   crossProject
     .in(file(s"modules/$prefixedName"))
     .settings(
-      name           := prefixedName,
+      name              := prefixedName,
       semanticdbEnabled := true,
       semanticdbVersion := scalafixSemanticdb.revision,
-      Test / fork    := true,
+      Test / fork       := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
-      scalafixConfig := (
+      scalafixConfig    := (
         if (scalaVersion.value.startsWith("3"))
           ((ThisBuild / baseDirectory).value / ".scalafix-scala3.conf").some
         else
