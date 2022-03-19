@@ -35,16 +35,8 @@ object tags extends tags {
   final class ClassTagSyntax[A](private val aClassTag: ClassTag[A]) extends AnyVal {
     def nestedRuntimeClassName: String = {
       val runtimeClass = aClassTag.runtimeClass
-
-      val className         = runtimeClass.getTypeName.stripSuffix("$")
-      val splitByDollarSign = className.split("\\$")
-
-      if (splitByDollarSign.length > 1) {
-        val theTypeName = splitByDollarSign.last
-        s"${splitByDollarSign.init.last.split("\\.").last}.$theTypeName"
-      } else {
-        className.split("\\.").takeRight(2).mkString(".")
-      }
+      val className    = runtimeClass.getTypeName
+      classes.getNestedName(className)
     }
   }
 
@@ -52,16 +44,8 @@ object tags extends tags {
 
     def nestedRuntimeClassName: String = {
       val runtimeClass = ClassTag[A](a.getClass).runtimeClass
-
-      val className         = runtimeClass.getTypeName.stripSuffix("$")
-      val splitByDollarSign = className.split("\\$")
-
-      if (splitByDollarSign.length > 1) {
-        val theTypeName = splitByDollarSign.last
-        s"${splitByDollarSign.init.last.split("\\.").last}.$theTypeName"
-      } else {
-        className.split("\\.").takeRight(2).mkString(".")
-      }
+      val className    = runtimeClass.getTypeName
+      classes.getNestedName(className)
     }
 
   }

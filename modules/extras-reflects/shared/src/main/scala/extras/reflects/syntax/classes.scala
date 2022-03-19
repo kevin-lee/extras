@@ -15,33 +15,23 @@ trait classes {
 object classes extends classes {
 
   final class ClassSyntax[A](private val aClass: Class[A]) extends AnyVal {
-    def nestedClassName: String = {
-      val className = aClass.getName.stripSuffix("$")
-
-      val splitByDollarSign = className.split("\\$")
-      if (splitByDollarSign.length > 1) {
-        val theTypeName = splitByDollarSign.last
-        s"${splitByDollarSign.init.last.split("\\.").last}.$theTypeName"
-      } else {
-        className.split("\\.").takeRight(2).mkString(".")
-      }
-    }
+    def nestedClassName: String = getNestedName(aClass.getName)
   }
 
   final class ASyntaxWithClass[A](private val a: A) extends AnyVal {
+    def nestedClassName: String = getNestedName(a.getClass.getName)
+  }
 
-    def nestedClassName: String = {
-      val className = a.getClass.getName.stripSuffix("$")
+  private[syntax] def getNestedName(className: String): String = {
+    val classNameWithNoDollarSuffix = className.stripSuffix("$")
+    val splitByDollarSign           = classNameWithNoDollarSuffix.split("\\$")
 
-      val splitByDollarSign = className.split("\\$")
-      if (splitByDollarSign.length > 1) {
-        val theTypeName = splitByDollarSign.last
-        s"${splitByDollarSign.init.last.split("\\.").last}.$theTypeName"
-      } else {
-        className.split("\\.").takeRight(2).mkString(".")
-      }
+    if (splitByDollarSign.length > 1) {
+      val theTypeName = splitByDollarSign.last
+      s"${splitByDollarSign.init.last.split("\\.").last}.$theTypeName"
+    } else {
+      classNameWithNoDollarSuffix.split("\\.").takeRight(2).mkString(".")
     }
-
   }
 
 }
