@@ -4,7 +4,7 @@ import cats.data.EitherNec
 import cats.syntax.all._
 import eu.timepit.refined._
 import eu.timepit.refined.api._
-import extras.reflects.syntax.reflects._
+import extras.reflects.syntax.tags._
 import io.estatico.newtype.Coercible
 import io.estatico.newtype.ops._
 
@@ -26,7 +26,7 @@ object refinement extends refinement { self =>
       tt: WeakTypeTag[A]
     ): EitherNec[String, A] =
       refineV[P](value)
-        .leftMap(err => s"Failed to create ${weakTypeTag[A].nestedTypeName}: $err")
+        .leftMap(err => s"Failed to create ${tt.nestedTypeName}: $err")
         .toEitherNec
         .map(_.coerce[A])
   }
