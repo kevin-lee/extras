@@ -10,9 +10,9 @@ when creating newtype + refinement type just like this.
 
 ```scala
 YourRefinementType.from(value)
-  .toEither
   .map(YourNewtype(_))
   .leftMap(err => s"Failed to create YourNewtype: $err")
+  .toEitherNec
 ```
 
 In practice, it may look like
@@ -25,15 +25,15 @@ import eu.timepit.refined.types.string.NonEmptyString
 
 val validNameValue = "Kevin"
 NonEmptyString.from(validNameValue)
-  .toEitherNel
   .map(Name(_))
   .leftMap(err => s"Failed to create Name: $err")
+  .toEitherNec
 
 val invalidNameValue = ""
 NonEmptyString.from(invalidNameValue)
-  .toEitherNel
   .map(Name(_))
   .leftMap(err => s"Failed to create Name: $err")
+  .toEitherNec
 ```
 
 or this
@@ -59,22 +59,44 @@ import Types._
 
 val idValue = 999
 
-val id  = PositiveInt.from(idValue)
-            .toEitherNel
-            .map(Id(_))
-            .leftMap(err => s"Failed to create Types.Id: $err")
+val id = PositiveInt.from(idValue)
+          .map(Id(_))
+          .leftMap(err => s"Failed to create Types.Id: $err")
+          .toEitherNec
 println(id)
 
 val nameValue = "Kevin"
 
-val name  = NonEmptyString.from(nameValue)
-            .toEitherNel
+val name = NonEmptyString.from(nameValue)
             .map(Name(_))
             .leftMap(err => s"Failed to create Types.Name: $err")
+            .toEitherNec
 println(name)
 
 val person = (id, name).parMapN(Person.apply)
 println(person)
+
+```
+or invalid case like
+```scala mdoc
+val idValue2 = 0
+
+val id2 = PositiveInt.from(idValue2)
+          .map(Id(_))
+          .leftMap(err => s"Failed to create Types.Id: $err")
+          .toEitherNec
+println(id2)
+
+val nameValue2 = ""
+
+val name2 = NonEmptyString.from(nameValue2)
+            .map(Name(_))
+            .leftMap(err => s"Failed to create Types.Name: $err")
+            .toEitherNec
+println(name2)
+
+val person2 = (id2, name2).parMapN(Person.apply)
+println(person2)
 
 ```
 
@@ -83,9 +105,9 @@ println(person)
 The boilerplate code issue in newtype + refinement type creation can be fixed with `extras` `refinement` syntax so the following code snippet
 ```scala
 YourRefinementType.from(value)
-  .toEither
   .map(YourNewtype(_))
   .leftMap(err => s"Failed to create YourNewtype: $err")
+  .toEitherNec
 ```
 becomes just
 ```scala
@@ -99,6 +121,10 @@ value.validateAs[YourNewtype]
 :::note
 The idea of `validateAs[A](value)` and `value.validateAs[A]` is from [Practical FP in Scala](https://leanpub.com/pfp-scala).
 The syntax is not exactly the same, but the most important core logic of using `Coercible` is the same.
+
+If you are interested in the difference,
+* [the source code from `Practical FP in Scala` is here](https://github.com/gvolpe/pfps-examples/blob/e49adf61fe5cdc84b0ca50995f20fb5a79f91cea/src/main/scala/examples/validation/RuntimeValidation.scala#L268-L294) and
+* [the source code of `extras-refinement` is here](https://github.com/Kevin-Lee/extras/blob/3aaf342368665ba622f41874639e37b4f130a046/modules/extras-refinement/shared/src/main/scala/extras/refinement/syntax/refinement.scala#L11-L42)
 :::
 
 ### Example: Valid Case
