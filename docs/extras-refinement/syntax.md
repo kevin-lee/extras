@@ -15,6 +15,11 @@ YourRefinementType.from(value)
   .toEitherNec
 ```
 
+There are a few issues here.
+* First, you need to create your `newtype` with the newtype constructor and the validated value. e.g.) `.map(YourNewType(_))`
+* If it is invalid, you probably want to add the type name for debugging with `leftMap`. e.g.) `.leftMap(err => s"Failed to create YourNewtype: $err")`
+* Finally, depending on how to validate, you probably turn the `Either[String, YourNewType]` from the validation into `EitherNec` since you may want to accumulate all the errors from multiple validations. e.g.) `.toEitherNec`
+
 In practice, it may look like
 ```scala mdoc:reset-object
 import cats.syntax.all._
@@ -102,7 +107,7 @@ println(person2)
 
 ## `refinement` syntax
 
-The boilerplate code issue in newtype + refinement type creation can be fixed with `extras` `refinement` syntax so the following code snippet
+The boilerplate code issue in newtype + refinement type creation can be fixed with `extras` `refinement` syntax so the following code
 ```scala
 YourRefinementType.from(value)
   .map(YourNewtype(_))
