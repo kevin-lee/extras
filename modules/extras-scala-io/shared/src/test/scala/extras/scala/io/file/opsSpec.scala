@@ -5,14 +5,11 @@ import hedgehog.runner._
 
 import java.io.File
 import java.nio.file.Files
-import scala.annotation.tailrec
 
 /** @author Kevin Lee
   * @since 2022-03-24
   */
 object opsSpec extends Properties {
-  val tempDir = Files.createTempDirectory("tmp").toFile
-
   override def tests: List[Test] = List(
     property("testGetAllFiles", testGetAllFiles),
     property("testDeleteFileRecursively", testDeleteFileRecursively)
@@ -27,6 +24,7 @@ object opsSpec extends Properties {
     filename3    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3").log("filename3")
     filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filename3a")
   } yield {
+    val tempDir = Files.createTempDirectory("tmp").toFile
     try {
 
       val rootFile = new File(tempDir, rootFilename)
@@ -54,7 +52,7 @@ object opsSpec extends Properties {
 
       actual.sorted ==== expected.sorted
     } finally {
-      cleanUpFilesInside(tempDir)
+      FileUtils.cleanUpFilesInside(tempDir)
       ()
     }
   }
@@ -68,6 +66,7 @@ object opsSpec extends Properties {
     filename3    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3").log("filename3")
     filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filename3a")
   } yield {
+    val tempDir = Files.createTempDirectory("tmp").toFile
     try {
 
       val rootFile = new File(tempDir, rootFilename)
@@ -106,36 +105,9 @@ object opsSpec extends Properties {
         )
       )
     } finally {
-      cleanUpFilesInside(tempDir)
+      FileUtils.cleanUpFilesInside(tempDir)
       ()
     }
   }
 
-  def cleanUpFilesInside(file: File): Unit = {
-    @tailrec
-    def cleanAll(files: List[File]): Unit = files match {
-      case file :: rest =>
-        if (file.isDirectory) {
-          val list = file.listFiles
-          if (list.isEmpty) {
-            file.delete()
-            cleanAll(rest)
-          } else {
-            cleanAll((list.toList ++ rest) :+ file)
-          }
-        } else {
-          if (file.exists()) {
-            file.delete()
-            cleanAll(rest)
-          } else cleanAll(rest)
-        }
-      case Nil =>
-        ()
-    }
-    if (file.isDirectory) {
-      cleanAll(file.listFiles.toList)
-    } else {
-      ()
-    }
-  }
 }

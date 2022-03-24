@@ -107,16 +107,17 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
-      val sharedSourceDir = baseDirectory.value / "src/main"
-      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
+      val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/main"
+      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12")) {
         List(
           sharedSourceDir / "scala-2.11_2.12",
         )
-      else
-        Seq.empty
+      } else {
+        List.empty
+      }
     },
     Test / unmanagedSourceDirectories ++= {
-      val sharedSourceDir = baseDirectory.value / "src/test"
+      val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/test"
       if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
         List(
           sharedSourceDir / "scala-2.11_2.12",
