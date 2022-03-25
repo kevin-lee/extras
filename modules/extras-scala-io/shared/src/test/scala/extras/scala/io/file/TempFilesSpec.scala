@@ -4,6 +4,7 @@ import hedgehog._
 import hedgehog.runner._
 
 import java.io.File
+import scala.util.Try
 
 /** @author Kevin Lee
   * @since 2022-03-24
@@ -67,7 +68,15 @@ object TempFilesSpec extends Properties {
           Result.failure.log(s"the target should have been removed but got an error instead. ${err.getMessage}")
       }
     } finally {
-      target.foreach(FileUtils.cleanUpFilesInside)
+      target.foreach { file =>
+        Try(FileUtils.cleanUpFilesInside(file)).foreach(_ => ())
+        Try {
+          if (file.exists)
+            file.delete()
+          else
+            ()
+        }.foreach(_ => ())
+      }
       ()
     }
   }

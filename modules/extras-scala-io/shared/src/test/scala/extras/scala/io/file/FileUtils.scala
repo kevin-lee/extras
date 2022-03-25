@@ -2,6 +2,7 @@ package extras.scala.io.file
 
 import java.io.File
 import scala.annotation.tailrec
+import scala.util.Try
 
 /** @author Kevin Lee
   * @since 2022-03-24
@@ -15,14 +16,14 @@ object FileUtils {
         if (file.isDirectory) {
           val list = file.listFiles
           if (list.isEmpty) {
-            file.delete()
+            Try(file.delete()).foreach(_ => ())
             cleanAll(rest)
           } else {
             cleanAll((list.toList ++ rest) :+ file)
           }
         } else {
           if (file.exists()) {
-            file.delete()
+            Try(file.delete()).foreach(_ => ())
             cleanAll(rest)
           } else cleanAll(rest)
         }
