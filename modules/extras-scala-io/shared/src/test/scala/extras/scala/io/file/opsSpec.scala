@@ -13,6 +13,9 @@ import scala.util.Try
 object opsSpec extends Properties {
   override def tests: List[Test] = List(
     property("testGetAllFiles", testGetAllFiles),
+    property("testGetAllFiles with a non directory file", testGetAllFilesWithNoDir),
+    property("testGetAllFiles with an empty directory", testGetAllFilesWithEmptyDir),
+    property("testGetAllFiles with not existing directory", testGetAllFilesNotExistingFile),
     property("testDeleteFileRecursively", testDeleteFileRecursively)
   )
 
@@ -48,10 +51,76 @@ object opsSpec extends Properties {
 
       import ops._
 
-      val expected = List(file3a, file3, file2, file1b, file1a, file1, rootFile)
-      val actual   = getAllFiles(rootFile)
+      val expected = List(file3a, file3, file2, file1b, file1a, file1)
+      val actual   = listAllFilesRecursively(rootFile)
 
       actual.sorted ==== expected.sorted
+    } finally {
+      Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
+      Try(tempDir).foreach(_ => ())
+    }
+  }
+
+  def testGetAllFilesWithNoDir: Property = for {
+    rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
+  } yield {
+    val tempDir = Files.createTempDirectory("tmp").toFile
+    try {
+
+      val rootFile = new File(tempDir, rootFilename)
+      rootFile.createNewFile()
+
+      val makeSureRootFileIsAFile = Result.assert(!rootFile.isDirectory).log("rootFile should be a file")
+
+      import ops._
+
+      val expected = List.empty[File]
+      val actual   = listAllFilesRecursively(rootFile)
+
+      makeSureRootFileIsAFile and actual.sorted ==== expected.sorted
+    } finally {
+      Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
+      Try(tempDir).foreach(_ => ())
+    }
+  }
+
+  def testGetAllFilesWithEmptyDir: Property = for {
+    rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
+  } yield {
+    val tempDir = Files.createTempDirectory("tmp").toFile
+    try {
+
+      val rootFile = new File(tempDir, rootFilename)
+      rootFile.mkdir()
+
+      import ops._
+
+      val expected = List.empty[File]
+      val actual   = listAllFilesRecursively(rootFile)
+
+      actual.sorted ==== expected.sorted
+    } finally {
+      Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
+      Try(tempDir).foreach(_ => ())
+    }
+  }
+
+  def testGetAllFilesNotExistingFile: Property = for {
+    rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
+  } yield {
+    val tempDir = Files.createTempDirectory("tmp").toFile
+    try {
+
+      val rootFile = new File(tempDir, rootFilename)
+
+      val makeSureNotExist = Result.assert(!rootFile.exists).log("rootFile should not exist.")
+
+      import ops._
+
+      val expected = List.empty[File]
+      val actual   = listAllFilesRecursively(rootFile)
+
+      makeSureNotExist and actual.sorted ==== expected.sorted
     } finally {
       Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
       Try(tempDir).foreach(_ => ())
@@ -90,7 +159,7 @@ object opsSpec extends Properties {
 
       import ops._
 
-      val allFiles = getAllFiles(rootFile)
+      val allFiles = listAllFilesRecursively(rootFile)
 
       val allExist = Result.assert(allFiles.forall(_.exists))
 
