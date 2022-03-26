@@ -27,6 +27,6 @@ object TempFiles {
 
     given tempDirCanEqual: CanEqual[TempDir, TempDir] = CanEqual.derived
 
-    given deleteTempFileWhenRelease: CanClose[TempDir] = tempDir => ops.deleteAllRecursively(tempDir.value)
+    given deleteTempFileWhenRelease: CanClose[TempDir] = tempDir => syntax.deleteAllRecursively(tempDir.value)
   }
 }

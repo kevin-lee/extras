@@ -7,7 +7,7 @@ import scala.util.control.NonFatal
 /** @author Kevin Lee
   * @since 2022-03-24
   */
-object ops {
+trait syntax {
 
   def listAllFilesRecursively(file: File): List[File] = {
     @tailrec
@@ -45,4 +45,17 @@ object ops {
     listAllFilesRecursively(file).foreach(deleteIfExists)
     deleteIfExists(file)
   }
+
+}
+
+object syntax extends syntax { self =>
+
+  implicit class ExtrasFileOps(private val file: File) extends AnyVal {
+    def listAllFilesRecursively: List[File] =
+      self.listAllFilesRecursively(file)
+
+    def deleteAllRecursively(): Unit =
+      self.deleteAllRecursively(file)
+  }
+
 }
