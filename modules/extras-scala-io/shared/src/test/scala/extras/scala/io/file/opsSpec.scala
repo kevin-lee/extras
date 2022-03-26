@@ -5,6 +5,7 @@ import hedgehog.runner._
 
 import java.io.File
 import java.nio.file.Files
+import scala.util.Try
 
 /** @author Kevin Lee
   * @since 2022-03-24
@@ -18,11 +19,11 @@ object opsSpec extends Properties {
   def testGetAllFiles: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
-    filename1a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filenames1a")
-    filename1b   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(name => s"${name}_$filename1a").log("filenames1b")
+    filename1a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1a").log("filenames1a")
+    filename1b   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1b").log("filenames1b")
     filename2    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_2").log("filename2")
     filename3    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3").log("filename3")
-    filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filename3a")
+    filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3a").log("filename3a")
   } yield {
     val tempDir = Files.createTempDirectory("tmp").toFile
     try {
@@ -52,19 +53,19 @@ object opsSpec extends Properties {
 
       actual.sorted ==== expected.sorted
     } finally {
-      FileUtils.cleanUpFilesInside(tempDir)
-      ()
+      Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
+      Try(tempDir).foreach(_ => ())
     }
   }
 
   def testDeleteFileRecursively: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
-    filename1a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filenames1a")
-    filename1b   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(name => s"${name}_$filename1a").log("filenames1b")
+    filename1a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1a").log("filenames1a")
+    filename1b   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1b").log("filenames1b")
     filename2    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_2").log("filename2")
     filename3    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3").log("filename3")
-    filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("filename3a")
+    filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3a").log("filename3a")
   } yield {
     val tempDir = Files.createTempDirectory("tmp").toFile
     try {
@@ -105,8 +106,8 @@ object opsSpec extends Properties {
         )
       )
     } finally {
-      FileUtils.cleanUpFilesInside(tempDir)
-      ()
+      Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
+      Try(tempDir).foreach(_ => ())
     }
   }
 
