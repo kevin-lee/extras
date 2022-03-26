@@ -163,7 +163,7 @@ object opsSpec extends Properties {
 
       val allExist = Result.assert(allFiles.forall(_.exists))
 
-      deleteFileRecursively(rootFile)
+      deleteAllRecursively(rootFile)
 
       val noFileExists = Result.assert(allFiles.forall(!_.exists))
 
