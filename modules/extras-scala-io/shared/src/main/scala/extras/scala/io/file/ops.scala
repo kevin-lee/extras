@@ -9,7 +9,7 @@ import scala.util.control.NonFatal
   */
 object ops {
 
-  def getAllFiles(file: File): List[File] = {
+  def listAllFilesRecursively(file: File): List[File] = {
     @tailrec
     def getAllFilesRecursively(files: List[File], acc: List[File]): List[File] = files match {
       case file :: rest =>
@@ -22,17 +22,27 @@ object ops {
       case Nil =>
         acc
     }
-    getAllFilesRecursively(List(file), List.empty)
+    if (file.isDirectory) {
+      getAllFilesRecursively(file.listFiles().toList, List.empty)
+    } else {
+      List.empty
+    }
   }
 
-  def deleteFileRecursively(file: File): Unit =
-    getAllFiles(file).foreach { each =>
-      if (each.exists) {
-        try each.delete()
-        catch {
-          case NonFatal(_) =>
-            ()
-        }
-      } else ()
-    }
+  private val deleteIfExists: File => Unit = { each =>
+    if (each.exists) {
+      try {
+        each.delete()
+        ()
+      } catch {
+        case NonFatal(_) =>
+          ()
+      }
+    } else ()
+  }
+
+  def deleteFileRecursively(file: File): Unit = {
+    listAllFilesRecursively(file).foreach(deleteIfExists)
+    deleteIfExists(file)
+  }
 }
