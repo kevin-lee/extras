@@ -41,7 +41,7 @@ object ops {
     } else ()
   }
 
-  def deleteFileRecursively(file: File): Unit = {
+  def deleteAllRecursively(file: File): Unit = {
     listAllFilesRecursively(file).foreach(deleteIfExists)
     deleteIfExists(file)
   }

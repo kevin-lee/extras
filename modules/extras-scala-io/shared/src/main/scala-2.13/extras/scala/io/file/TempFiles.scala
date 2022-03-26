@@ -18,6 +18,6 @@ object TempFiles {
 
   final case class TempDir(value: File) extends AnyVal
   object TempDir {
-    implicit val deleteTempFileWhenRelease: CanClose[TempDir] = tempDir => ops.deleteFileRecursively(tempDir.value)
+    implicit val deleteTempFileWhenRelease: CanClose[TempDir] = tempDir => ops.deleteAllRecursively(tempDir.value)
   }
 }
