@@ -205,7 +205,7 @@ lazy val docs = (project in file("generated-docs"))
         "io.kevinlee" %% "extras-concurrent-testing" % latestVersion,
         "io.kevinlee" %% "extras-cats"               % latestVersion,
         "io.kevinlee" %% "extras-scala-io"           % latestVersion,
-      )
+      ) ++ List(libs.hedgehogCore, libs.hedgehogRunner)
     },
     mdocVariables       := Map(
       "VERSION"                  -> {
