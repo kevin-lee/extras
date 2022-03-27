@@ -29,9 +29,30 @@ For more details: [**Supported version matrix**](https://index.scala-lang.org/ar
 :::
 
 * [extras-cats](extras-cats/getting-started.md)
+  ```scala
+  "io.kevinlee" %% "extras-cats" % "@VERSION@"
+  ```
 * [extras-scala-io](extras-scala-io/getting-started.md)
+  ```scala
+  "io.kevinlee" %% "extras-scala-io" % "@VERSION@"
+  ```
 * [extras-concurrent](extras-concurrent/getting-started.md)
+  ```scala
+  "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
+  ```
+  ```scala
+  "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
+  ```
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->
 * [extras-hedgehog-cats-effect3](extras-hedgehog-cats-effect3/getting-started.md)
+  ```scala
+  "io.kevinlee" %% "extras-hedgehog-cats-effect3" % "@VERSION@"
+  ```
 * [extras-reflects](extras-reflects/getting-started.md) (n/a to Scala 3)
+  ```scala
+  "io.kevinlee" %% "extras-reflects" % "@VERSION@"
+  ```
 * [extras-refinement](extras-refinement/getting-started.md) (n/a to Scala 3)
+  ```scala
+  "io.kevinlee" %% "extras-refinement" % "@VERSION@"
+  ```
