@@ -14,6 +14,7 @@ object TempFilesSpec extends Properties {
     property("testRunWithTempDir", testRunWithTempDir)
   )
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testRunWithTempDir: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
@@ -24,6 +25,7 @@ object TempFilesSpec extends Properties {
     filename3a   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_3a").log("filename3a")
   } yield {
 
+    @SuppressWarnings(Array("org.wartremover.warts.Var"))
     var target: Option[File] = None // scalafix:ok DisableSyntax.var
 
     try {
@@ -71,10 +73,10 @@ object TempFilesSpec extends Properties {
       target.foreach { file =>
         Try(FileUtils.cleanUpFilesInside(file)).foreach(_ => ())
         Try {
-          if (file.exists)
+          if (file.exists) {
             file.delete()
-          else
             ()
+          } else ()
         }.foreach(_ => ())
       }
       ()

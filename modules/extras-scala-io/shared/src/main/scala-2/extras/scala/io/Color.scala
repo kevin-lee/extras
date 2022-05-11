@@ -140,8 +140,13 @@ object Color {
       AnsiColor.INVISIBLE
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.ToString"))
+  def show(color: Color): String = color.toString
+
   implicit final class ColorOps(private val color: Color) extends AnyVal {
     def toAnsi: String = Color.render(color)
+
+    def show: String = Color.show(color)
   }
 
 }

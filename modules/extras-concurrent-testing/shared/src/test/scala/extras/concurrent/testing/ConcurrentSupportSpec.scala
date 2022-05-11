@@ -42,6 +42,7 @@ object ConcurrentSupportSpec extends Properties {
   } yield {
     val executorService = ConcurrentSupport.newExecutorService(numThread)
     try {
+      @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf", "org.wartremover.warts.Throw"))
       val threadPoolExecutor = executorService match {
         case _: ThreadPoolExecutor =>
           executorService.asInstanceOf[ThreadPoolExecutor] // scalafix:ok DisableSyntax.asInstanceOf

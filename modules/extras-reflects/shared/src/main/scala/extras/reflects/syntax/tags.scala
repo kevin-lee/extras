@@ -23,6 +23,7 @@ object tags extends tags {
 
   final class WeakTypeTagSyntax[A](private val weakTypeTag: WeakTypeTag[A]) extends AnyVal {
     def nestedTypeName: String = {
+      @SuppressWarnings(Array("org.wartremover.warts.ToString"))
       val typeName = weakTypeTag
         .tpe
         .toString

@@ -6,6 +6,7 @@ import hedgehog.runner._
 /** @author Kevin Lee
   * @since 2021-08-21
   */
+@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object EitherSyntaxSpec extends Properties {
 
   override def tests: List[Test] = List(
@@ -65,7 +66,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -80,7 +81,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -107,7 +108,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -124,7 +125,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -151,7 +152,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -169,7 +170,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
+          Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -196,7 +197,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
+          Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -214,7 +215,7 @@ object EitherSyntaxSpec extends Properties {
       val actualValue = actual.value.unsafeRunSync()
       Result.all(
         List(
-          Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
+          Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: ${actualValue.toString}"),
           actualValue ==== expected.value.unsafeRunSync()
         )
       )
@@ -283,21 +284,37 @@ object EitherSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actual1Value.isRight).log(s"actual1Value should be Right. actual1Value: $actual1Value"),
+          Result
+            .assert(actual1Value.isRight)
+            .log(s"actual1Value should be Right. actual1Value: ${actual1Value.toString}"),
           actual1Value ==== expected1Value,
-          Result.assert(actual1_1Value.isRight).log(s"actual1_1Value should be Right. actual1_1Value: $actual1_1Value"),
+          Result
+            .assert(actual1_1Value.isRight)
+            .log(s"actual1_1Value should be Right. actual1_1Value: ${actual1_1Value.toString}"),
           actual1_1Value ==== expected1Value,
-          Result.assert(actual2Value.isRight).log(s"actual2Value should be Right. actual2Value: $actual2Value"),
+          Result
+            .assert(actual2Value.isRight)
+            .log(s"actual2Value should be Right. actual2Value: ${actual2Value.toString}"),
           actual2Value ==== expected2Value,
-          Result.assert(actual2_1Value.isRight).log(s"actual2_1Value should be Right. actual2_1Value: $actual2_1Value"),
+          Result
+            .assert(actual2_1Value.isRight)
+            .log(s"actual2_1Value should be Right. actual2_1Value: ${actual2_1Value.toString}"),
           actual2_1Value ==== expected2Value,
-          Result.assert(actual3Value.isRight).log(s"actual3Value should be Right. actual3Value: $actual3Value"),
+          Result
+            .assert(actual3Value.isRight)
+            .log(s"actual3Value should be Right. actual3Value: ${actual3Value.toString}"),
           actual3Value ==== expected3Value,
-          Result.assert(actual4Value.isLeft).log(s"actual4Value should be Left. actual4Value: $actual4Value"),
+          Result
+            .assert(actual4Value.isLeft)
+            .log(s"actual4Value should be Left. actual4Value: ${actual4Value.toString}"),
           actual4Value ==== expected4Value,
-          Result.assert(actual5Value.isRight).log(s"actual5Value should be Right. actual5Value: $actual5Value"),
+          Result
+            .assert(actual5Value.isRight)
+            .log(s"actual5Value should be Right. actual5Value: ${actual5Value.toString}"),
           actual5Value ==== expected5Value,
-          Result.assert(actual6Value.isLeft).log(s"actual6Value should be Left. actual6Value: $actual6Value"),
+          Result
+            .assert(actual6Value.isLeft)
+            .log(s"actual6Value should be Left. actual6Value: ${actual6Value.toString}"),
           actual6Value ==== expected6Value
         )
       )

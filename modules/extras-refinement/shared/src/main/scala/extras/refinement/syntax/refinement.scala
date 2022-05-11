@@ -19,6 +19,7 @@ trait refinement {
 object refinement extends refinement { self =>
   import scala.reflect.runtime.universe._
 
+  @SuppressWarnings(Array("org.wartremover.warts.DefaultArguments"))
   private[refinement] final class PartiallyAppliedRefinement[A](private val dummy: Boolean = false) extends AnyVal {
     def apply[T, P](value: T)(
       implicit coercible: Coercible[Refined[T, P], A],
