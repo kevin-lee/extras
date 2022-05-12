@@ -17,6 +17,7 @@ object CanCloseSpec extends Properties {
     finally CanClose[A].close(a)
 
   final case class MyResource(value: String) {
+    @SuppressWarnings(Array("org.wartremover.warts.Var"))
     private[this] var _closed: Boolean     = false // scalafix:ok DisableSyntax.var
     def closed: Boolean                    = _closed
     def closed_=(newClosed: Boolean): Unit = {
@@ -31,6 +32,7 @@ object CanCloseSpec extends Properties {
   }
 
   def testAutoCloseableCanClose: Result = {
+    @SuppressWarnings(Array("org.wartremover.warts.Var"))
     var result: Option[String] = None // scalafix:ok DisableSyntax.var
     val autoCloseable          = new AutoCloseable {
       override def close(): Unit = {

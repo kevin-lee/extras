@@ -32,7 +32,7 @@ trait syntax {
   private val deleteIfExists: File => Unit = { each =>
     if (each.exists) {
       try {
-        each.delete()
+        val _ = each.delete()
         ()
       } catch {
         case NonFatal(_) =>

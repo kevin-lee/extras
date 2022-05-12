@@ -81,7 +81,9 @@ object refinementSpec extends Properties {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
     val actual = validateAs[Id](nonPositiveInt)
-    actual ==== Left(NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
+    actual ==== Left(
+      NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: (${nonPositiveInt.toString} > 0).")
+    )
   }
 
   def testIntAsValidateToErrorSyntax: Property = for {
@@ -90,7 +92,9 @@ object refinementSpec extends Properties {
     import TypesForTesting._
     import extras.refinement.syntax.refinement._
     val actual = nonPositiveInt.validateAs[Id]
-    actual ==== Left(NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: ($nonPositiveInt > 0)."))
+    actual ==== Left(
+      NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: (${nonPositiveInt.toString} > 0).")
+    )
   }
 
   object TypesForTesting {

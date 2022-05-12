@@ -27,6 +27,7 @@ object syntaxSpec extends Properties {
     property("test File.deleteAllRecursively", testFileDeleteAllRecursively)
   )
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testListAllFilesRecursively: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
@@ -69,6 +70,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testListAllFilesRecursivelyWithNoDir: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
   } yield {
@@ -92,6 +94,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testListAllFilesRecursivelyWithEmptyDir: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
   } yield {
@@ -135,6 +138,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testFileListAllFilesRecursively: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
@@ -177,6 +181,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testFileListAllFilesRecursivelyWithNoDir: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
   } yield {
@@ -200,6 +205,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testFileListAllFilesRecursivelyWithEmptyDir: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
   } yield {
@@ -243,6 +249,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testDeleteAllRecursively: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")
@@ -296,6 +303,7 @@ object syntaxSpec extends Properties {
     }
   }
 
+  @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   def testFileDeleteAllRecursively: Property = for {
     rootFilename <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("rootFilename")
     filename1    <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).map(_ + "_1").log("filename1")

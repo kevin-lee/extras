@@ -11,13 +11,14 @@ import scala.util.control.NonFatal
   * @since 2020-09-22
   */
 trait ConcurrentSupport {
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   def newExecutorService(minThread: Int): ExecutorService =
     if (minThread >= 1)
       Executors.newFixedThreadPool(math.max(minThread, Runtime.getRuntime.availableProcessors() >> 1))
     else
-      throw new IllegalArgumentException(
-        s"minThread must be greater than or equal to 1. [minThread: $minThread]"
-      ) // scalafix:ok DisableSyntax.throw
+      throw new IllegalArgumentException( // scalafix:ok DisableSyntax.throw
+        s"minThread must be greater than or equal to 1. [minThread: ${minThread.toString}]"
+      )
 
   def newExecutionContext(
     executorService: ExecutorService,

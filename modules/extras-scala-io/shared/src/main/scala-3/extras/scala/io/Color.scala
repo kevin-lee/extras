@@ -29,6 +29,50 @@ enum Color derives CanEqual {
 
 object Color {
 
+  def black: Color = Color.Black
+
+  def red: Color = Color.Red
+
+  def green: Color = Color.Green
+
+  def yellow: Color = Color.Yellow
+
+  def blue: Color = Color.Blue
+
+  def magenta: Color = Color.Magenta
+
+  def cyan: Color = Color.Cyan
+
+  def white: Color = Color.White
+
+  def blackBg: Color = Color.BlackBg
+
+  def redBg: Color = Color.RedBg
+
+  def greenBg: Color = Color.GreenBg
+
+  def yellowBg: Color = Color.YellowBg
+
+  def blueBg: Color = Color.BlueBg
+
+  def magentaBg: Color = Color.MagentaBg
+
+  def cyanBg: Color = Color.CyanBg
+
+  def whiteBg: Color = Color.WhiteBg
+
+  def reset: Color = Color.Reset
+
+  def bold: Color = Color.Bold
+
+  def underlined: Color = Color.Underlined
+
+  def blink: Color = Color.Blink
+
+  def reversed: Color = Color.Reversed
+
+  def invisible: Color = Color.Invisible
+
   extension (color: Color) {
     def render: String = color match {
       case Black =>
@@ -99,6 +143,8 @@ object Color {
     }
 
     def toAnsi: String = Color.render(color)
+
+    def show: String = color.toString
   }
 
 }

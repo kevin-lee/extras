@@ -6,6 +6,7 @@ import hedgehog.runner._
 /** @author Kevin Lee
   * @since 2021-08-22
   */
+@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object OptionSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
@@ -59,7 +60,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -77,7 +78,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -105,7 +106,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -123,7 +124,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -150,7 +151,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -178,7 +179,7 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
+          Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: ${actualValue.toString}"),
           actualValue ==== expectedValue
         )
       )
@@ -235,21 +236,29 @@ object OptionSyntaxSpec extends Properties {
 
       Result.all(
         List(
-          Result.assert(actual1Value.isDefined).log(s"actual1Value should be Some. actual1Value: $actual1Value"),
+          Result
+            .assert(actual1Value.isDefined)
+            .log(s"actual1Value should be Some. actual1Value: ${actual1Value.toString}"),
           actual1Value ==== expected1Value,
           Result
             .assert(actual1_1Value.isDefined)
-            .log(s"actual1_1Value should be Some. actual1_1Value: $actual1_1Value"),
+            .log(s"actual1_1Value should be Some. actual1_1Value: ${actual1_1Value.toString}"),
           actual1_1Value ==== expected1Value,
-          Result.assert(actual2Value.isDefined).log(s"actual2Value should be Some. actual2Value: $actual2Value"),
+          Result
+            .assert(actual2Value.isDefined)
+            .log(s"actual2Value should be Some. actual2Value: ${actual2Value.toString}"),
           actual2Value ==== expected2Value,
           Result
             .assert(actual2_1Value.isDefined)
-            .log(s"actual2_1Value should be Some. actual2_1Value: $actual2_1Value"),
+            .log(s"actual2_1Value should be Some. actual2_1Value: ${actual2_1Value.toString}"),
           actual2_1Value ==== expected2Value,
-          Result.assert(actual3Value.isDefined).log(s"actual3Value should be Some. actual3Value: $actual3Value"),
+          Result
+            .assert(actual3Value.isDefined)
+            .log(s"actual3Value should be Some. actual3Value: ${actual3Value.toString}"),
           actual3Value ==== expected3Value,
-          Result.assert(actual4Value.isDefined).log(s"actual4Value should be Some. actual4Value: $actual4Value"),
+          Result
+            .assert(actual4Value.isDefined)
+            .log(s"actual4Value should be Some. actual4Value: ${actual4Value.toString}"),
           actual4Value ==== expected4Value
         )
       )

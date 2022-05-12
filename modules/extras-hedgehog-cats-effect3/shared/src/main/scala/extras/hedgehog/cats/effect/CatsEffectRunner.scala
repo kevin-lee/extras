@@ -44,8 +44,10 @@ object CatsEffectRunner {
   private val someK: Id ~> Option =
     new ~>[Id, Option] { def apply[A](a: A) = a.some }
 
+  @SuppressWarnings(Array("org.wartremover.warts.Throw"))
   def unsafeRun[A](ioa: IO[A])(implicit ticker: Ticker): Outcome[Option, Throwable, A] =
     try {
+      @SuppressWarnings(Array("org.wartremover.warts.Var"))
       var results: Outcome[Option, Throwable, A] = Outcome.Succeeded(None) // scalafix:ok DisableSyntax.var
 
       ioa
@@ -151,7 +153,8 @@ object CatsEffectRunner {
           Result
             .failure
             .log(
-              expectedThrowableMessage + s" but no Throwable was thrown and some value has been returned. result: $value."
+              expectedThrowableMessage + s" but no Throwable was thrown and some value has been returned. result: ${String
+                  .valueOf(value)}."
             )
 
         case Outcome.Succeeded(None) =>
@@ -170,7 +173,9 @@ object CatsEffectRunner {
         case Outcome.Succeeded(Some(value)) =>
           Result
             .failure
-            .log(s"Expected some error, but no Throwable was thrown and some value has been returned. result: $value.")
+            .log(
+              s"Expected some error, but no Throwable was thrown and some value has been returned. result: ${String.valueOf(value)}."
+            )
 
         case Outcome.Succeeded(None) =>
           Result.failure.log("Expected some error, but no Throwable was thrown nor did it return anything.")

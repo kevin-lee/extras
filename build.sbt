@@ -281,6 +281,15 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
         else
           ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
       ),
+      wartremoverErrors ++= Warts.allBut(Wart.Any, Wart.Nothing, Wart.ImplicitConversion, Wart.ImplicitParameter),
+      scalacOptions := {
+        val options = scalacOptions.value
+        if (isScala3(scalaVersion.value)) {
+          options.filterNot(_.startsWith("-P:wartremover"))
+        } else {
+          options
+        }
+      }
     )
     .settings(
       mavenCentralPublishSettings
@@ -305,7 +314,7 @@ lazy val props = new {
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   val Scala2Versions = List(
-    "2.13.5",
+    "2.13.6",
     "2.12.13",
     "2.11.12",
   )

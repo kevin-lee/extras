@@ -11,15 +11,15 @@ object FileUtils {
 
   def cleanUpFilesInside(file: File): Unit = {
     @tailrec
-    def cleanAll(files: List[File]): Unit = files match {
-      case file :: rest =>
+    def cleanAll(files: Seq[File]): Unit = files match {
+      case file +: rest =>
         if (file.isDirectory) {
           val list = file.listFiles
           if (list.isEmpty) {
             Try(file.delete()).foreach(_ => ())
             cleanAll(rest)
           } else {
-            cleanAll((list.toList ++ rest) :+ file)
+            cleanAll((list.toVector ++ rest) :+ file)
           }
         } else {
           if (file.exists()) {
@@ -27,12 +27,12 @@ object FileUtils {
             cleanAll(rest)
           } else cleanAll(rest)
         }
-      case Nil =>
+      case Seq() =>
         ()
     }
     if (file.exists) {
       if (file.isDirectory) {
-        cleanAll(file.listFiles.toList)
+        cleanAll(file.listFiles.toVector)
       } else {
         ()
       }
