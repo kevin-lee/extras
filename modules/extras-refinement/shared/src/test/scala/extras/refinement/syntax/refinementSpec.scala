@@ -20,7 +20,8 @@ object refinementSpec extends Properties {
     property("test validate[A](Int) => Right(A(Int Refined Positive))", testValidateAsAIntToAIntRefinedPositiveSyntax),
     property("test Int.as[A].validate => Right(A(Int Refined Positive))", testIntAsValidateToAIntRefinedPositiveSyntax),
     property("test validate[A](non positive Int) => Left(error)", testValidateAsAIntToErrorSyntax),
-    property("test (non positive Int).as[A].validate => Left(error)", testIntAsValidateToErrorSyntax)
+    property("test (non positive Int).as[A].validate => Left(error)", testIntAsValidateToErrorSyntax),
+    property("test newtype(refined(T)).toValue should return T", testCoercibleRefinementSyntaxToValue)
   )
 
   def testValidateAsAStringToANonEmptyStringSyntax: Property = for {
@@ -94,6 +95,33 @@ object refinementSpec extends Properties {
     val actual = nonPositiveInt.validateAs[Id]
     actual ==== Left(
       NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: (${nonPositiveInt.toString} > 0).")
+    )
+  }
+
+  def testCoercibleRefinementSyntaxToValue: Property = for {
+    s <- Gen.string(Gen.alphaNum, Range.linear(1, 100)).log("s")
+    n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+  } yield {
+    import TypesForTesting._
+    import extras.refinement.syntax.refinement._
+
+    val name = Name(NonEmptyString.unsafeFrom(s))
+    val id   = Id(PositiveInt.unsafeFrom(n))
+
+    val expected1 = s
+    val actual1   = name.toValue
+
+    val expected2 = n
+    val actual2   = id.toValue
+
+    Result.all(
+      List(
+        (actual1.getClass.getName ==== "java.lang.String")
+          .log("""Failed: actual1.getClass.getName ==== "java.lang.String""""),
+        (actual1 ==== expected1).log("Failed: actual1 ==== expected1"),
+        (actual2.getClass.getName ==== "int").log("""actual2.getClass.getName ==== "int""""),
+        (actual2 ==== expected2).log("actual2 ==== expected2")
+      )
     )
   }
 
