@@ -9,11 +9,14 @@ import io.estatico.newtype.Coercible
 import io.estatico.newtype.ops._
 
 trait refinement {
-  import refinement.{PartiallyAppliedRefinement, RefinementSyntax}
+  import refinement.{CoercibleRefinementSyntax, PartiallyAppliedRefinement, RefinementSyntax}
 
   def validateAs[A]: PartiallyAppliedRefinement[A] = new PartiallyAppliedRefinement[A]()
 
   implicit def refinementSyntax[T, P](value: T): RefinementSyntax[T, P] = new RefinementSyntax(value)
+
+  implicit def coercibleRefinementSyntax[A, T, P](value: A): CoercibleRefinementSyntax[A, T, P] =
+    new CoercibleRefinementSyntax(value)
 }
 
 object refinement extends refinement { self =>
@@ -38,6 +41,10 @@ object refinement extends refinement { self =>
       validate: Validate[T, P],
       tt: WeakTypeTag[A]
     ): EitherNec[String, A] = self.validateAs[A](value)
+  }
+
+  private[refinement] final class CoercibleRefinementSyntax[A, T, P](private val value: A) extends AnyVal {
+    def toValue(implicit coercible: Coercible[A, Refined[T, P]]): T = coercible(value).value
   }
 
 }
