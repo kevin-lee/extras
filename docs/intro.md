@@ -25,7 +25,7 @@ slug: '/'
 :::info
 Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
 
-For more details: [**Supported version matrix**](https://index.scala-lang.org/artifacts/kevin-lee/extras)
+Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/artifacts)
 :::
 
 * [extras-cats](extras-cats/getting-started.md)
