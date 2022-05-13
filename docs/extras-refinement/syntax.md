@@ -105,7 +105,7 @@ println(person2)
 
 ```
 
-## `refinement` syntax
+## `validateAs`
 
 The boilerplate code issue in newtype + refinement type creation can be fixed with `extras` `refinement` syntax so the following code
 ```scala
@@ -288,3 +288,80 @@ println(name2)
 val person = (id, name).parMapN(Person.apply)
 println(person)
 ```
+
+## `toValue`
+If you want to get the underlying value of a refined newtype,
+you can do it easily with `extras.refinement.syntax.refinement`.
+```scala
+val name = Name(NonEmptyString("Kevin"))
+name.value
+// NonEmptyString = Kevin
+
+name.value.value
+// String = "Kevin"
+
+import eu.timepit.refined.auto._
+name.toValue
+// String = "Kevin" 
+```
+
+```scala mdoc:reset-object
+import eu.timepit.refined.api._
+import eu.timepit.refined.numeric._
+import eu.timepit.refined.types.string.NonEmptyString
+import io.estatico.newtype.macros.newtype
+
+object Types {
+  type PositiveInt = Int Refined Positive
+  object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
+  @newtype case class Num(value: PositiveInt)
+  
+  @newtype case class Name(value: NonEmptyString)
+  
+}
+```
+```scala mdoc
+import Types._
+
+def foo(n: Int): Int = n * 2
+def hello(s: String): Unit = println(s"Hello $s")
+
+val n = 1
+val num = Num(PositiveInt.unsafeFrom(n))
+
+val nameString = "Kevin"
+val name = Name(NonEmptyString.unsafeFrom(nameString))
+```
+```scala mdoc:fail
+foo(num.value)
+```
+```scala mdoc:fail
+hello(name.value)
+```
+You can solve with `extras-refinement`.
+```scala mdoc
+import extras.refinement.syntax.refinement._
+
+num.value
+num.value.value
+num.toValue
+foo(num.toValue)
+
+name.value
+name.value.value
+name.toValue
+hello(name.toValue)
+```
+
+You can also use `eu.timepit.refined.auto` like
+```scala mdoc
+import eu.timepit.refined.auto._
+
+num.value
+foo(num.value)
+
+name.value
+hello(name.value)
+```
+However, `.value` with `eu.timepit.refined.auto` does an `implicit` conversion from the `refined type` to the underlying type
+whereas the syntax from `extras-refinement` is an explicit way to get the underlying type value of the ``refined newtype``.
