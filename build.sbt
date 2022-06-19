@@ -282,7 +282,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
           ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
       ),
       wartremoverErrors ++= Warts.allBut(Wart.Any, Wart.Nothing, Wart.ImplicitConversion, Wart.ImplicitParameter),
-      scalacOptions := {
+      scalacOptions     := {
         val options = scalacOptions.value
         if (isScala3(scalaVersion.value)) {
           options.filterNot(_.startsWith("-P:wartremover"))
