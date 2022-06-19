@@ -5,4 +5,6 @@ package extras.scala.io.syntax
   */
 package object truecolor {
   object rgb extends RgbSyntax
+  object rainbow extends RainbowSyntax
+  object all extends RgbSyntax with RainbowSyntax
 }
