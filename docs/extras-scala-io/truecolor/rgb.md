@@ -1,10 +1,10 @@
 ---
-sidebar_position: 3
-id: 'truecolor'
-title: 'True Color'
+sidebar_position: 1
+id: 'rgb'
+title: 'Rgb'
 ---
 
-# True Color
+# Rgb
 
 ## `Rgb`
 

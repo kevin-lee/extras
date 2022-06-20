@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
-id: 'getting-started'
-title: 'Getting Started'
+title: 'extras-hedgehog-cats-effect3: Getting Started'
 ---
 
 # Get `extras-hedgehog-cats-effect3`

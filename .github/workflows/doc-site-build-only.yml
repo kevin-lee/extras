@@ -14,6 +14,8 @@ jobs:
       matrix:
         scala:
           - { version: "2.13.5", binary-version: "2.13", java-version: "adopt@1.11" }
+        node:
+          - { version: "16.15.0" }
 
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +24,7 @@ jobs:
           java-version: ${{ matrix.scala.java-version }}
       - uses: actions/setup-node@v3
         with:
-          node-version: '14.4.0'
+          node-version: ${{ matrix.node.version }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Cache SBT
