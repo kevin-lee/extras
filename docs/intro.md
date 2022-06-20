@@ -28,15 +28,15 @@ Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
 Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/artifacts)
 :::
 
-* [extras-cats](extras-cats/getting-started.md)
+* [extras-cats](extras-cats)
   ```scala
   "io.kevinlee" %% "extras-cats" % "@VERSION@"
   ```
-* [extras-scala-io](extras-scala-io/getting-started.md)
+* [extras-scala-io](extras-scala-io)
   ```scala
   "io.kevinlee" %% "extras-scala-io" % "@VERSION@"
   ```
-* [extras-concurrent](extras-concurrent/getting-started.md)
+* [extras-concurrent](extras-concurrent)
   ```scala
   "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
   ```
@@ -44,15 +44,15 @@ Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/a
   "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
   ```
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->
-* [extras-hedgehog-cats-effect3](extras-hedgehog-cats-effect3/getting-started.md)
+* [extras-hedgehog-cats-effect3](extras-hedgehog-cats-effect3)
   ```scala
   "io.kevinlee" %% "extras-hedgehog-cats-effect3" % "@VERSION@"
   ```
-* [extras-reflects](extras-reflects/getting-started.md) (n/a to Scala 3)
+* [extras-reflects](extras-reflects) (n/a to Scala 3)
   ```scala
   "io.kevinlee" %% "extras-reflects" % "@VERSION@"
   ```
-* [extras-refinement](extras-refinement/getting-started.md) (n/a to Scala 3)
+* [extras-refinement](extras-refinement) (n/a to Scala 3)
   ```scala
   "io.kevinlee" %% "extras-refinement" % "@VERSION@"
   ```

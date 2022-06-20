@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
-id: 'getting-started'
-title: 'Getting Started'
+title: 'extras-scala-io: Getting Started'
 ---
 
 # Get `extras-scala-io`
