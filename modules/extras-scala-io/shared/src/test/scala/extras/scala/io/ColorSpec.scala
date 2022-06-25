@@ -1,7 +1,6 @@
 package extras.scala.io
 
-import hedgehog.*
-import hedgehog.runner.*
+import hedgehog.runner.{Properties, Test, example}
 
 /** @author Kevin Lee
   * @since 2021-09-19

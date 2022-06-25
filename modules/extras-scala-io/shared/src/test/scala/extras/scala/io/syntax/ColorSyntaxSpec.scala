@@ -1,8 +1,8 @@
 package extras.scala.io.syntax
 
 import extras.scala.io.ColorGens
-import hedgehog._
 import hedgehog.runner._
+import hedgehog._
 
 import scala.io.AnsiColor
 
