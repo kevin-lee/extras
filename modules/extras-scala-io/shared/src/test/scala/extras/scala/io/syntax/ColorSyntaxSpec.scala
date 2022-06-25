@@ -1,8 +1,8 @@
 package extras.scala.io.syntax
 
-import extras.scala.io.{Color, ColorGens}
-import hedgehog.runner._
+import extras.scala.io.ColorGens
 import hedgehog._
+import hedgehog.runner._
 
 import scala.io.AnsiColor
 
@@ -53,32 +53,8 @@ object ColorSyntaxSpec extends Properties {
   }
 
   def testEmptyStringColored: Property = for {
-    color <- Gen
-               .element1(
-                 Color.black,
-                 Color.red,
-                 Color.green,
-                 Color.yellow,
-                 Color.blue,
-                 Color.magenta,
-                 Color.cyan,
-                 Color.white,
-                 Color.blackBg,
-                 Color.redBg,
-                 Color.greenBg,
-                 Color.yellowBg,
-                 Color.blueBg,
-                 Color.magentaBg,
-                 Color.cyanBg,
-                 Color.whiteBg,
-                 Color.reset,
-                 Color.bold,
-                 Color.underlined,
-                 Color.blink,
-                 Color.reversed,
-                 Color.invisible
-               )
-               .log("color")
+    colorAndAnsi <- ColorGens.genColor.log("(color, ansi)")
+    (color, _) = colorAndAnsi
   } yield {
     val expected = ""
     val actual   = "".colored(color)

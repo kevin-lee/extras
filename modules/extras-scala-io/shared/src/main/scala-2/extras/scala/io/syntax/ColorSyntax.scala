@@ -15,7 +15,7 @@ object ColorSyntax {
   final class ColorOps(private val text: String) extends AnyVal {
 
     def colored(color: Color): String =
-      if (text.isEmpty) text else s"${color.toAnsi}$text${Color.reset.toAnsi}"
+      Color.colored(color)(text)
 
     def black: String         = colored(Color.black)
     def red: String           = colored(Color.red)
