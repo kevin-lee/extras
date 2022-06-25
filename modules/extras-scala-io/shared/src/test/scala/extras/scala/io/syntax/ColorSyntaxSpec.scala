@@ -1,6 +1,6 @@
 package extras.scala.io.syntax
 
-import extras.scala.io.ColorGens
+import extras.scala.io.{Color, ColorGens}
 import hedgehog.runner._
 import hedgehog._
 
@@ -12,6 +12,7 @@ import scala.io.AnsiColor
 object ColorSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property("test text.colored(Color)", testColored),
+    property("an empty String.colored(Color) should return an empty String", testEmptyStringColored),
     property("test txt.black", testBlack),
     property("test txt.red", testRed),
     property("test txt.green", testGreen),
@@ -49,6 +50,41 @@ object ColorSyntaxSpec extends Properties {
     val actual             = text.colored(color)
     val expected           = colorAndReset(text, ansiColor)
     actual ==== expected
+  }
+
+  def testEmptyStringColored: Property = for {
+    color <- Gen
+               .element1(
+                 Color.black,
+                 Color.red,
+                 Color.green,
+                 Color.yellow,
+                 Color.blue,
+                 Color.magenta,
+                 Color.cyan,
+                 Color.white,
+                 Color.blackBg,
+                 Color.redBg,
+                 Color.greenBg,
+                 Color.yellowBg,
+                 Color.blueBg,
+                 Color.magentaBg,
+                 Color.cyanBg,
+                 Color.whiteBg,
+                 Color.reset,
+                 Color.bold,
+                 Color.underlined,
+                 Color.blink,
+                 Color.reversed,
+                 Color.invisible
+               )
+               .log("color")
+  } yield {
+    val expected = ""
+    val actual   = "".colored(color)
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be "" (an empty String)""")
   }
 
   def testBlack: Property = for {

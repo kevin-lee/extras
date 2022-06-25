@@ -126,6 +126,9 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
         Seq.empty
     },
   )
+  .dependsOn(
+    extrasCore,
+  )
 
 lazy val extrasScalaIoJvm = extrasScalaIo.jvm
 lazy val extrasScalaIoJs  = extrasScalaIo.js.settings(Test / fork := false)
