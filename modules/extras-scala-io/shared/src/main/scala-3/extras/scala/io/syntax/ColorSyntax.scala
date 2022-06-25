@@ -10,7 +10,7 @@ trait ColorSyntax {
   extension (text: String) {
 
     def colored(color: Color): String =
-      s"${color.toAnsi}$text${Color.Reset.toAnsi}"
+      if text.isEmpty then text else s"${color.toAnsi}$text${Color.Reset.toAnsi}"
 
     def black: String         = colored(Color.black)
     def red: String           = colored(Color.red)
