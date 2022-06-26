@@ -53,8 +53,16 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
       testColor
     ),
     property(
+      """Rgb(value).color("") should return """"",
+      testColorEmptyString
+    ),
+    property(
       """Rgb(value).colored(String value) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
       testColored
+    ),
+    property(
+      """Rgb(value).colored("") should return """"",
+      testColoredEmptyString
     )
   ) ++ corssVersionTests
 
@@ -516,6 +524,18 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     actual ==== expected
   }
 
+  def testColorEmptyString: Property = for {
+    rgbInput <-
+      Gens.genRgbIntAndInts.log("(rgbInt, (expectedRed, expectedGreen, expectedBlue))")
+    (rgbInt, _) = rgbInput
+  } yield {
+    val expected = ""
+    val actual   = Rgb.unsafeFromInt(rgbInt).color("")
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
+  }
+
   def testColored: Property = for {
     rgbInput <-
       Gens.genRgbIntAndInts.log("(rgbInt, (expectedRed, expectedGreen, expectedBlue))")
@@ -531,6 +551,18 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         .toAnsi
     val actual   = Rgb.unsafeFromInt(rgbInt).colored(text)
     actual ==== expected
+  }
+
+  def testColoredEmptyString: Property = for {
+    rgbInput <-
+      Gens.genRgbIntAndInts.log("(rgbInt, (expectedRed, expectedGreen, expectedBlue))")
+    (rgbInt, _) = rgbInput
+  } yield {
+    val expected = ""
+    val actual   = Rgb.unsafeFromInt(rgbInt).colored("")
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
   }
 
 }

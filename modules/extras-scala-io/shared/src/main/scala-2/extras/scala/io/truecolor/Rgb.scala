@@ -126,8 +126,8 @@ object Rgb {
     def toAsciiEsc: String         =
       s"\u001b[38;2;${rgb.red.value.toString};${rgb.green.value.toString};${rgb.blue.value.toString}m"
 
-    def color(s: String): String = toAsciiEsc + s
+    def color(s: String): String = if (s.isEmpty) "" else toAsciiEsc + s
 
-    def colored(s: String): String = toAsciiEsc + s + extras.scala.io.Color.Reset.toAnsi
+    def colored(s: String): String = if (s.isEmpty) "" else toAsciiEsc + s + extras.scala.io.Color.Reset.toAnsi
   }
 }

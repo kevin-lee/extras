@@ -30,6 +30,10 @@ object RgbSyntaxSpec extends Properties {
       testRgbIntGreaterThan0xffffff
     ),
     property(
+      """"".rgb(Int) should return """"",
+      testEmptyStringRgbInt
+    ),
+    property(
       """String value.rgbed(Int) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
       testRgbedInt
     ),
@@ -40,6 +44,10 @@ object RgbSyntaxSpec extends Properties {
     property(
       """String value.rgbed(Int > 0xffffff) should return value in colored ASCII escaped String value with 0xffffff ending with scala.io.AnsiColor.RESET""",
       testRgbedIntGreaterThan0xffffff
+    ),
+    property(
+      """"".rgbed(Int) should return """"",
+      testEmptyStringRgbedInt
     )
   )
 
@@ -99,6 +107,17 @@ object RgbSyntaxSpec extends Properties {
     actual ==== expected
   }
 
+  def testEmptyStringRgbInt: Property = for {
+    intValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("intValue")
+  } yield {
+    import extras.scala.io.syntax.truecolor.rgb._
+    val expected = ""
+    val actual   = "".rgb(intValue)
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
+  }
+
   def testRgbedInt: Property = for {
     rgbInput <- Gens.genRgbIntAndInts.log("(rgbInt, (redInt, greenInt, blueInt))")
     (rgbInt, (redInt, greenInt, blueInt)) = rgbInput
@@ -128,6 +147,17 @@ object RgbSyntaxSpec extends Properties {
     val expected = TestTools.toRgbAsciiEsc(255, 255, 255) + text + extras.scala.io.Color.reset.toAnsi
     val actual   = text.rgbed(invalidRgbInt)
     actual ==== expected
+  }
+
+  def testEmptyStringRgbedInt: Property = for {
+    intValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("intValue")
+  } yield {
+    import extras.scala.io.syntax.truecolor.rgb._
+    val expected = ""
+    val actual   = "".rgbed(intValue)
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
   }
 
 }
