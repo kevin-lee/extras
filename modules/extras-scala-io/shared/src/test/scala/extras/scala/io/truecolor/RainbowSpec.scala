@@ -13,7 +13,9 @@ object RainbowSpec extends Properties {
     example("test Rainbow.rainbow(Big RAINBOW ASCII art) should return rainbowed String", testRainbowAsciiArt),
     property("test Rainbow.rainbow(String) should return rainbowed String", testRainbow),
     property("test Rainbow.rainbow(String) should return rainbowed String2", testRainbow2),
+    example("""test Rainbow.rainbow("") should return """"", testRainbowEmptyString),
     property("test Rainbow.rainbowHtml(String) should return rainbowed String in HTML", testRainbowHtml),
+    example("""test Rainbow.rainbowHtml("") should return """"", testRainbowHtmlEmptyString),
     property("test Rainbow.Index.value should return corresponding Int value", testRainbowIndexValue),
     property("test Rainbow.unsafeFromInt(valid Int) should return Rainbow.Index", testRainbowUnsafeFromIntValid),
     property("test Rainbow.unsafeFromInt(invalid Int) should throw exception", testRainbowUnsafeFromIntInvalid)
@@ -123,6 +125,14 @@ object RainbowSpec extends Properties {
 
   }
 
+  def testRainbowEmptyString: Result = {
+    val expected = ""
+    val actual   = Rainbow.rainbow("")
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
+  }
+
   def testRainbowHtml: Property = for {
     s1       <- Gen.string(Gen.alphaNum, Range.singleton(3)).log("s1")
     s2       <- Gen.string(Gen.alphaNum, Range.singleton(3)).log("s2")
@@ -167,6 +177,14 @@ object RainbowSpec extends Properties {
   } yield {
     val actual = Rainbow.rainbowHtml(input)
     actual ==== expected
+  }
+
+  def testRainbowHtmlEmptyString: Result = {
+    val expected = ""
+    val actual   = Rainbow.rainbowHtml("")
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
   }
 
   def testRainbowIndexValue: Property = for {

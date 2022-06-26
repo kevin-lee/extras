@@ -10,9 +10,11 @@ import hedgehog.runner._
 object RainbowSyntaxSpec extends Properties {
   override def tests: List[Prop] = List(
     example("test Rainbow.rainbow(Big RAINBOW ASCII art) should return rainbowed String", testRainbowAsciiArt),
-    property("test Rainbow.rainbow(String) should return rainbowed String", testRainbow),
-    property("test Rainbow.rainbow(String) should return rainbowed String2", testRainbow2),
-    property("test Rainbow.rainbowHtml(String) should return rainbowed String in HTML", testRainbowHtml)
+    property("test String.rainbowed should return rainbowed String", testRainbow),
+    property("test String.rainbowed should return rainbowed String2", testRainbow2),
+    example("""test "".rainbowed should return rainbowed """"", testEmptyStringRainbowed),
+    property("test String.rainbowedHtml should return rainbowed String in HTML", testRainbowHtml),
+    example("""test "".rainbowedHtml should return """"", testEmptyStringRainbowedHtml)
   )
 
   def testRainbowAsciiArt: Result = {
@@ -122,6 +124,15 @@ object RainbowSyntaxSpec extends Properties {
 
   }
 
+  def testEmptyStringRainbowed: Result = {
+    import extras.scala.io.syntax.truecolor.rainbow._
+    val expected = ""
+    val actual   = "".rainbowed
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
+  }
+
   def testRainbowHtml: Property = for {
     s1       <- Gen.string(Gen.alphaNum, Range.singleton(3)).log("s1")
     s2       <- Gen.string(Gen.alphaNum, Range.singleton(3)).log("s2")
@@ -167,6 +178,15 @@ object RainbowSyntaxSpec extends Properties {
     import extras.scala.io.syntax.truecolor.rainbow._
     val actual = input.rainbowedHtml
     actual ==== expected
+  }
+
+  def testEmptyStringRainbowedHtml: Result = {
+    import extras.scala.io.syntax.truecolor.rainbow._
+    val expected = ""
+    val actual   = "".rainbowedHtml
+    import extras.core.syntax.string._
+    (actual ==== expected)
+      .log(s"""${actual.encodeToUnicode} should be """"")
   }
 
 }

@@ -90,19 +90,23 @@ object Rainbow {
   }
 
   def rainbow(s: String): String =
-    mkRainbow(
-      s,
-      "",
-      (each, index) => RainbowColor(index.value).toAsciiEsc + each,
-      extras.scala.io.Color.Reset.toAnsi
-    )
+    if s.isEmpty then ""
+    else
+      mkRainbow(
+        s,
+        "",
+        (each, index) => RainbowColor(index.value).toAsciiEsc + each,
+        extras.scala.io.Color.Reset.toAnsi
+      )
 
   def rainbowHtml(s: String): String =
-    mkRainbow(
-      s,
-      "",
-      (each, index) => s"""<span style="color: ${RainbowColor(index.value).toHexHtml};">$each</span>""",
-      ""
-    )
+    if s.isEmpty then ""
+    else
+      mkRainbow(
+        s,
+        "",
+        (each, index) => s"""<span style="color: ${RainbowColor(index.value).toHexHtml};">$each</span>""",
+        ""
+      )
 
 }
