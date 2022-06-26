@@ -73,8 +73,8 @@ object Color {
 
   def invisible: Color = Color.Invisible
 
-  extension (color: Color) {
-    def render: String = color match {
+  extension (colour: Color) {
+    def render: String = colour match {
       case Black =>
         AnsiColor.BLACK
 
@@ -142,9 +142,15 @@ object Color {
         AnsiColor.INVISIBLE
     }
 
-    def toAnsi: String = Color.render(color)
+    def toAnsi: String = Color.render(colour)
 
-    def show: String = color.toString
+    def show: String = colour.toString
+
+    def color(s: String): String =
+      if s.isEmpty then "" else s"$toAnsi$s"
+
+    def colored(s: String): String =
+      if s.isEmpty then "" else color(s) + Color.render(Color.reset)
   }
 
 }

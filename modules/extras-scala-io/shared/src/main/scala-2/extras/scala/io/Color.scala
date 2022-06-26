@@ -143,10 +143,20 @@ object Color {
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))
   def show(color: Color): String = color.toString
 
-  implicit final class ColorOps(private val color: Color) extends AnyVal {
-    def toAnsi: String = Color.render(color)
+  def color(color: Color)(s: String): String =
+    if (s.isEmpty) "" else s"${Color.render(color)}$s"
 
-    def show: String = Color.show(color)
+  def colored(color: Color)(s: String): String =
+    if (s.isEmpty) "" else Color.color(color)(s) + Color.render(Color.reset)
+
+  implicit final class ColorOps(private val colour: Color) extends AnyVal {
+    def toAnsi: String = Color.render(colour)
+
+    def show: String = Color.show(colour)
+
+    def color(s: String): String = Color.color(colour)(s)
+
+    def colored(s: String): String = Color.colored(colour)(s)
   }
 
 }
