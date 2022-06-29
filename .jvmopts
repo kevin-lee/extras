@@ -1,0 +1,7 @@
+-Xss64m
+-Xms1024m
+-XX:MaxMetaspaceSize=1G
+-Xmx2G
+-XX:MaxInlineLevel=18
+-XX:+UnlockExperimentalVMOptions
+-XX:+UseJVMCICompiler
