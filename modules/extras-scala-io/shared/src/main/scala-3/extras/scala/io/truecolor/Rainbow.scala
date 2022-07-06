@@ -99,6 +99,14 @@ object Rainbow {
         extras.scala.io.Color.Reset.toAnsi
       )
 
+  def rainbows(ss: Seq[String]): Seq[String] = {
+    val maxLength = ss.map(_.length).foldLeft(0)(Ordering[Int].max)
+    ss.map { s =>
+      val length = s.length
+      rainbow(s + (" " * (maxLength - length)))
+    }
+  }
+
   def rainbowHtml(s: String): String =
     if s.isEmpty then ""
     else
