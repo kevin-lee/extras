@@ -10,4 +10,8 @@ trait RainbowSyntax {
     def rainbowed: String     = Rainbow.rainbow(s)
     def rainbowedHtml: String = Rainbow.rainbowHtml(s)
   }
+
+  extension (ss: Seq[String]) {
+    def rainbowed: Seq[String] = Rainbow.rainbows(ss)
+  }
 }
