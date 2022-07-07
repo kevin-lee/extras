@@ -4,12 +4,15 @@ import extras.scala.io.truecolor.Rainbow
 import hedgehog._
 import hedgehog.runner._
 
+import extras.scala.io.truecolor.Data.{expectedRainbowAsciiArt, rainbowAsciiArt}
+
 /** @author Kevin Lee
   * @since 2022-06-19
   */
 object RainbowSyntaxSpec extends Properties {
   override def tests: List[Prop] = List(
-    example("test Rainbow.rainbow(Big RAINBOW ASCII art) should return rainbowed String", testRainbowAsciiArt),
+    example("test List[String].map(_.rainbowed) should return rainbowed List[String]", testRainbowAsciiArt),
+    example("test Seq[String].rainbowed should return rainbowed Seq[String]", testRainbowAsciiArtWithSeq),
     property("test String.rainbowed should return rainbowed String", testRainbow),
     property("test String.rainbowed should return rainbowed String2", testRainbow2),
     example("""test "".rainbowed should return rainbowed """"", testEmptyStringRainbowed),
@@ -19,42 +22,19 @@ object RainbowSyntaxSpec extends Properties {
 
   def testRainbowAsciiArt: Result = {
     import extras.scala.io.syntax.truecolor.rainbow._
-    val rainbowAsciiArt =
-      List(
-        """ ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄ """,
-        """▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░▌      ▐░▌▐░░░░░░░░░░▌ ▐░░░░░░░░░░░▌▐░▌       ▐░▌""",
-        """▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀█░█▀▀▀▀ ▐░▌░▌     ▐░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░▌       ▐░▌""",
-        """▐░▌       ▐░▌▐░▌       ▐░▌     ▐░▌     ▐░▌▐░▌    ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌""",
-        """▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░▌ ▐░▌   ▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌       ▐░▌▐░▌   ▄   ▐░▌""",
-        """▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░▌  ▐░▌  ▐░▌▐░░░░░░░░░░▌ ▐░▌       ▐░▌▐░▌  ▐░▌  ▐░▌""",
-        """▐░█▀▀▀▀█░█▀▀ ▐░█▀▀▀▀▀▀▀█░▌     ▐░▌     ▐░▌   ▐░▌ ▐░▌▐░█▀▀▀▀▀▀▀█░▌▐░▌       ▐░▌▐░▌ ▐░▌░▌ ▐░▌""",
-        """▐░▌     ▐░▌  ▐░▌       ▐░▌     ▐░▌     ▐░▌    ▐░▌▐░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░▌▐░▌ ▐░▌▐░▌""",
-        """▐░▌      ▐░▌ ▐░▌       ▐░▌ ▄▄▄▄█░█▄▄▄▄ ▐░▌     ▐░▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌░▌   ▐░▐░▌""",
-        """▐░▌       ▐░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌      ▐░░▌▐░░░░░░░░░░▌ ▐░░░░░░░░░░░▌▐░░▌     ▐░░▌""",
-        """ ▀         ▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀        ▀▀  ▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀  ▀▀       ▀▀ """
-      )
 
-    val expected = {
-      import extras.scala.io.truecolor.Rainbow._
-      import extras.scala.io.Color
-      // format: off
-      List(
-        s"""${Red.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Orange.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Yellow.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Green.toAsciiEsc} ▄▄        ▄ ${Blue.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄  ${Indigo.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Violet.toAsciiEsc} ▄         ▄ ${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░░░░░░░░░░░▌${Orange.toAsciiEsc}▐░░░░░░░░░░░▌${Yellow.toAsciiEsc}▐░░░░░░░░░░░▌${Green.toAsciiEsc}▐░░▌      ▐░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░░░░░░░░░░░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Orange.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Yellow.toAsciiEsc} ▀▀▀▀█░█▀▀▀▀ ${Green.toAsciiEsc}▐░▌░▌     ▐░▌${Blue.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Indigo.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░▌       ▐░▌${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌▐░▌    ▐░▌${Blue.toAsciiEsc}▐░▌       ▐░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Orange.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌ ▐░▌   ▐░▌${Blue.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌   ▄   ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░░░░░░░░░░░▌${Orange.toAsciiEsc}▐░░░░░░░░░░░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌  ▐░▌  ▐░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌  ▐░▌  ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░█▀▀▀▀█░█▀▀ ${Orange.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌   ▐░▌ ▐░▌${Blue.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌ ▐░▌░▌ ▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░▌     ▐░▌  ${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌    ▐░▌▐░▌${Blue.toAsciiEsc}▐░▌       ▐░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌▐░▌ ▐░▌▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░▌      ▐░▌ ${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc} ▄▄▄▄█░█▄▄▄▄ ${Green.toAsciiEsc}▐░▌     ▐░▐░▌${Blue.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Indigo.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Violet.toAsciiEsc}▐░▌░▌   ▐░▐░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc}▐░▌       ▐░▌${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}▐░░░░░░░░░░░▌${Green.toAsciiEsc}▐░▌      ▐░░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░░░░░░░░░░░▌${Violet.toAsciiEsc}▐░░▌     ▐░░▌${Color.reset.toAnsi}""",
-        s"""${Red.toAsciiEsc} ▀         ▀ ${Orange.toAsciiEsc} ▀         ▀ ${Yellow.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀▀ ${Green.toAsciiEsc} ▀        ▀▀ ${Blue.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀  ${Indigo.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀▀ ${Violet.toAsciiEsc} ▀▀       ▀▀ ${Color.reset.toAnsi}"""
-      ).mkString("\n")
-      // format: on
-    }
+    val expected = expectedRainbowAsciiArt
+    val actual   = rainbowAsciiArt.map(_.rainbowed).mkString("\n")
+    println(actual)
 
-    val actual = rainbowAsciiArt.map(_.rainbowed).mkString("\n")
+    actual ==== expected
+  }
+
+  def testRainbowAsciiArtWithSeq: Result = {
+    import extras.scala.io.syntax.truecolor.rainbow._
+
+    val expected = expectedRainbowAsciiArt
+    val actual   = rainbowAsciiArt.rainbowed.mkString("\n")
     println(actual)
 
     actual ==== expected

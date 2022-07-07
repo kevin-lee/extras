@@ -1,5 +1,6 @@
 package extras.scala.io.truecolor
 
+import Data.{expectedRainbowAsciiArt, rainbowAsciiArt}
 import hedgehog._
 import hedgehog.runner._
 
@@ -11,7 +12,7 @@ import scala.util.Try
 object RainbowSpec extends Properties {
   override def tests: List[Test] = List(
     example("test Rainbow.rainbow(Big RAINBOW ASCII art) should return rainbowed String", testRainbowAsciiArt),
-    example("test Rainbow.rainbow(List[String]) should return rainbowed List[String]", testRainbowAsciiArtWithList),
+    example("test Rainbow.rainbows(Seq[String]) should return rainbowed Seq[String]", testRainbowAsciiArtWithSeq),
     property("test Rainbow.rainbow(String) should return rainbowed String", testRainbow),
     property("test Rainbow.rainbow(String) should return rainbowed String2", testRainbow2),
     example("""test Rainbow.rainbow("") should return """"", testRainbowEmptyString),
@@ -22,48 +23,13 @@ object RainbowSpec extends Properties {
     property("test Rainbow.unsafeFromInt(invalid Int) should throw exception", testRainbowUnsafeFromIntInvalid)
   )
 
-  val rainbowAsciiArt: Seq[String] =
-    List(
-      """ ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄▄▄▄▄▄▄▄▄▄  ▄▄        ▄  ▄▄▄▄▄▄▄▄▄▄   ▄▄▄▄▄▄▄▄▄▄▄  ▄         ▄ """,
-      """▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌▐░░▌      ▐░▌▐░░░░░░░░░░▌ ▐░░░░░░░░░░░▌▐░▌       ▐░▌""",
-      """▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌ ▀▀▀▀█░█▀▀▀▀ ▐░▌░▌     ▐░▌▐░█▀▀▀▀▀▀▀█░▌▐░█▀▀▀▀▀▀▀█░▌▐░▌       ▐░▌""",
-      """▐░▌       ▐░▌▐░▌       ▐░▌     ▐░▌     ▐░▌▐░▌    ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░▌       ▐░▌""",
-      """▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌     ▐░▌     ▐░▌ ▐░▌   ▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌       ▐░▌▐░▌   ▄   ▐░▌""",
-      """▐░░░░░░░░░░░▌▐░░░░░░░░░░░▌     ▐░▌     ▐░▌  ▐░▌  ▐░▌▐░░░░░░░░░░▌ ▐░▌       ▐░▌▐░▌  ▐░▌  ▐░▌""",
-      """▐░█▀▀▀▀█░█▀▀ ▐░█▀▀▀▀▀▀▀█░▌     ▐░▌     ▐░▌   ▐░▌ ▐░▌▐░█▀▀▀▀▀▀▀█░▌▐░▌       ▐░▌▐░▌ ▐░▌░▌ ▐░▌""",
-      """▐░▌     ▐░▌  ▐░▌       ▐░▌     ▐░▌     ▐░▌    ▐░▌▐░▌▐░▌       ▐░▌▐░▌       ▐░▌▐░▌▐░▌ ▐░▌▐░▌""",
-      """▐░▌      ▐░▌ ▐░▌       ▐░▌ ▄▄▄▄█░█▄▄▄▄ ▐░▌     ▐░▐░▌▐░█▄▄▄▄▄▄▄█░▌▐░█▄▄▄▄▄▄▄█░▌▐░▌░▌   ▐░▐░▌""",
-      """▐░▌       ▐░▌▐░▌       ▐░▌▐░░░░░░░░░░░▌▐░▌      ▐░░▌▐░░░░░░░░░░▌ ▐░░░░░░░░░░░▌▐░░▌     ▐░░▌""",
-      """ ▀         ▀  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀        ▀▀  ▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀  ▀▀       ▀▀ """
-    )
-
-  val expectedRainbowAsciiArt: String = {
-    import Rainbow._
-    import extras.scala.io.Color
-    // format: off
-    List(
-      s"""${Red.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Orange.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Yellow.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Green.toAsciiEsc} ▄▄        ▄ ${Blue.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄  ${Indigo.toAsciiEsc} ▄▄▄▄▄▄▄▄▄▄▄ ${Violet.toAsciiEsc} ▄         ▄ ${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░░░░░░░░░░░▌${Orange.toAsciiEsc}▐░░░░░░░░░░░▌${Yellow.toAsciiEsc}▐░░░░░░░░░░░▌${Green.toAsciiEsc}▐░░▌      ▐░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░░░░░░░░░░░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Orange.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Yellow.toAsciiEsc} ▀▀▀▀█░█▀▀▀▀ ${Green.toAsciiEsc}▐░▌░▌     ▐░▌${Blue.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Indigo.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░▌       ▐░▌${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌▐░▌    ▐░▌${Blue.toAsciiEsc}▐░▌       ▐░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌       ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Orange.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌ ▐░▌   ▐░▌${Blue.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌   ▄   ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░░░░░░░░░░░▌${Orange.toAsciiEsc}▐░░░░░░░░░░░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌  ▐░▌  ▐░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌  ▐░▌  ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░█▀▀▀▀█░█▀▀ ${Orange.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌   ▐░▌ ▐░▌${Blue.toAsciiEsc}▐░█▀▀▀▀▀▀▀█░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌ ▐░▌░▌ ▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░▌     ▐░▌  ${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}     ▐░▌     ${Green.toAsciiEsc}▐░▌    ▐░▌▐░▌${Blue.toAsciiEsc}▐░▌       ▐░▌${Indigo.toAsciiEsc}▐░▌       ▐░▌${Violet.toAsciiEsc}▐░▌▐░▌ ▐░▌▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░▌      ▐░▌ ${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc} ▄▄▄▄█░█▄▄▄▄ ${Green.toAsciiEsc}▐░▌     ▐░▐░▌${Blue.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Indigo.toAsciiEsc}▐░█▄▄▄▄▄▄▄█░▌${Violet.toAsciiEsc}▐░▌░▌   ▐░▐░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc}▐░▌       ▐░▌${Orange.toAsciiEsc}▐░▌       ▐░▌${Yellow.toAsciiEsc}▐░░░░░░░░░░░▌${Green.toAsciiEsc}▐░▌      ▐░░▌${Blue.toAsciiEsc}▐░░░░░░░░░░▌ ${Indigo.toAsciiEsc}▐░░░░░░░░░░░▌${Violet.toAsciiEsc}▐░░▌     ▐░░▌${Color.reset.toAnsi}""",
-      s"""${Red.toAsciiEsc} ▀         ▀ ${Orange.toAsciiEsc} ▀         ▀ ${Yellow.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀▀ ${Green.toAsciiEsc} ▀        ▀▀ ${Blue.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀  ${Indigo.toAsciiEsc} ▀▀▀▀▀▀▀▀▀▀▀ ${Violet.toAsciiEsc} ▀▀       ▀▀ ${Color.reset.toAnsi}"""
-    ).mkString("\n")
-    // format: on
-  }
-
   def testRainbowAsciiArt: Result = {
     val actual = rainbowAsciiArt.map(Rainbow.rainbow).mkString("\n")
     println(actual)
     actual ==== expectedRainbowAsciiArt
   }
 
-  def testRainbowAsciiArtWithList: Result = {
+  def testRainbowAsciiArtWithSeq: Result = {
     val actual = Rainbow.rainbows(rainbowAsciiArt).mkString("\n")
     println(actual)
     actual ==== expectedRainbowAsciiArt
