@@ -4,4 +4,3 @@
 -Xmx2G
 -XX:MaxInlineLevel=18
 -XX:+UnlockExperimentalVMOptions
--XX:+UseJVMCICompiler
