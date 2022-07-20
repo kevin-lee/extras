@@ -47,6 +47,12 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Render markdown and build website
+        env:
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
+          GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
+          GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
         run: |
           sbt \
             ++${{ matrix.scala.version }}! \
