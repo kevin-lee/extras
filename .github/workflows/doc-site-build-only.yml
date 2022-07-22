@@ -15,7 +15,7 @@ jobs:
         scala:
           - { version: "2.13.5", binary-version: "2.13", java-version: "adopt@1.11" }
         node:
-          - { version: "16.15.0" }
+          - { version: "16.16.0" }
 
     steps:
       - uses: actions/checkout@v3
