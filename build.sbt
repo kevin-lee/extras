@@ -347,7 +347,7 @@ lazy val props = new {
   val CatsEffectVersion      = "2.5.4"
   val CatsEffect2_0_0Version = "2.0.0"
 
-  val HedgehogVersion = "0.8.0"
+  val HedgehogVersion = "0.9.0"
 
   val NewtypeVersion            = "0.4.4"
   val RefinedVersion            = "0.9.27"
