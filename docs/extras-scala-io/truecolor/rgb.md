@@ -223,18 +223,44 @@ println(s"${Rgb.unsafeFromInt(0xffffff).colored("Hello")} World")
 
 
 ## syntax
-
+To use `Rgb` syntax, import `extras.scala.io.syntax.truecolor.rgb._`.
 ```scala mdoc:reset-object
 import extras.scala.io.syntax.truecolor.rgb._
 ```
+
+### `String.rgb(Int)` and `String.rgbed(Int)`
 ```scala mdoc
 "Hello".rgb(0x10e0ff)
 "Hello".rgbed(0x10e0ff)
 ```
+
+### Invalid RGB Value Handling
+In `.rgb(Int)` and `.rgbed(Int)` syntax,
+ * If the given RGB `Int` value is less than `0` (`0x000000`), it uses `0` (`0x000000`).
+ * If the given RGB `Int` value is greater than `16777215` (`0xffffff`), it uses `16777215` (`0xffffff`).
+```scala mdoc
+"Hello".rgb(0x000000 - 1)
+"Hello".rgb(0xffffff + 1)
+
+"Hello".rgbed(0xffffff + 1)
+"Hello".rgbed(0xffffff + 1)
+```
+
+### `String.rgb(Rgb)` and `String.rgbed(Rgb)`
 ```scala mdoc
 import extras.scala.io.truecolor.Rgb
 Rgb.fromInt(0x11a02f)
   .map(rgb => "Hello".rgb(rgb))
 Rgb.fromInt(0x11a02f)
   .map(rgb => "Hello".rgbed(rgb))
+
+for {
+  a <- Rgb.fromInt(0x11a02f)
+  b <- Rgb.fromInt(0x00eab0)
+} yield {
+  println("Hello".rgb(a))
+  println("Hello".rgb(b))
+  println("Hello".rgbed(a))
+  println("Hello".rgbed(b))
+}
 ```
