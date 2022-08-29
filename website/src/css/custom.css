@@ -13,7 +13,9 @@
   --ifm-color-primary-light: #20737f;
   --ifm-color-primary-lighter: #217984;
   --ifm-color-primary-lightest: #268895;
+
   --ifm-code-font-size: 95%;
+  --ifm-font-family-monospace: "FiraCode Retina Nerd Font";
 
   --ifm-container-width-xl: 1920px;
 }
@@ -27,4 +29,39 @@
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+@font-face {
+  font-family: "FiraCode Light Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Light%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FiraCode Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FiraCode Retina Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FiraCode Medium Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FiraCode SemiBold Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "FiraCode Bold Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "CaskaydiaCove Nerd Font";
+  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-caskaydia-cove-nerd-font/2.1.0/Caskaydia%20Cove%20Nerd%20Font%20Complete.ttf") format("truetype");
 }
