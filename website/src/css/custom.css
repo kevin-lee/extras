@@ -5,6 +5,11 @@
  */
 
 /* You can override the default Infima variables here. */
+
+@import url('https://content-fonts.kevinly.dev/nerd-fonts/font-fira-code-nerd-font/fonts.css');
+
+@import url('https://content-fonts.kevinly.dev/nerd-fonts/font-caskaydia-cove-nerd-font/fonts.css');
+
 :root {
   --ifm-color-primary: #1d6973;
   --ifm-color-primary-dark: #1a5e68;
@@ -29,39 +34,4 @@
 
 html[data-theme='dark'] .docusaurus-highlight-code-line {
   background-color: rgba(0, 0, 0, 0.3);
-}
-
-@font-face {
-  font-family: "FiraCode Light Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Light%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "FiraCode Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Regular%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "FiraCode Retina Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Retina%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "FiraCode Medium Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Medium%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "FiraCode SemiBold Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20SemiBold%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "FiraCode Bold Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-fira-code-nerd-font/2.2.1/Fira%20Code%20Bold%20Nerd%20Font%20Complete.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "CaskaydiaCove Nerd Font";
-  src: url("https://raw.githubusercontent.com/Kevin-Lee/content-fonts/main/nerd-fonts/font-caskaydia-cove-nerd-font/2.1.0/Caskaydia%20Cove%20Nerd%20Font%20Complete.ttf") format("truetype");
 }
