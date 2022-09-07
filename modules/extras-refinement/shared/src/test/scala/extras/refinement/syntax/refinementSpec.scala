@@ -12,98 +12,112 @@ import io.estatico.newtype.macros.newtype
   * @since 2022-03-14
   */
 object refinementSpec extends Properties {
-  override def tests: List[Test] = List(
-    property("test validate[A](String) => Right(A(NonEmptyString))", testValidateAsAStringToANonEmptyStringSyntax),
-    property("test String.as[A].validate => Right(A(NonEmptyString))", testStringAsValidateToANonEmptyStringSyntax),
-    example("test validate[A](\"\") => Left(error)", testValidateAsAStringToErrorSyntax),
-    example("test \"\".as[A].validate => Left(error)", testStringAsValidateToErrorSyntax),
-    property("test validate[A](Int) => Right(A(Int Refined Positive))", testValidateAsAIntToAIntRefinedPositiveSyntax),
-    property("test Int.as[A].validate => Right(A(Int Refined Positive))", testIntAsValidateToAIntRefinedPositiveSyntax),
-    property("test validate[A](non positive Int) => Left(error)", testValidateAsAIntToErrorSyntax),
-    property("test (non positive Int).as[A].validate => Left(error)", testIntAsValidateToErrorSyntax),
-    property("test newtype(refined(T)).toValue should return T", testCoercibleRefinementSyntaxToValue)
+  override def tests: List[Test] = allTests(extras.refinement.syntax.refinement)
+
+  def allTests(refinementSyn: refinement): List[Test] = List(
+    property(
+      "test validate[A](String) => Right(A(NonEmptyString))",
+      testValidateAsAStringToANonEmptyStringSyntax(refinementSyn)
+    ),
+    property(
+      "test String.as[A].validate => Right(A(NonEmptyString))",
+      testStringAsValidateToANonEmptyStringSyntax(refinementSyn)
+    ),
+    example("test validate[A](\"\") => Left(error)", testValidateAsAStringToErrorSyntax(refinementSyn)),
+    example("test \"\".as[A].validate => Left(error)", testStringAsValidateToErrorSyntax(refinementSyn)),
+    property(
+      "test validate[A](Int) => Right(A(Int Refined Positive))",
+      testValidateAsAIntToAIntRefinedPositiveSyntax(refinementSyn)
+    ),
+    property(
+      "test Int.as[A].validate => Right(A(Int Refined Positive))",
+      testIntAsValidateToAIntRefinedPositiveSyntax(refinementSyn)
+    ),
+    property("test validate[A](non positive Int) => Left(error)", testValidateAsAIntToErrorSyntax(refinementSyn)),
+    property("test (non positive Int).as[A].validate => Left(error)", testIntAsValidateToErrorSyntax(refinementSyn)),
+    property("test newtype(refined(T)).toValue should return T", testCoerciblerefinementSynToValue(refinementSyn))
   )
 
-  def testValidateAsAStringToANonEmptyStringSyntax: Property = for {
+  def testValidateAsAStringToANonEmptyStringSyntax(refinementSyn: refinement): Property = for {
     nonEmptyString <- Gen.string(Gen.unicode, Range.linear(1, 10)).log("nonEmptyString")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = validateAs[Name](nonEmptyString)
     actual ==== Right(Name(NonEmptyString.unsafeFrom(nonEmptyString)))
   }
 
-  def testStringAsValidateToANonEmptyStringSyntax: Property = for {
+  def testStringAsValidateToANonEmptyStringSyntax(refinementSyn: refinement): Property = for {
     nonEmptyString <- Gen.string(Gen.unicode, Range.linear(1, 10)).log("nonEmptyString")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = nonEmptyString.validateAs[Name]
     actual ==== Right(Name(NonEmptyString.unsafeFrom(nonEmptyString)))
   }
 
-  def testValidateAsAStringToErrorSyntax: Result = {
+  def testValidateAsAStringToErrorSyntax(refinementSyn: refinement): Result = {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val input  = ""
     val actual = validateAs[Name](input)
     actual ==== Left(NonEmptyChain("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
   }
 
-  def testStringAsValidateToErrorSyntax: Result = {
+  def testStringAsValidateToErrorSyntax(refinementSyn: refinement): Result = {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val input  = ""
     val actual = input.validateAs[Name]
     actual ==== Left(NonEmptyChain("Failed to create TypesForTesting.Name: Predicate isEmpty() did not fail."))
   }
 
-  def testValidateAsAIntToAIntRefinedPositiveSyntax: Property = for {
+  def testValidateAsAIntToAIntRefinedPositiveSyntax(refinementSyn: refinement): Property = for {
     positiveInt <- Gen.int(Range.linear(1, Int.MaxValue)).log("positiveInt")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = validateAs[Id](positiveInt)
     actual ==== Right(Id(PositiveInt.unsafeFrom(positiveInt)))
   }
 
-  def testIntAsValidateToAIntRefinedPositiveSyntax: Property = for {
+  def testIntAsValidateToAIntRefinedPositiveSyntax(refinementSyn: refinement): Property = for {
     positiveInt <- Gen.int(Range.linear(1, Int.MaxValue)).log("positiveInt")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = positiveInt.validateAs[Id]
     actual ==== Right(Id(PositiveInt.unsafeFrom(positiveInt)))
   }
 
-  def testValidateAsAIntToErrorSyntax: Property = for {
+  def testValidateAsAIntToErrorSyntax(refinementSyn: refinement): Property = for {
     nonPositiveInt <- Gen.int(Range.linear(Int.MinValue, 0)).log("nonPositiveInt")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = validateAs[Id](nonPositiveInt)
     actual ==== Left(
       NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: (${nonPositiveInt.toString} > 0).")
     )
   }
 
-  def testIntAsValidateToErrorSyntax: Property = for {
+  def testIntAsValidateToErrorSyntax(refinementSyn: refinement): Property = for {
     nonPositiveInt <- Gen.int(Range.linear(Int.MinValue, 0)).log("nonPositiveInt")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
     val actual = nonPositiveInt.validateAs[Id]
     actual ==== Left(
       NonEmptyChain(s"Failed to create TypesForTesting.Id: Predicate failed: (${nonPositiveInt.toString} > 0).")
     )
   }
 
-  def testCoercibleRefinementSyntaxToValue: Property = for {
+  def testCoerciblerefinementSynToValue(refinementSyn: refinement): Property = for {
     s <- Gen.string(Gen.alphaNum, Range.linear(1, 100)).log("s")
     n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
   } yield {
     import TypesForTesting._
-    import extras.refinement.syntax.refinement._
+    import refinementSyn._
 
     val name = Name(NonEmptyString.unsafeFrom(s))
     val id   = Id(PositiveInt.unsafeFrom(n))
