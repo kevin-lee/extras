@@ -1,7 +1,7 @@
 ---
-sidebar_position: 2
-id: 'syntax'
-title: 'Refinement Syntax'
+sidebar_position: 1
+id: 'refinement'
+title: 'refinement Syntax'
 ---
 ## Why `refinement` syntax?
 When you use [newtype](https://github.com/estatico/scala-newtype) and [refined](https://github.com/fthomas/refined) together 
