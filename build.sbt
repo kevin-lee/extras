@@ -177,6 +177,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
       libs.catsEffect3,
       libs.libCatsEffectTestKit excludeAll ("org.scalacheck"),
       libs.hedgehogCore,
+      libs.hedgehogRunner,
     ) ++ libs.hedgehog,
     libraryDependencies            :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
@@ -209,7 +210,7 @@ lazy val docs = (project in file("generated-docs"))
         "io.kevinlee" %% "extras-cats"               % latestVersion,
         "io.kevinlee" %% "extras-scala-io"           % latestVersion,
       ) ++
-      List(libs.hedgehogCore, libs.hedgehogRunner)
+        List(libs.hedgehogCore, libs.hedgehogRunner)
     },
     mdocVariables       := Map(
       "VERSION"                  -> {

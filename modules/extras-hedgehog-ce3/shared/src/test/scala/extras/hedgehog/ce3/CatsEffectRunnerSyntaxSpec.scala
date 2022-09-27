@@ -3,21 +3,22 @@ package extras.hedgehog.ce3
 import cats.effect.IO
 import cats.syntax.all._
 import cats.{Eq, Show}
+import extras.hedgehog.ce3.syntax.runner._
 import hedgehog._
 import hedgehog.runner._
 
 /** @author Kevin Lee
   * @since 2021-12-12
   */
-object CatsEffectRunnerSpec extends Properties with CatsEffectRunner {
+object CatsEffectRunnerSyntaxSpec extends Properties {
 
   override def tests: List[Test] = List(
     property(
-      "test CatsEffectRunner and IO.map(_ ==== expected) - success case",
+      "test CatsEffectRunner syntax: IO.map(_ ==== expected) - success case",
       testCatsEffectRunnerSuccessCase
     ),
     property(
-      "test CatsEffectRunner and IO.attempt.map(_ ==== Left(expected)) - error case",
+      "test CatsEffectRunner syntax: IO.attempt.map(_ ==== Left(expected)) - error case",
       testCatsEffectRunnerErrorCase
     ),
   )
