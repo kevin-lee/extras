@@ -169,7 +169,7 @@ lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatfo
 lazy val extrasCatsJvm = extrasCats.jvm
 lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
 
-lazy val extrasHedgehogCatsEffect3 = crossSubProject("hedgehog-cats-effect3", crossProject(JVMPlatform, JSPlatform))
+lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions             := props.CrossScalaVersionsWithout_2_11,
     libraryDependencies ++= List(
@@ -184,8 +184,8 @@ lazy val extrasHedgehogCatsEffect3 = crossSubProject("hedgehog-cats-effect3", cr
   )
   .dependsOn(extrasCore, extrasCats)
 
-lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCatsEffect3.jvm
-lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCatsEffect3.js.settings(Test / fork := false)
+lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCe3.jvm
+lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / fork := false)
 
 lazy val docs = (project in file("generated-docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
