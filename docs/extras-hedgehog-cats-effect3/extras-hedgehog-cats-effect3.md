@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: 'extras-hedgehog-cats-effect3: Getting Started'
+title: 'Getting Started'
 ---
 
-# Get `extras-hedgehog-cats-effect3`
+## Get `extras-hedgehog-cats-effect3`
 
 `extras-hedgehog-cats-effect3` provides some helper tools to write tests with hedgehog and cats-effect 3.
 

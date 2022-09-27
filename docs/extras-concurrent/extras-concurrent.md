@@ -1,9 +1,8 @@
 ---
 sidebar_position: 1
-title: 'extras-concurrent: Getting Started'
+title: 'Getting Started'
 ---
 
-# Get `extras-concurrent`
 ## Get `extras-concurrent`
 ```scala
 "io.kevinlee" %% "extras-concurrent" % "@VERSION@"

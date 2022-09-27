@@ -2,5 +2,9 @@
   "label": "Extras - scala.io",
   "position": 4,
   "collapsible": false,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Extras for scala.io"
+  }
 }

@@ -2,5 +2,9 @@
   "label": "Extras - Cats",
   "position": 2,
   "collapsible": false,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Extras for Cats"
+  }
 }
