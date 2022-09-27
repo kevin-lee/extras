@@ -1,2 +1,6 @@
 ignore:
   - "docs"
+  - "generated-docs"
+  - "generated-docs-scala2"
+  - "generated-docs-scala3"
+  - "website"

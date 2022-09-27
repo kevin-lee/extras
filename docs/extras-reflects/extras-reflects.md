@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: 'extras-reflects: Getting Started'
+title: 'Getting Started'
 ---
 
-# Get `extras-reflects`
+## Get `extras-reflects`
 
 `extras-reflects` provides convenient syntax to use scala-reflect.
 

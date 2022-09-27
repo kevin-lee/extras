@@ -2,5 +2,9 @@
   "label": "Extras - Hedgehog Cats Effect 3",
   "position": 3,
   "collapsible": false,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Extras - Cats Effect 3 support for Hedgehog"
+  }
 }

@@ -1,9 +1,10 @@
 ---
 sidebar_position: 1
-title: 'extras-cats: Getting Started'
+id: 'extras-cats'
+title: 'Getting Started'
 ---
 
-# Get `extras-cats`
+## Get `extras-cats`
 
 ```scala
 "io.kevinlee" %% "extras-cats" % "@VERSION@"

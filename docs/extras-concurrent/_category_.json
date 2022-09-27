@@ -2,5 +2,9 @@
   "label": "Extras - Concurrent",
   "position": 5,
   "collapsible": false,
-  "collapsed": false
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Extras for Scala concurrent programming"
+  }
 }
