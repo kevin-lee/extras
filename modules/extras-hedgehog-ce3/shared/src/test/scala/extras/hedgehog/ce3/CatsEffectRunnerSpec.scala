@@ -1,4 +1,4 @@
-package extras.hedgehog.cats.effect
+package extras.hedgehog.ce3
 
 import cats.{Eq, Show}
 import cats.effect.IO
