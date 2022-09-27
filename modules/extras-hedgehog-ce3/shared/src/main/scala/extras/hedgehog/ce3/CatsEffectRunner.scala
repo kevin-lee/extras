@@ -1,8 +1,10 @@
 package extras.hedgehog.ce3
 
+import CatsEffectRunner.{IoOps, SyncIoOps}
 import cats.effect.{IO, Outcome, SyncIO, unsafe}
 import cats.syntax.all._
 import cats.{Eq, Id, Order, Show, ~>}
+import extras.hedgehog.ce3
 import extras.tools._
 import hedgehog._
 
@@ -16,15 +18,15 @@ import scala.reflect.ClassTag
   * @author Kevin Lee
   * @since 2021-08-05
   */
-object CatsEffectRunner {
+trait CatsEffectRunner {
 
-  type TestContext = cats.effect.kernel.testkit.TestContext
-  val TestContext: cats.effect.kernel.testkit.TestContext.type = cats.effect.kernel.testkit.TestContext
-
-  final case class Ticker(ctx: TestContext)
-  object Ticker {
-    def withNewTestContext(): Ticker = Ticker(TestContext())
+  def withIO(test: => IO[Result]): Result = {
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+    test.completeThen(identity)
   }
+
+  type Ticker = ce3.Ticker
+  val Ticker = ce3.Ticker
 
   implicit lazy val eqThrowable: Eq[Throwable] =
     Eq.fromUniversalEquals[Throwable]
@@ -89,7 +91,15 @@ object CatsEffectRunner {
       def monotonicNanos(): Long = ctx.now().toNanos
     }
 
-  implicit final class IoOps[A](private val ioa: IO[A]) extends AnyVal {
+  implicit def ioOps[A](ioa: IO[A]): IoOps[A] = new IoOps(ioa)
+
+  implicit def syncIoOps[A](ioa: SyncIO[A]): SyncIoOps[A] = new SyncIoOps[A](ioa)
+
+}
+
+private[ce3] object CatsEffectRunner extends CatsEffectRunner {
+
+  final class IoOps[A](private val ioa: IO[A]) extends AnyVal {
 
     def tickTo(expected: Outcome[Option, Throwable, A])(
       implicit ticker: Ticker,
@@ -184,7 +194,7 @@ object CatsEffectRunner {
 
   }
 
-  implicit final class SyncIoOps[A](private val ioa: SyncIO[A]) extends AnyVal {
+  final class SyncIoOps[A](private val ioa: SyncIO[A]) extends AnyVal {
     def completeAsSync(expected: A)(implicit eq: Eq[A], sh: Show[A]): Result = {
       val a = ioa.unsafeRunSync()
       Result.assert(a eqv expected).log(s"${a.show} !== ${expected.show}")
