@@ -13,9 +13,17 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
 
   override def tests: List[Test] = List(
     property("test CatsEffectRunner and IO.completeAs", testCatsEffectRunnerWithCompleteAs),
+    property("test CatsEffectRunner and two IO.completeAs", testCatsEffectRunnerWithCompleteAsPair),
+    property("test CatsEffectRunner and multiple IO.completeAs", testCatsEffectRunnerWithCompleteAsMultiple),
     property("test CatsEffectRunner and IO.completeThen", testCatsEffectRunnerWithCompleteThen),
+    property("test CatsEffectRunner and two IO.completeThen", testCatsEffectRunnerWithCompleteThenPair),
+    property("test CatsEffectRunner and multiple IO.completeThen", testCatsEffectRunnerWithCompleteThenMultiple),
     property("test CatsEffectRunner and IO.expectError", testCatsEffectRunnerWithExpectError),
-    property("test CatsEffectRunner and IO.errorThen", testCatsEffectRunnerWithErrorThen)
+    property("test CatsEffectRunner and two IO.expectError", testCatsEffectRunnerWithExpectErrorPair),
+    property("test CatsEffectRunner and multiple IO.expectError", testCatsEffectRunnerWithExpectErrorMultiple),
+    property("test CatsEffectRunner and IO.errorThen", testCatsEffectRunnerWithErrorThen),
+    property("test CatsEffectRunner and two IO.errorThen", testCatsEffectRunnerWithErrorThenPair),
+    property("test CatsEffectRunner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple)
   )
 
   def testCatsEffectRunnerWithCompleteAs: Property = for {
@@ -29,9 +37,42 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     actual.completeAs(expected)
   }
 
+  def testCatsEffectRunnerWithCompleteAsPair: Property = for {
+    n  <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    n2 <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n2")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected  = n
+    val expected2 = n2
+    val actual    = IO(n)
+    val actual2   = IO(n2)
+
+    actual.completeAs(expected) and actual2.completeAs(expected2)
+  }
+
+  def testCatsEffectRunnerWithCompleteAsMultiple: Property = for {
+    ns <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).list(Range.linear(3, 10)).log("ns")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected = ns
+    val actual   = ns.map(IO(_))
+
+    Result.all(
+      actual.zipWithIndex.map {
+        case (ioN, index) =>
+          ioN.completeAs(expected(index))
+      }
+    )
+  }
+
   def testCatsEffectRunnerWithCompleteThen: Property = for {
     n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
   } yield {
+
     implicit val ticker: Ticker = Ticker.withNewTestContext()
 
     val expected = n
@@ -40,6 +81,45 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     actual.completeThen { actual =>
       actual ==== expected
     }
+  }
+
+  def testCatsEffectRunnerWithCompleteThenPair: Property = for {
+    n  <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    n2 <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n2")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected  = n
+    val expected2 = n2
+
+    val actual  = IO(n)
+    val actual2 = IO(n2)
+
+    actual.completeThen { actual =>
+      actual ==== expected
+    } and actual2.completeThen { actual =>
+      actual ==== expected2
+    }
+  }
+
+  def testCatsEffectRunnerWithCompleteThenMultiple: Property = for {
+    ns <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).list(Range.linear(3, 10)).log("ns")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected = ns
+    val actual   = ns.map(IO(_))
+
+    Result.all(
+      actual.zipWithIndex.map {
+        case (ioN, index) =>
+          ioN.completeThen { actual =>
+            actual ==== expected(index)
+          }
+      }
+    )
   }
 
   def testCatsEffectRunnerWithExpectError: Property = for {
@@ -51,12 +131,59 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
                  )
                  .log("error")
   } yield {
+
     implicit val ticker: Ticker = Ticker.withNewTestContext()
 
     val expected = error
     val actual   = IO.raiseError[Int](error)
 
     actual.expectError(expected)
+  }
+
+  def testCatsEffectRunnerWithExpectErrorPair: Property = for {
+    message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
+    genError = Gen
+                 .element1(
+                   TestError.someTestError(s"Don't worry it's only a test error. $message"),
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                 )
+    error  <- genError.log("error")
+    error2 <- genError.log("error2")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected  = error
+    val expected2 = error2
+
+    val actual  = IO.raiseError[Int](error)
+    val actual2 = IO.raiseError[String](error2)
+
+    actual.expectError(expected) and actual2.expectError(expected2)
+  }
+
+  def testCatsEffectRunnerWithExpectErrorMultiple: Property = for {
+    message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
+    errors  <- Gen
+                 .element1(
+                   TestError.someTestError(s"Don't worry it's only a test error. $message"),
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                 )
+                 .list(Range.linear(3, 10))
+                 .log("errors")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected = errors
+    val actual   = errors.map(IO.raiseError[Int](_))
+
+    Result.all(
+      actual.zipWithIndex.map {
+        case (ioN, index) =>
+          ioN.expectError(expected(index))
+      }
+    )
   }
 
   def testCatsEffectRunnerWithErrorThen: Property = for {
@@ -68,6 +195,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
                  )
                  .log("error")
   } yield {
+
     implicit val ticker: Ticker = Ticker.withNewTestContext()
 
     val expected = error
@@ -76,6 +204,57 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     actual.errorThen { actual =>
       actual ==== expected
     }
+  }
+
+  def testCatsEffectRunnerWithErrorThenPair: Property = for {
+    message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
+    genError = Gen
+                 .element1(
+                   TestError.someTestError(s"Don't worry it's only a test error. $message"),
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                 )
+    error  <- genError.log("error")
+    error2 <- genError.log("error2")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected  = error
+    val expected2 = error2
+    val actual    = IO.raiseError[Int](error)
+    val actual2   = IO.raiseError[Int](error2)
+
+    actual.errorThen { actual =>
+      actual ==== expected
+    } and actual2.errorThen { actual =>
+      actual ==== expected2
+    }
+  }
+
+  def testCatsEffectRunnerWithErrorThenMultiple: Property = for {
+    message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
+    errors  <- Gen
+                 .element1(
+                   TestError.someTestError(s"Don't worry it's only a test error. $message"),
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                 )
+                 .list(Range.linear(3, 10))
+                 .log("errors")
+  } yield {
+
+    implicit val ticker: Ticker = Ticker.withNewTestContext()
+
+    val expected = errors
+    val actual   = errors.map(IO.raiseError[Int](_))
+
+    Result.all(
+      actual.zipWithIndex.map {
+        case (ioN, index) =>
+          ioN.errorThen { actual =>
+            actual ==== expected(index)
+          }
+      }
+    )
   }
 
   sealed abstract class TestError(val message: String) extends RuntimeException(message)

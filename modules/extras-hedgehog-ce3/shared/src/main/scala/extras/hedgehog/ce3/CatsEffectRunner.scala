@@ -20,7 +20,7 @@ import scala.reflect.ClassTag
   */
 trait CatsEffectRunner {
 
-  def withIO(test: => IO[Result]): Result = {
+  def runIO(test: => IO[Result]): Result = {
     implicit val ticker: Ticker = Ticker.withNewTestContext()
     test.completeThen(identity)
   }
