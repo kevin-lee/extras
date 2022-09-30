@@ -12,18 +12,18 @@ import hedgehog.runner._
 object ManualCatsEffectRunnerSyntaxSpec extends Properties {
 
   override def tests: List[Test] = List(
-    property("test CatsEffectRunner and IO.completeAs", testCatsEffectRunnerWithCompleteAs),
-    property("test CatsEffectRunner and two IO.completeAs", testCatsEffectRunnerWithCompleteAsPair),
-    property("test CatsEffectRunner and multiple IO.completeAs", testCatsEffectRunnerWithCompleteAsMultiple),
-    property("test CatsEffectRunner and IO.completeThen", testCatsEffectRunnerWithCompleteThen),
-    property("test CatsEffectRunner and two IO.completeThen", testCatsEffectRunnerWithCompleteThenPair),
-    property("test CatsEffectRunner and multiple IO.completeThen", testCatsEffectRunnerWithCompleteThenMultiple),
-    property("test CatsEffectRunner and IO.expectError", testCatsEffectRunnerWithExpectError),
-    property("test CatsEffectRunner and two IO.expectError", testCatsEffectRunnerWithExpectErrorPair),
-    property("test CatsEffectRunner and multiple IO.expectError", testCatsEffectRunnerWithExpectErrorMultiple),
-    property("test CatsEffectRunner and IO.errorThen", testCatsEffectRunnerWithErrorThen),
-    property("test CatsEffectRunner and two IO.errorThen", testCatsEffectRunnerWithErrorThenPair),
-    property("test CatsEffectRunner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple)
+    property("test syntax.runner and IO.completeAs", testCatsEffectRunnerWithCompleteAs),
+    property("test syntax.runner and two IO.completeAs", testCatsEffectRunnerWithCompleteAsPair),
+    property("test syntax.runner and multiple IO.completeAs", testCatsEffectRunnerWithCompleteAsMultiple),
+    property("test syntax.runner and IO.completeThen", testCatsEffectRunnerWithCompleteThen),
+    property("test syntax.runner and two IO.completeThen", testCatsEffectRunnerWithCompleteThenPair),
+    property("test syntax.runner and multiple IO.completeThen", testCatsEffectRunnerWithCompleteThenMultiple),
+    property("test syntax.runner and IO.expectError", testCatsEffectRunnerWithExpectError),
+    property("test syntax.runner and two IO.expectError", testCatsEffectRunnerWithExpectErrorPair),
+    property("test syntax.runner and multiple IO.expectError", testCatsEffectRunnerWithExpectErrorMultiple),
+    property("test syntax.runner and IO.errorThen", testCatsEffectRunnerWithErrorThen),
+    property("test syntax.runner and two IO.errorThen", testCatsEffectRunnerWithErrorThenPair),
+    property("test syntax.runner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple)
   )
 
   def testCatsEffectRunnerWithCompleteAs: Property = for {

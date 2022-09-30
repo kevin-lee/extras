@@ -14,27 +14,27 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
 
   override def tests: List[Test] = List(
     property(
-      "test CatsEffectRunner syntax: IO.map(_ ==== expected) - success case",
+      "test syntax.runner: IO.map(_ ==== expected) - success case",
       testCatsEffectRunnerSuccessCase
     ),
     property(
-      "test CatsEffectRunner and two IO.map(_ ==== expected) - success case",
+      "test syntax.runner and two IO.map(_ ==== expected) - success case",
       testCatsEffectRunnerSuccessCasePair
     ),
     property(
-      "test CatsEffectRunner and multiple IO.map(_ ==== expected) - success case",
+      "test syntax.runner and multiple IO.map(_ ==== expected) - success case",
       testCatsEffectRunnerSuccessCaseMultiple
     ),
     property(
-      "test CatsEffectRunner and IO.attempt.map(_ ==== Left(expected)) - error case",
+      "test syntax.runner and IO.attempt.map(_ ==== Left(expected)) - error case",
       testCatsEffectRunnerErrorCase
     ),
     property(
-      "test CatsEffectRunner and two IO.attempt.map(_ ==== Left(expected)) - error case",
+      "test syntax.runner and two IO.attempt.map(_ ==== Left(expected)) - error case",
       testCatsEffectRunnerErrorCasePair
     ),
     property(
-      "test CatsEffectRunner multiple two IO.attempt.map(_ ==== Left(expected)) - error case",
+      "test syntax.runner and multiple IO.attempt.map(_ ==== Left(expected)) - error case",
       testCatsEffectRunnerErrorCaseMultiple
     )
   )

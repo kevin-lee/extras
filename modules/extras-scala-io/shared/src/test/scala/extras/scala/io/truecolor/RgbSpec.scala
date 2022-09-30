@@ -273,9 +273,20 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
   def testFromHexStringInvalidHex: Property = for {
     invalidHexString <- Gens.genInvalidRgbHexString.log("invalidHexString")
   } yield {
-    val expected = Left(s"Invalid color hex: $invalidHexString")
-    val actual   = Rgb.fromHexString(invalidHexString)
-    actual ==== expected
+    val expected = s"Invalid color hex: $invalidHexString"
+    Rgb.fromHexString(invalidHexString) match {
+      case Left(actual) =>
+        Result.diff(actual, expected)(_.startsWith(_))
+
+      case Right(r) =>
+        Result
+          .failure
+          .log(
+            raw"""It should have failed with the error message starting with $expected
+                 |  ↪️ but it succeeded and returned ${r.toString} instead
+                 |""".stripMargin
+          )
+    }
   }
 
   def testFromHexStringInvalidString: Property = for {
