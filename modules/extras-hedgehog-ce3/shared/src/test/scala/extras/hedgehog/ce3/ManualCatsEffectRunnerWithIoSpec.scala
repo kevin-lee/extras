@@ -8,7 +8,7 @@ import hedgehog.runner._
 /** @author Kevin Lee
   * @since 2021-12-12
   */
-object ManualCatsEffectRunnerWithIOSpec extends Properties with CatsEffectRunner {
+object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner {
 
   override def tests: List[Test] = List(
     property("test CatsEffectRunner and IO.completeAs", testCatsEffectRunnerWithCompleteAs),
