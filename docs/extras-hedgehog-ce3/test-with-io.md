@@ -6,7 +6,7 @@ title: 'Test with cats-effect 3 IO'
 
 # Test with cats-effect 3 `IO`
 
-If you just run `IO.unsafeRunSync()` in a test, it may not end and just hang. extras for hedgehog and cats-effect 3 (`extras-hedgehog-cats-effect3`) can solve it. 
+If you just run `IO.unsafeRunSync()` in a test, it may not end and just hang. extras for hedgehog and cats-effect 3 (`extras-hedgehog-ce3`) can solve it. 
 
 ## completeThen
 Use `CatsEffectRunner` and `completeThen` instead of `unsafeRunSync()`.
@@ -14,12 +14,12 @@ Use `CatsEffectRunner` and `completeThen` instead of `unsafeRunSync()`.
 ```scala
 import cats.effect._
 
-import extras.hedgehog.cats.effect.CatsEffectRunner
+import extras.hedgehog.ce3.CatsEffectRunner
 
 import hedgehog._
 import hedgehog.runner._
 
-object SomeSpec extends Properties {
+object SomeSpec extends Properties with CatsEffectRunner {
   
   override def tests: List[Test] = List(
     property("test with CatsEffectRunner and completeThen", testCatsEffectRunnerWithCompleteThen)
@@ -28,7 +28,6 @@ object SomeSpec extends Properties {
   def testCatsEffectRunnerWithCompleteThen: Property = for {
     n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
   } yield {
-    import CatsEffectRunner._
     implicit val ticker: Ticker = Ticker.withNewTestContext()
 
     val expected = n
@@ -47,12 +46,12 @@ If you want to test with `IO` which may result in some `Exception` thrown, you c
 ```scala
 import cats.effect._
 
-import extras.hedgehog.cats.effect.CatsEffectRunner
+import extras.hedgehog.ce3.CatsEffectRunner
 
 import hedgehog._
 import hedgehog.runner._
 
-object SomeSpec extends Properties {
+object SomeSpec extends Properties with CatsEffectRunner {
 
   override def tests: List[Test] = List(
     property("test with CatsEffectRunner and errorThen", testCatsEffectRunnerWithErrorThen)
@@ -67,7 +66,6 @@ object SomeSpec extends Properties {
       )
       .log("error")
   } yield {
-    import CatsEffectRunner._
     implicit val ticker: Ticker = Ticker.withNewTestContext()
 
     val expected = error

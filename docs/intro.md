@@ -18,7 +18,7 @@ slug: '/'
 | extras-scala-io | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-scala-io_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-scala-io_2.13) |
 | extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13) |
 | extras-concurrent-testing | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent-testing_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent-testing_2.13) |
-| extras-hedgehog-cats-effect3 | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-hedgehog-cats-effect3_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-hedgehog-cats-effect3_2.13) |
+| extras-hedgehog-ce3 | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-hedgehog-ce3_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-hedgehog-ce3_2.13) |
 | extras-reflects | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-reflects_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-reflects_2.13) |
 | extras-refinement | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-refinement_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-refinement_2.13) |
 
@@ -44,9 +44,9 @@ Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/a
   "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
   ```
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->
-* [extras-hedgehog-cats-effect3](extras-hedgehog-cats-effect3)
+* [extras-hedgehog-ce3](extras-hedgehog-ce3)
   ```scala
-  "io.kevinlee" %% "extras-hedgehog-cats-effect3" % "@VERSION@"
+  "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@"
   ```
 * [extras-reflects](extras-reflects) (n/a to Scala 3)
   ```scala
