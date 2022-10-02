@@ -2,6 +2,7 @@
 sidebar_position: 1
 title: 'Getting Started'
 ---
+import DocCardList from '@theme/DocCardList';
 
 ## Get `extras-hedgehog-ce3`
 
@@ -10,3 +11,7 @@ title: 'Getting Started'
 ```scala
 "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@"
 ```
+
+There are two ways to use `extras-hedgehog-ce3` and both have the exactly the same result so please choose whichever you prefer.
+
+<DocCardList />
