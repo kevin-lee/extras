@@ -46,7 +46,7 @@ Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/a
 <!--* [extras-concurrent-testing](extras-concurrent-testing/get.md)-->
 * [extras-hedgehog-ce3](extras-hedgehog-ce3)
   ```scala
-  "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@"
+  "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
   ```
 * [extras-reflects](extras-reflects) (n/a to Scala 3)
   ```scala

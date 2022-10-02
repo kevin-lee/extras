@@ -2,6 +2,7 @@
 sidebar_position: 1
 title: 'Getting Started'
 ---
+import DocCardList from '@theme/DocCardList';
 
 ## Get `extras-concurrent`
 ```scala
@@ -14,3 +15,5 @@ title: 'Getting Started'
 ```
 
 ## Usage
+
+<DocCardList />

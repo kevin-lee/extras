@@ -2,6 +2,7 @@
 sidebar_position: 1
 title: 'Getting Started'
 ---
+import DocCardList from '@theme/DocCardList';
 
 ## Get `extras-reflects`
 
@@ -10,3 +11,5 @@ title: 'Getting Started'
 ```scala
 "io.kevinlee" %% "extras-reflects" % "@VERSION@"
 ```
+
+<DocCardList />
