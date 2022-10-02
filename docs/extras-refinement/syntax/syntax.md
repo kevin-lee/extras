@@ -2,6 +2,8 @@
 sidebar_position: 1
 title: 'syntax'
 ---
+import DocCardList from '@theme/DocCardList';
+
 ## `syntax`
 Additional syntax for [newtype](https://github.com/estatico/scala-newtype) and [refined](https://github.com/fthomas/refined)
 * [refinement](refinement.md) (for `newtype` and `refined`)
@@ -16,3 +18,5 @@ which is equivalent to
 import extras.refinement.syntax.refinement._
 import extras.refinement.syntax.string._
 ```
+
+<DocCardList />

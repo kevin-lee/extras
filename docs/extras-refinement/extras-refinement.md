@@ -2,6 +2,7 @@
 sidebar_position: 1
 title: 'Getting Started'
 ---
+import DocCardList from '@theme/DocCardList';
 
 ## Get `extras-refinement`
 
@@ -10,3 +11,5 @@ title: 'Getting Started'
 ```scala
 "io.kevinlee" %% "extras-refinement" % "@VERSION@"
 ```
+
+<DocCardList />

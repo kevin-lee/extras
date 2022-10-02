@@ -1,6 +1,6 @@
 {
   "label": "syntax",
   "position": 1,
-  "collapsible": false,
+  "collapsible": true,
   "collapsed": false
 }
