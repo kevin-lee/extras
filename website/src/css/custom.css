@@ -23,15 +23,10 @@
   --ifm-font-family-monospace: "FiraCode Retina Nerd Font";
 
   --ifm-container-width-xl: 1920px;
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-.docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.1);
-  display: block;
-  margin: 0 calc(-1 * var(--ifm-pre-padding));
-  padding: 0 var(--ifm-pre-padding);
-}
-
-html[data-theme='dark'] .docusaurus-highlight-code-line {
-  background-color: rgba(0, 0, 0, 0.3);
+[data-theme='dark'] {
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.2);
 }

@@ -1,17 +1,31 @@
 ---
-sidebar_position: 2
-id: 'test-with-io'
-title: 'Test with cats-effect 3 IO'
+sidebar_position: 3
+id: 'with-manual-test-context-creation'
+title: 'With Manual TestContext Creation'
+sidebar_label: 'With TestContext'
 ---
 
-# Test with cats-effect 3 `IO`
+## `TestContext`
 
-If you just run `IO.unsafeRunSync()` in a test, it may not end and just hang. extras for hedgehog and cats-effect 3 (`extras-hedgehog-ce3`) can solve it. 
+`cats.effect.kernel.testkit.TestContext` is from `cats-effect-kernel-testkit` and it is
+> A `scala.concurrent.ExecutionContext` implementation that can simulate async boundaries and time passage
+
+`extras-hedgehog-ce3` uses it and if you need to manually create it you can do so if you do not use `withIO` or `runIO`.
+```scala
+implicit val ticker: Ticker = Ticker.withNewTestContext()
+```
+`Ticker` is a value class for `TestContext` so you can also do
+```scala
+import cats.effect.kernel.testkit.TestContext
+import extras.hedgehog.ce3.Ticker // You don't need to import it if you're using CatsEffectRunner
+
+implicit val ticker: Ticker = Ticker(TestContext())
+```
 
 ## completeThen
 Use `CatsEffectRunner` and `completeThen` instead of `unsafeRunSync()`.
 
-```scala
+```scala {17}
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner
@@ -43,7 +57,7 @@ object SomeSpec extends Properties with CatsEffectRunner {
 ## errorThen
 If you want to test with `IO` which may result in some `Exception` thrown, you can use `errorThen` instead of `unsafeRunSync()` and `Try`.
 
-```scala
+```scala {23}
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner

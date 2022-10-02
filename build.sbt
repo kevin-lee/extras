@@ -209,6 +209,7 @@ lazy val docs = (project in file("generated-docs"))
         "io.kevinlee" %% "extras-concurrent-testing" % latestVersion,
         "io.kevinlee" %% "extras-cats"               % latestVersion,
         "io.kevinlee" %% "extras-scala-io"           % latestVersion,
+//        "io.kevinlee" %% "extras-hedgehog-ce3"       % latestVersion,
       ) ++
         List(libs.hedgehogCore, libs.hedgehogRunner)
     },
