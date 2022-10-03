@@ -46,7 +46,7 @@ def test: Property =
 ### completeThen
 Use `CatsEffectRunner` and `completeThen` instead of `unsafeRunSync()`.
 
-```scala {8,16,21-23}
+```scala {8,16,21-23} mdoc:reset-object
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner
@@ -78,7 +78,7 @@ object SomeSpec extends Properties with CatsEffectRunner {
 ### errorThen
 If you want to test with `IO` which may result in some `Exception` thrown, you can use `errorThen` instead of `unsafeRunSync()` and `Try`.
 
-```scala {8,22,27-29}
+```scala {8,22,27-29} mdoc:reset-object
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner

@@ -31,7 +31,7 @@ const websiteConfig = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: '../generated-docs/target/mdoc/',
+          path: '../generated-docs/docs/',
           sidebarPath: require.resolve('./sidebars.js'),
         },
         theme: {

@@ -25,7 +25,7 @@ implicit val ticker: Ticker = Ticker(TestContext())
 ## completeThen
 Use `CatsEffectRunner` and `completeThen` instead of `unsafeRunSync()`.
 
-```scala {17}
+```scala {17} mdoc:reset-object
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner
@@ -57,7 +57,7 @@ object SomeSpec extends Properties with CatsEffectRunner {
 ## errorThen
 If you want to test with `IO` which may result in some `Exception` thrown, you can use `errorThen` instead of `unsafeRunSync()` and `Try`.
 
-```scala {23}
+```scala {23} mdoc:reset-object
 import cats.effect._
 
 import extras.hedgehog.ce3.CatsEffectRunner
