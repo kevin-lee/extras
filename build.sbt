@@ -92,8 +92,7 @@ lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatfo
     crossScalaVersions  := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
       libs.newtype,
-    ) ++ (if (scalaVersion.value.startsWith("2.11")) List(libs.catsOld, libs.refined_Scala2_11)
-          else List(libs.cats, libs.refined)),
+    ) ++ List(libs.cats, libs.refined),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest, extrasReflects)
@@ -108,9 +107,9 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
       val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/main"
-      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12")) {
+      if (scalaVersion.value.startsWith("2.12")) {
         List(
-          sharedSourceDir / "scala-2.11_2.12",
+          sharedSourceDir / "scala-2.12",
         )
       } else {
         List.empty
@@ -118,9 +117,9 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
     },
     Test / unmanagedSourceDirectories ++= {
       val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/test"
-      if (scalaVersion.value.startsWith("2.11") || scalaVersion.value.startsWith("2.12"))
+      if (scalaVersion.value.startsWith("2.12"))
         List(
-          sharedSourceDir / "scala-2.11_2.12",
+          sharedSourceDir / "scala-2.12",
         )
       else
         Seq.empty
@@ -156,11 +155,9 @@ lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatfo
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.catsLatest, libs.catsEffect3 % Test)
-                             } else if (scalaVersion.value.startsWith("2.11")) {
-                               List(libs.catsOld, libs.catsEffectOld % Test)
                              } else {
                                List(libs.cats, libs.catsEffect % Test)
-                             }) ++ List("org.slf4j" % "slf4j-api" % "1.7.32"),
+                             }) ++ List("org.slf4j" % "slf4j-api" % "1.7.32" % Test),
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
   )
@@ -171,7 +168,7 @@ lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
 
 lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions             := props.CrossScalaVersionsWithout_2_11,
+    crossScalaVersions             := props.CrossScalaVersions,
     libraryDependencies ++= List(
       libs.catsLatest,
       libs.catsEffect3,
@@ -406,8 +403,14 @@ def createMdocVariables(): Map[String, String] = Map(
   },
 )
 
-addCommandAlias("docsCleanAll", "; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean")
-addCommandAlias("docsMdocAll", "; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc")
+addCommandAlias(
+  "docsCleanAll",
+  "; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
+)
+addCommandAlias(
+  "docsMdocAll",
+  "; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
+)
 
 lazy val props = new {
 
@@ -422,7 +425,6 @@ lazy val props = new {
   val Scala2Versions = List(
     "2.13.6",
     "2.12.13",
-    "2.11.12",
   )
   val Scala2Version  = Scala2Versions.head
 
@@ -434,9 +436,6 @@ lazy val props = new {
 
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
-
-  val CrossScalaVersionsWithout_2_11 =
-    CrossScalaVersions.distinct.filterNot(_.startsWith("2.11"))
 
   val SonatypeCredentialHost = "s01.oss.sonatype.org"
   val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
@@ -451,9 +450,8 @@ lazy val props = new {
 
   val HedgehogVersion = "0.9.0"
 
-  val NewtypeVersion            = "0.4.4"
-  val RefinedVersion            = "0.9.27"
-  val Refined_Scala2_11_Version = "0.9.12"
+  val NewtypeVersion = "0.4.4"
+  val RefinedVersion = "0.9.27"
 
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
@@ -489,9 +487,8 @@ lazy val libs = new {
 
   def scalaReflect(scalaVersion: String): ModuleID = "org.scala-lang" % "scala-reflect" % scalaVersion
 
-  lazy val newtype           = "io.estatico" %% "newtype" % props.NewtypeVersion
-  lazy val refined           = "eu.timepit"  %% "refined" % props.RefinedVersion
-  lazy val refined_Scala2_11 = "eu.timepit"  %% "refined" % props.Refined_Scala2_11_Version
+  lazy val newtype = "io.estatico" %% "newtype" % props.NewtypeVersion
+  lazy val refined = "eu.timepit"  %% "refined" % props.RefinedVersion excludeAll "org.scala-lang.modules" %% "scala-xml"
 
 }
 
