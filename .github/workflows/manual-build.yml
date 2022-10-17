@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       java-version:
-        description: 'Java Version (e.g. adopt@1.8, adopt@1.11, etc.)'
+        description: 'Java Version (e.g. 11, 17, etc.)'
         required: true
-        default: 'adopt@1.11'
+        default: '11'
+      java-distribution:
+        description: 'Java Distribution (temurin, zulu, adopt, adopt-openj9, liberica, microsoft, corretto)'
+        required: true
+        default: 'temurin'
       scala-version:
         description: 'Scala Version'
         required: true
@@ -28,7 +32,8 @@ jobs:
               name: "Scala",
               version: "${{ github.event.inputs.scala-version }}",
               binary-version: "${{ github.event.inputs.scala-binary-version }}",
-              java-version: "${{ github.event.inputs.java-version }}"
+              java-version: "${{ github.event.inputs.java-version }}",
+              java-distribution: "${{ github.event.inputs.java-distribution }}"
             }
 
     steps:

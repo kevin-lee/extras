@@ -8,7 +8,8 @@ on:
       - '*'
 
 env:
-  GH_JAVA_VERSION: "adopt@1.11"
+  GH_JAVA_VERSION: "11"
+  GH_JAVA_DISTRIBUTION: "temurin"
   GH_JVM_OPTS: "-Xss64m -Xms1024m -XX:MaxMetaspaceSize=1G -Xmx2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
 
 
@@ -115,7 +116,7 @@ jobs:
     - uses: actions/setup-java@v3
       with:
         java-version: ${{ env.GH_JAVA_VERSION }}
-        distribution: ${{ matrix.scala.java-distribution }}
+        distribution: ${{ env.GH_JAVA_DISTRIBUTION }}
 
     - name: Cache SBT
       uses: actions/cache@v3
@@ -152,7 +153,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: ${{ env.GH_JAVA_VERSION }}
-          distribution: ${{ matrix.scala.java-distribution }}
+          distribution: ${{ env.GH_JAVA_DISTRIBUTION }}
       - uses: olafurpg/setup-gpg@v3
 
       - name: Cache SBT
@@ -202,7 +203,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: ${{ env.GH_JAVA_VERSION }}
-          distribution: ${{ matrix.scala.java-distribution }}
+          distribution: ${{ env.GH_JAVA_DISTRIBUTION }}
       - uses: olafurpg/setup-gpg@v3
 
       - name: Cache SBT
