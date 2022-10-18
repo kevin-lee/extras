@@ -297,11 +297,14 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
                           }
                           .log("invalidHexString")
   } yield {
-    val expected = Left(
-      raw"""Invalid color hex: $invalidHexString, Error: For input string: "${invalidHexString.take(2)}""""
-    )
-    val actual   = Rgb.fromHexString(invalidHexString)
-    actual ==== expected
+    val expected = raw"""Invalid color hex: $invalidHexString, Error: For input string: "${invalidHexString.take(2)}""""
+
+    Rgb.fromHexString(invalidHexString) match {
+      case Left(actual) =>
+        Result.diff(actual, expected)(_.startsWith(_))
+      case Right(r) =>
+        Result.failure.log(s"Left(error message) was expected but it returned Right(${r.toString}) instead.")
+    }
   }
 
   def testUnsafeFromHexStringValid: Property = for {
