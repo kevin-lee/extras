@@ -198,6 +198,25 @@ lazy val docs = (project in file("docs-gen-tmp/docs"))
   )
   .settings(noPublish)
 
+lazy val docsExtrasCore = (project in file("docs-gen-tmp/extras-core"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    name                := "docs-extras-core",
+    mdocIn              := file("docs/extras-core"),
+    mdocOut             := file("generated-docs/docs/extras-core"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= List(
+      libs.catsEffect,
+    ) ++ {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-core" % latestVersion,
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
 lazy val docsExtrasCats = (project in file("docs-gen-tmp/extras-cats"))
   .enablePlugins(MdocPlugin)
   .settings(
@@ -405,11 +424,11 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
+  "; docsExtrasCore/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
+  "; docsExtrasCore/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
 )
 
 lazy val props = new {
