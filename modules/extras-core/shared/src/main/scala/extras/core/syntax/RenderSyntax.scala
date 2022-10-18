@@ -39,7 +39,7 @@ object RenderSyntax {
             sep,
             builder
               .append(sep)
-              .append(iterator.next())
+              .append(R.render(iterator.next()))
           )
         else
           builder
