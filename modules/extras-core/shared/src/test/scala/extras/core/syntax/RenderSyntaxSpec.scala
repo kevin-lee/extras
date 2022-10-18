@@ -1,5 +1,6 @@
 package extras.core.syntax
 
+import extras.core.Render
 import extras.core.syntax.render._
 import hedgehog._
 import hedgehog.runner._
@@ -180,75 +181,82 @@ object RenderSyntaxSpec extends Properties {
       duration.render ==== duration.toString
     }
 
+  final case class Foo(id: Int, name: String)
+
+  object Foo {
+    implicit val fooRender: Render[Foo] =
+      foo => s"{ID=${foo.id.toString},Name=${foo.name}}"
+  }
+
+  def genFoo: Gen[Foo] =
+    for {
+      id   <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue))
+      name <- Gen.string(Gen.alphaNum, Range.linear(1, 10))
+    } yield Foo(id, name)
+
   def testListRenderString: Property =
     for {
-      ns <- Gen
-              .int(Range.linear(Int.MinValue, Int.MaxValue))
-              .list(Range.linear(0, 10))
-              .log("ns")
+      foos <- genFoo
+                .list(Range.linear(0, 10))
+                .log("foos")
     } yield {
-      ns.renderString ==== ns.mkString
+      foos.renderString ==== foos.map(_.render).mkString
     }
 
   def testListRenderStringWithDelimiter: Property =
     for {
-      ns        <- Gen
-                     .int(Range.linear(Int.MinValue, Int.MaxValue))
+      foos      <- genFoo
                      .list(Range.linear(0, 10))
-                     .log("ns")
+                     .log("foos")
       delimiter <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("delimiter")
     } yield {
-      ns.renderString(delimiter) ==== ns.mkString(delimiter)
+      foos.renderString(delimiter) ==== foos.map(_.render).mkString(delimiter)
     }
 
   def testListRenderStringWithStartDelimiterEnd: Property =
     for {
-      ns        <- Gen
-                     .int(Range.linear(Int.MinValue, Int.MaxValue))
+      foos      <- genFoo
                      .list(Range.linear(0, 10))
-                     .log("ns")
+                     .log("foos")
       start     <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("start")
       delimiter <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("delimiter")
       end       <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("end")
     } yield {
-      ns.renderString(start, delimiter, end) ==== ns.mkString(start, delimiter, end)
+      foos.renderString(start, delimiter, end) ==== foos.map(_.render).mkString(start, delimiter, end)
     }
 
   def testVectorRenderString: Property =
     for {
-      ns <- Gen
-              .int(Range.linear(Int.MinValue, Int.MaxValue))
-              .list(Range.linear(0, 10))
-              .map(_.toVector)
-              .log("ns")
+      foos <- genFoo
+                .list(Range.linear(0, 10))
+                .map(_.toVector)
+                .log("foos")
     } yield {
-      ns.renderString ==== ns.mkString
+      foos.renderString ==== foos.map(_.render).mkString
     }
 
   def testVectorRenderStringWithDelimiter: Property =
     for {
-      ns        <- Gen
-                     .int(Range.linear(Int.MinValue, Int.MaxValue))
+      foos      <- genFoo
                      .list(Range.linear(0, 10))
                      .map(_.toVector)
-                     .log("ns")
+                     .log("foos")
       delimiter <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("delimiter")
     } yield {
-      ns.renderString(delimiter) ==== ns.mkString(delimiter)
+      foos.renderString(delimiter) ==== foos.map(_.render).mkString(delimiter)
     }
 
   def testVectorRenderStringWithStartDelimiterEnd: Property =
     for {
-      ns        <- Gen
-                     .int(Range.linear(Int.MinValue, Int.MaxValue))
+      foos      <- genFoo
                      .list(Range.linear(0, 10))
                      .map(_.toVector)
-                     .log("ns")
+                     .log("foos")
       start     <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("start")
       delimiter <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("delimiter")
       end       <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("end")
     } yield {
-      ns.renderString(start, delimiter, end) ==== ns.mkString(start, delimiter, end)
+      foos.renderString(start, delimiter, end) ==== foos.map(_.render).mkString(start, delimiter, end)
     }
 
 }
