@@ -207,19 +207,19 @@ lazy val docs = (project in file("docs-gen-tmp/docs"))
   )
   .settings(noPublish)
 
-lazy val docsExtrasCore = (project in file("docs-gen-tmp/extras-core"))
+lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-core"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-core",
-    mdocIn              := file("docs/extras-core"),
-    mdocOut             := file("generated-docs/docs/extras-core"),
+    name                := "docs-extras-render",
+    mdocIn              := file("docs/extras-render"),
+    mdocOut             := file("generated-docs/docs/extras-render"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(
       libs.catsEffect,
     ) ++ {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-core" % latestVersion,
+        "io.kevinlee" %% "extras-render" % latestVersion,
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -433,11 +433,11 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasCore/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
+  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasCore/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
 )
 
 lazy val props = new {

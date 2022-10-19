@@ -14,7 +14,7 @@ slug: '/'
 
 |                   Project | Maven Central |
 |--------------------------:| ------------- |
-|               extras-core | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-core_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-core_2.13) |
+|               extras-render | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-render_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-render_2.13) |
 |               extras-cats | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-cats_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-cats_2.13) |
 |           extras-scala-io | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-scala-io_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-scala-io_2.13) |
 |         extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13) |
@@ -29,9 +29,9 @@ Supported Scala Versions: @SUPPORTED_SCALA_VERSIONS@
 Show [**all `extras` versions**](https://index.scala-lang.org/kevin-lee/extras/artifacts)
 :::
 
-* [extras-core](extras-core)
+* [extras-render](extras-render)
   ```scala
-  "io.kevinlee" %% "extras-core" % "@VERSION@"
+  "io.kevinlee" %% "extras-render" % "@VERSION@"
   ```
 * [extras-cats](extras-cats)
   ```scala
