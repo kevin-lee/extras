@@ -1,6 +1,6 @@
-package extras.core.syntax
+package extras.render.syntax
 
-import extras.core.Render
+import extras.render.Render
 
 import scala.annotation.tailrec
 import scala.collection.mutable

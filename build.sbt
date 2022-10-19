@@ -46,6 +46,8 @@ lazy val extras = (project in file("."))
   .aggregate(
     extrasCoreJvm,
     extrasCoreJs,
+    extrasRenderJvm,
+    extrasRenderJs,
     extrasReflectsJvm,
     extrasReflectsJs,
     extrasRefinementJvm,
@@ -62,17 +64,25 @@ lazy val extras = (project in file("."))
     extrasHedgehogCatsEffect3Js,
   )
 
-lazy val extrasCore = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
+lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
-
 lazy val extrasCoreJvm = extrasCore.jvm
 lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 
-lazy val extrasReflects = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
+lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+lazy val extrasRenderJvm = extrasRender.jvm
+lazy val extrasRenderJs  = extrasRender.js.settings(Test / fork := false)
+
+lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++
@@ -83,7 +93,6 @@ lazy val extrasReflects = crossSubProject("reflects", crossProject(JVMPlatform, 
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest)
-
 lazy val extrasReflectsJvm = extrasReflects.jvm
 lazy val extrasReflectsJs  = extrasReflects.js.settings(Test / fork := false)
 
@@ -507,7 +516,7 @@ lazy val libs = new {
   def scalaReflect(scalaVersion: String): ModuleID = "org.scala-lang" % "scala-reflect" % scalaVersion
 
   lazy val newtype = "io.estatico" %% "newtype" % props.NewtypeVersion
-  lazy val refined = "eu.timepit"  %% "refined" % props.RefinedVersion excludeAll "org.scala-lang.modules" %% "scala-xml"
+  lazy val refined = "eu.timepit" %% "refined" % props.RefinedVersion excludeAll "org.scala-lang.modules" %% "scala-xml"
 
 }
 
