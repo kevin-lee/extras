@@ -1,4 +1,4 @@
-package extras.core
+package extras.render
 
 import java.util.UUID
 import scala.concurrent.duration.{Duration, FiniteDuration}

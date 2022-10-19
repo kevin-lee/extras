@@ -6,7 +6,5 @@ package extras.core
 package object syntax {
   object string extends StringSyntax
 
-  object render extends RenderSyntax
-
-  object all extends StringSyntax with RenderSyntax
+  object all extends StringSyntax
 }

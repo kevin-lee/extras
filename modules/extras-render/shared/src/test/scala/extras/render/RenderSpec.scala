@@ -1,4 +1,4 @@
-package extras.core
+package extras.render
 
 import hedgehog._
 import hedgehog.runner._
