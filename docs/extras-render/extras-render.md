@@ -1,14 +1,14 @@
 ---
 sidebar_position: 1
-id: 'extras-core'
+id: 'extras-render'
 title: 'Getting Started'
 ---
 import DocCardList from '@theme/DocCardList';
 
-## Get `extras-core`
+## Get `extras-render`
 
 ```scala
-"io.kevinlee" %% "extras-core" % "@VERSION@"
+"io.kevinlee" %% "extras-render" % "@VERSION@"
 ```
 
 <DocCardList />

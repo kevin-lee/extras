@@ -14,7 +14,7 @@ trait Render[A] {
 
 ### Usage Example
 ```scala mdoc:reset-object
-import extras.core.Render
+import extras.render.Render
 
 final case class Foo(id: Int, name: String)
 object Foo {
@@ -38,7 +38,7 @@ There is `Render` syntax provided for convenience.
 ```
 
 ```scala mdoc:reset-object
-import extras.core.Render
+import extras.render.Render
 
 final case class Foo(id: Int, name: String)
 object Foo {
@@ -46,9 +46,9 @@ object Foo {
     foo => s"ID=${foo.id.toString} / Name=${foo.name}"
 }
 
-import extras.core.syntax.render._
+import extras.render.syntax.render._
 // or
-// import extras.core.syntax.all._
+// import extras.render.syntax.all._
 
 def bar[A: Render](a: A): Unit =
   println(s">> a: ${a.render}")
@@ -67,7 +67,7 @@ List[A](a..).renderString(start, delimiter, end) // when Render[A] is available
 
 
 ```scala mdoc:reset-object
-import extras.core.Render
+import extras.render.Render
 
 final case class Foo(id: Int, name: String)
 object Foo {
@@ -75,9 +75,9 @@ object Foo {
     foo => s"{ID=${foo.id.toString},Name=${foo.name}}"
 }
 
-import extras.core.syntax.render._
+import extras.render.syntax.render._
 // or
-// import extras.core.syntax.all._
+// import extras.render.syntax.all._
 
 List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString
 List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString(", ")
