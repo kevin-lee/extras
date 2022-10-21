@@ -36,6 +36,9 @@ object syntaxSpec extends Properties {
     property("test Vector.renderString", testVectorRenderString),
     property("test Vector.renderString(delimiter)", testVectorRenderStringWithDelimiter),
     property("test Vector.renderString(start, delimiter, end)", testVectorRenderStringWithStartDelimiterEnd),
+
+    /* String interpolation */
+    property("test render interpolation", testRenderInterpolation)
   )
 
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))
@@ -245,6 +248,21 @@ object syntaxSpec extends Properties {
       end       <- Gen.string(Gen.unicodeAll, Range.linear(0, 5)).log("end")
     } yield {
       foos.renderString(start, delimiter, end) ==== foos.map(_.render).mkString(start, delimiter, end)
+    }
+
+  def testRenderInterpolation: Property =
+    for {
+      foo1 <- genFoo.log("foo1")
+      foo2 <- genFoo.log("foo2")
+      foo3 <- genFoo.log("foo3")
+      foo4 <- genFoo.log("foo4")
+      foo5 <- genFoo.log("foo5")
+    } yield {
+      val expected =
+        s"Start[${foo1.render} > ${foo2.render} >> ${foo3.render} >>> ${foo4.render} >>>> ${foo5.render}]END"
+      val actual   = render"Start[$foo1 > $foo2 >> $foo3 >>> $foo4 >>>> $foo5]END"
+
+      actual ==== expected
     }
 
   final case class Foo(id: Int, name: String)
