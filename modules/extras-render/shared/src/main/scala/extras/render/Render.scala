@@ -40,4 +40,12 @@ object Render {
   implicit val durationRender: Render[Duration]             = fromToString[Duration]
   implicit val finiteDurationRender: Render[FiniteDuration] = fromToString[FiniteDuration]
 
+  final case class Rendered(override val toString: String) extends AnyVal
+  object Rendered {
+    implicit def toRendered[A](a: A)(implicit R: Render[A]): Rendered = Rendered(R.render(a))
+  }
+
+  final case class RenderInterpolator(stringContext: StringContext) extends AnyVal {
+    def render(args: Rendered*): String = stringContext.s(args: _*)
+  }
 }

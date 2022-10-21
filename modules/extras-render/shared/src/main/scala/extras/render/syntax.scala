@@ -11,6 +11,9 @@ trait syntax {
   implicit def renderSyntaxA[A](a: A): RenderSyntaxA[A] = new RenderSyntaxA[A](a)
 
   implicit def renderSyntaxIterable[A](as: Iterable[A]): RenderSyntaxIterable[A] = new RenderSyntaxIterable[A](as)
+
+  implicit def renderInterpolator(stringContext: StringContext): Render.RenderInterpolator =
+    Render.RenderInterpolator(stringContext)
 }
 object syntax extends syntax {
   final class RenderSyntaxA[A](private val a: A) extends AnyVal {
