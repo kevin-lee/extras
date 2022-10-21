@@ -1,6 +1,4 @@
-package extras.render.syntax
-
-import extras.render.Render
+package extras.render
 
 import scala.annotation.tailrec
 import scala.collection.mutable
@@ -8,13 +6,13 @@ import scala.collection.mutable
 /** @author Kevin Lee
   * @since 2022-10-15
   */
-trait RenderSyntax {
-  import RenderSyntax._
+trait syntax {
+  import syntax._
   implicit def renderSyntaxA[A](a: A): RenderSyntaxA[A] = new RenderSyntaxA[A](a)
 
   implicit def renderSyntaxIterable[A](as: Iterable[A]): RenderSyntaxIterable[A] = new RenderSyntaxIterable[A](as)
 }
-object RenderSyntax {
+object syntax extends syntax {
   final class RenderSyntaxA[A](private val a: A) extends AnyVal {
     def render(implicit R: Render[A]): String = R.render(a)
   }
