@@ -10,6 +10,7 @@ import java.util.UUID
   */
 object RenderSpec extends Properties {
   override def tests: List[Test] = List(
+    property("test Render.render[A](A => String)", testRenderRenderA),
     example("test Render[Unit].render", testUnitRender),
     property("test Render[Boolean].render", testBooleanRender),
     property("test Render[Byte].render", testByteRender),
@@ -26,6 +27,21 @@ object RenderSpec extends Properties {
     property("test Render[UUID].render", testUuidRender),
     property("test Render[Duration].render", testDurationRender)
   )
+
+  def testRenderRenderA: Property =
+    for {
+      s <- Gen.string(Gen.unicode, Range.linear(3, 10)).log("s")
+    } yield {
+      final case class Something(value: String)
+      object Something {
+        implicit val renderSomething: Render[Something] = Render.render(s => s"value=${s.value}")
+      }
+
+      val expected = s"value=$s"
+      val actual   = Render[Something].render(Something(s))
+
+      actual ==== expected
+    }
 
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))
   def testUnitRender: Result =
