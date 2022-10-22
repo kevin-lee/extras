@@ -18,8 +18,13 @@ import extras.render.Render
 
 final case class Foo(id: Int, name: String)
 object Foo {
-  implicit val fooRender: Render[Foo] =
-    foo => s"ID=${foo.id.toString} / Name=${foo.name}"
+  implicit val fooRender: Render[Foo] = new Render[Foo] {
+    def render(foo: Foo): String =
+      s"ID=${foo.id.toString} / Name=${foo.name}"
+  }
+//  OR just
+//  implicit val fooRender: Render[Foo] =
+//    foo => s"ID=${foo.id.toString} / Name=${foo.name}"
 }
 
 def bar[A: Render](a: A): Unit =
@@ -29,53 +34,25 @@ def bar[A: Render](a: A): Unit =
 bar(Foo(1, "Something"))
 ```
 
-## `Render` Syntax
-There is `Render` syntax provided for convenience.
-
-### `A.render`
+## `Render.render` constructor method
 ```scala
-(a: A).render // when `Render[A]` is available
+Render.render[A](A => String): Render[A]
 ```
 
+### Usage Example
 ```scala mdoc:reset-object
 import extras.render.Render
 
 final case class Foo(id: Int, name: String)
 object Foo {
-  implicit val fooRender: Render[Foo] =
+  implicit val fooRender: Render[Foo] = Render.render(
     foo => s"ID=${foo.id.toString} / Name=${foo.name}"
+  )
 }
-
-import extras.render.syntax._
 
 def bar[A: Render](a: A): Unit =
-  println(s">> a: ${a.render}")
+  println(s">> a: ${Render[A].render(a)}")
 
-Foo(1, "Something").render
 
 bar(Foo(1, "Something"))
-```
-
-### `List[A].renderString`
-```scala
-List[A](a..).renderString // when Render[A] is available
-List[A](a..).renderString(delimiter) // when Render[A] is available
-List[A](a..).renderString(start, delimiter, end) // when Render[A] is available
-```
-
-
-```scala mdoc:reset-object
-import extras.render.Render
-
-final case class Foo(id: Int, name: String)
-object Foo {
-  implicit val fooRender: Render[Foo] =
-    foo => s"{ID=${foo.id.toString},Name=${foo.name}}"
-}
-
-import extras.render.syntax._
-
-List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString
-List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString(", ")
-List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString("[", ", ", "]")
 ```
