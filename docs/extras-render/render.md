@@ -46,9 +46,7 @@ object Foo {
     foo => s"ID=${foo.id.toString} / Name=${foo.name}"
 }
 
-import extras.render.syntax.render._
-// or
-// import extras.render.syntax.all._
+import extras.render.syntax._
 
 def bar[A: Render](a: A): Unit =
   println(s">> a: ${a.render}")
@@ -75,9 +73,7 @@ object Foo {
     foo => s"{ID=${foo.id.toString},Name=${foo.name}}"
 }
 
-import extras.render.syntax.render._
-// or
-// import extras.render.syntax.all._
+import extras.render.syntax._
 
 List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString
 List(Foo(1, "A"), Foo(2, "B"), Foo(3, "C")).renderString(", ")
