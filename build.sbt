@@ -60,6 +60,8 @@ lazy val extras = (project in file("."))
     extrasConcurrentTestingJs,
     extrasCatsJvm,
     extrasCatsJs,
+    extrasHedgehogCirceJvm,
+    extrasHedgehogCirceJs,
     extrasHedgehogCatsEffect3Jvm,
     extrasHedgehogCatsEffect3Js,
   )
@@ -174,6 +176,24 @@ lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatfo
 
 lazy val extrasCatsJvm = extrasCats.jvm
 lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
+
+lazy val extrasHedgehogCirce    = crossSubProject("hedgehog-circe", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.Scala2Versions,
+    libraryDependencies ++= List(
+      libs.cats,
+      libs.hedgehogCore,
+      libs.circeCore,
+      libs.circeParser,
+      libs.kittens      % Test,
+      libs.circeGeneric % Test,
+    )
+  )
+  .dependsOn(
+    extrasReflects
+  )
+lazy val extrasHedgehogCirceJvm = extrasHedgehogCirce.jvm
+lazy val extrasHedgehogCirceJs  = extrasHedgehogCirce.js.settings(Test / fork := false)
 
 lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPlatform, JSPlatform))
   .settings(
@@ -472,8 +492,12 @@ lazy val props = new {
   val CatsVersion       = "2.6.1"
   val Cats2_0_0Version  = "2.0.0"
 
-  val CatsEffect3Version     = "3.2.9"
-  val CatsEffectVersion      = "2.5.4"
+  val CatsEffect3Version = "3.2.9"
+  val CatsEffectVersion  = "2.5.4"
+
+  val KittensVersion = "3.0.0"
+
+  val CirceVersion = "0.14.1"
 
   val HedgehogVersion = "0.9.0"
 
@@ -496,10 +520,16 @@ lazy val libs = new {
   lazy val cats       = "org.typelevel" %% "cats-core" % props.CatsVersion
   lazy val catsOld    = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
 
-  lazy val catsEffect3   = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
-  lazy val catsEffect    = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
+  lazy val catsEffect3 = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
+  lazy val catsEffect  = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
 
   lazy val libCatsEffectTestKit = "org.typelevel" %% "cats-effect-testkit" % props.CatsEffect3Version
+
+  lazy val kittens = "org.typelevel" %% "kittens" % props.KittensVersion
+
+  lazy val circeCore    = "io.circe" %% "circe-core"    % props.CirceVersion
+  lazy val circeParser  = "io.circe" %% "circe-parser"  % props.CirceVersion
+  lazy val circeGeneric = "io.circe" %% "circe-generic" % props.CirceVersion
 
   lazy val hedgehogCore   = "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion
   lazy val hedgehogRunner = "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion
