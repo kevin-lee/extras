@@ -474,7 +474,6 @@ lazy val props = new {
 
   val CatsEffect3Version     = "3.2.9"
   val CatsEffectVersion      = "2.5.4"
-  val CatsEffect2_0_0Version = "2.0.0"
 
   val HedgehogVersion = "0.9.0"
 
@@ -499,7 +498,6 @@ lazy val libs = new {
 
   lazy val catsEffect3   = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
   lazy val catsEffect    = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
-  lazy val catsEffectOld = "org.typelevel" %% "cats-effect" % props.CatsEffect2_0_0Version
 
   lazy val libCatsEffectTestKit = "org.typelevel" %% "cats-effect-testkit" % props.CatsEffect3Version
 
