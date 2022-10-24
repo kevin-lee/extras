@@ -86,7 +86,8 @@ lazy val extrasRenderJs  = extrasRender.js.settings(Test / fork := false)
 
 lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.Scala2Versions,
+//    crossScalaVersions  := props.Scala2Versions,
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog ++
       (
         if (isScala3(scalaVersion.value)) List.empty
@@ -98,12 +99,26 @@ lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatfor
 lazy val extrasReflectsJvm = extrasReflects.jvm
 lazy val extrasReflectsJs  = extrasReflects.js.settings(Test / fork := false)
 
+lazy val extrasTypeInfo    = crossSubProject("type-info", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog ++
+      (
+        if (isScala3(scalaVersion.value)) List.empty
+        else List(libs.scalaReflect(scalaVersion.value))
+      ),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(extrasCore % props.IncludeTest)
+lazy val extrasTypeInfoJvm = extrasTypeInfo.jvm
+lazy val extrasTypeInfoJs  = extrasTypeInfo.js.settings(Test / fork := false)
+
 lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
-      libs.newtype,
-    ) ++ List(libs.cats, libs.refined),
+      libs.newtype.cross(CrossVersion.for3Use2_13),
+    ) ++ List(libs.cats, libs.refined.cross(CrossVersion.for3Use2_13)),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest, extrasReflects)
@@ -312,6 +327,7 @@ lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement
         "io.kevinlee" %% "extras-refinement" % latestVersion,
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
     mdocVariables       := createMdocVariables(),
   )
   .settings(noPublish)
@@ -330,6 +346,7 @@ lazy val docsExtrasReflects = (project in file("docs-gen-tmp/extras-reflects"))
         "io.kevinlee" %% "extras-reflects" % latestVersion,
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
     mdocVariables       := createMdocVariables(),
   )
   .settings(noPublish)
@@ -479,8 +496,8 @@ lazy val props = new {
   val Scala3Versions = List("3.0.0")
   val Scala3Version  = Scala3Versions.head
 
-  val ProjectScalaVersion = Scala2Version
-//  val ProjectScalaVersion = Scala3Version
+//  val ProjectScalaVersion = Scala2Version
+  val ProjectScalaVersion = Scala3Version
 
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
