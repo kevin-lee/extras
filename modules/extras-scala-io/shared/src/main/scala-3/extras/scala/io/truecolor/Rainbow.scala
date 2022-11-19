@@ -55,8 +55,7 @@ object Rainbow {
         .sliding(size, size)
         .zipWithIndex
         .map { case (each, index) => f(each, Index.unsafeFromInt(index)) }
-        .mkString +
-        end
+        .mkString + end
     } else {
       val half       = remainder / 2
       val halfRemain = remainder % 2
