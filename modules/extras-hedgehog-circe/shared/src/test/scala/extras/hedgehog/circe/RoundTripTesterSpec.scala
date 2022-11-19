@@ -1,7 +1,7 @@
 package extras.hedgehog.circe
 
 import cats.syntax.all._
-import cats.{Show, derived}
+import cats.Show
 import hedgehog._
 import hedgehog.runner._
 import io.circe.{Codec, Decoder, Encoder}
@@ -112,14 +112,20 @@ object RoundTripTesterSpec extends Properties {
 
   final case class Something(id: Int, name: String)
   object Something {
-    implicit val somethingShow: Show[Something] = derived.semiauto.show
+    implicit val somethingShow: Show[Something] =
+      something => s"Something(id = ${something.id.toString}, name = ${something.name})"
 
     implicit val somethingCodec: Codec[Something] = io.circe.generic.semiauto.deriveCodec
   }
 
   final case class SomethingWithCustomDecoding(id: Int, name: String)
   object SomethingWithCustomDecoding {
-    implicit val somethingWithDifferentDecoderShow: Show[SomethingWithCustomDecoding] = derived.semiauto.show
+    implicit val somethingWithDifferentDecoderShow: Show[SomethingWithCustomDecoding] =
+      somethingWithCustomDecoding =>
+        List(
+          s"id = ${somethingWithCustomDecoding.id.toString}",
+          s"name = ${somethingWithCustomDecoding.name}",
+        ).mkString("SomethingWithCustomDecoding(", ", ", ")")
 
     implicit val somethingWithDifferentDecoderEncoder: Encoder[SomethingWithCustomDecoding] =
       io.circe.generic.semiauto.deriveEncoder
@@ -135,7 +141,16 @@ object RoundTripTesterSpec extends Properties {
   final case class SomethingWithDecodeFailure(id: Int, name: String)
 
   object SomethingWithDecodeFailure {
-    implicit val somethingWithDecodeFailureShow: Show[SomethingWithDecodeFailure] = derived.semiauto.show
+    implicit val somethingWithDecodeFailureShow: Show[SomethingWithDecodeFailure] =
+      somethingWithDecodeFailure =>
+        List(
+          s"id = ${somethingWithDecodeFailure.id.toString}",
+          s"name = ${somethingWithDecodeFailure.name}",
+        ).mkString(
+          "SomethingWithDecodeFailure(",
+          ", ",
+          ")",
+        )
 
     implicit val somethingWithDecodeFailureEncoder: Encoder[SomethingWithDecodeFailure] =
       io.circe.generic.semiauto.deriveEncoder
