@@ -8,7 +8,7 @@ import scala.reflect.runtime.universe._
 /** @author Kevin Lee
   * @since 2022-03-19
   */
-trait tags {
+trait types {
 
   implicit def weakTypeTagSyntax[A](weakTypeTag: WeakTypeTag[A]): WeakTypeTagSyntax[A] =
     new WeakTypeTagSyntax[A](weakTypeTag)
@@ -19,7 +19,7 @@ trait tags {
 
 }
 
-object tags extends types {
+object types extends types {
 
   final class WeakTypeTagSyntax[A](private val weakTypeTag: WeakTypeTag[A]) extends AnyVal {
     def nestedTypeName: String = {
