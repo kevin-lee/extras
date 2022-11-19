@@ -8,12 +8,12 @@ import scala.reflect.ClassTag
 /** @author Kevin Lee
   * @since 2022-03-14
   */
-object tagsSpec extends Properties {
+object typesSpec extends Properties {
   override def tests: List[Test] = List(
     example("test A.nestedTypeName[WeakTypeTag[A]]", testANestedTypeNameWeakTypeTagA),
     example("test weakTypeTag[A].nestedTypeName", testWeakTypeTagANestedTypeName),
     example("test (A with ClassTag[A]).nestedTypeName", testAWithClassTagANestedTypeName),
-    example("test ClassTag[A].nestedTypeName", testClassTagANestedTypeName)
+    example("test ClassTag[A].nestedTypeName", testClassTagANestedTypeName),
   )
 
   def testANestedTypeNameWeakTypeTagA: Result = {
@@ -38,7 +38,7 @@ object tagsSpec extends Properties {
         (actual2t ==== expected2t).log("Failed actual2t ==== expected2t"),
         (actual2 ==== expected2).log("Failed actual2 ==== expected2"),
         (actual3 ==== expected3).log("Failed actual3 ==== expected3"),
-        (actual4 ==== expected4).log("Failed actual4 ==== expected4")
+        (actual4 ==== expected4).log("Failed actual4 ==== expected4"),
       )
     )
   }
@@ -61,7 +61,7 @@ object tagsSpec extends Properties {
         actual1 ==== expected1,
         actual2 ==== expected2,
         actual3 ==== expected3,
-        actual4 ==== expected4
+        actual4 ==== expected4,
       )
     )
   }
@@ -82,7 +82,7 @@ object tagsSpec extends Properties {
         actual1 ==== expected1,
         actual2 ==== expected2,
         actual3 ==== expected3,
-        actual4 ==== expected4
+        actual4 ==== expected4,
       )
     )
   }
@@ -119,7 +119,7 @@ object tagsSpec extends Properties {
         actual1Data ==== expected1Data,
         actual2Data ==== expected2Data,
         actual3Data ==== expected3Data,
-        actual4Data ==== expected4Data
+        actual4Data ==== expected4Data,
       )
     )
   }
