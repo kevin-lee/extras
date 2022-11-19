@@ -194,18 +194,19 @@ lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
 
 lazy val extrasHedgehogCirce    = crossSubProject("hedgehog-circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions := props.Scala2Versions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= List(
       libs.cats,
       libs.hedgehogCore,
       libs.circeCore,
       libs.circeParser,
-      libs.kittens      % Test,
+//      libs.kittens      % Test,
       libs.circeGeneric % Test,
-    )
+    ),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(
-    extrasReflects
+    extrasTypeInfo
   )
 lazy val extrasHedgehogCirceJvm = extrasHedgehogCirce.jvm
 lazy val extrasHedgehogCirceJs  = extrasHedgehogCirce.js.settings(Test / fork := false)
