@@ -42,7 +42,7 @@ object ColorTestUtils {
     Color.underlined -> AnsiColor.UNDERLINED,
     Color.blink      -> AnsiColor.BLINK,
     Color.reversed   -> AnsiColor.REVERSED,
-    Color.invisible  -> AnsiColor.INVISIBLE
+    Color.invisible  -> AnsiColor.INVISIBLE,
   )
 
 }

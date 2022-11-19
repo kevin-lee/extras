@@ -17,7 +17,7 @@ object RainbowSyntaxSpec extends Properties {
     property("test String.rainbowed should return rainbowed String2", testRainbow2),
     example("""test "".rainbowed should return rainbowed """"", testEmptyStringRainbowed),
     property("test String.rainbowedHtml should return rainbowed String in HTML", testRainbowHtml),
-    example("""test "".rainbowedHtml should return """"", testEmptyStringRainbowedHtml)
+    example("""test "".rainbowedHtml should return """"", testEmptyStringRainbowedHtml),
   )
 
   def testRainbowAsciiArt: Result = {
@@ -77,7 +77,7 @@ object RainbowSyntaxSpec extends Properties {
       Result.assert(actual.contains(Rainbow.Green.toAsciiEsc)).log("Should contains Green"),
       Result.assert(actual.contains(Rainbow.Blue.toAsciiEsc)).log("Should contains Blue"),
       Result.assert(actual.contains(Rainbow.Indigo.toAsciiEsc)).log("Should contains Indigo"),
-      Result.assert(actual.contains(Rainbow.Violet.toAsciiEsc)).log("Should contains Violet")
+      Result.assert(actual.contains(Rainbow.Violet.toAsciiEsc)).log("Should contains Violet"),
     )
     val length          = s.length
     val assertListToUse = if (length < 7) assertList.take(length) else assertList
@@ -98,7 +98,7 @@ object RainbowSyntaxSpec extends Properties {
           .diffNamed("actual must be not the same as the input", actual, s)(_ != _)
           .log(s"actual: $actual / input: $s"),
         (withoutRainbow ==== s)
-          .log(s"result - rainbow colors should be the same as input: withoutRainbow: $withoutRainbow, input: $s")
+          .log(s"result - rainbow colors should be the same as input: withoutRainbow: $withoutRainbow, input: $s"),
       ) ++ assertListToUse
     )
 
@@ -136,7 +136,7 @@ object RainbowSyntaxSpec extends Properties {
                 Rainbow.Green,
                 Rainbow.Blue,
                 Rainbow.Indigo,
-                Rainbow.Violet
+                Rainbow.Violet,
               )
                 .map(_.toHexHtml)
                 .zip(
@@ -147,7 +147,7 @@ object RainbowSyntaxSpec extends Properties {
                     s4,
                     s5,
                     s6,
-                    s7
+                    s7,
                   )
                 )
                 .flatMap { case (color, text) => List(color, text) }: _*

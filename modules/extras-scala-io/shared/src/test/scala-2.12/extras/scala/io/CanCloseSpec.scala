@@ -9,7 +9,7 @@ import hedgehog.runner._
 object CanCloseSpec extends Properties {
   override def tests: List[Test] = List(
     example("testAutoCloseableCanClose", testAutoCloseableCanClose),
-    example("testMyResourceCanClose", testMyResourceCanClose)
+    example("testMyResourceCanClose", testMyResourceCanClose),
   )
 
   def withCanClose[A: CanClose, B](a: A)(f: A => B): B =
@@ -46,7 +46,7 @@ object CanCloseSpec extends Properties {
     Result.all(
       List(
         actual ==== "Done",
-        result ==== Some("Closed")
+        result ==== Some("Closed"),
       )
     )
   }
@@ -65,7 +65,7 @@ object CanCloseSpec extends Properties {
       List(
         closedBefore,
         actual ==== expected,
-        autoCloseable.closed ==== true
+        autoCloseable.closed ==== true,
       )
     )
   }

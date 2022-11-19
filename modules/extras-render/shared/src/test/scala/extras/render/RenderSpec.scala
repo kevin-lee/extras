@@ -25,7 +25,7 @@ object RenderSpec extends Properties {
     property("test Render[String].render", testStringRender),
     property("test Render[Symbol].render", testSymbolRender),
     property("test Render[UUID].render", testUuidRender),
-    property("test Render[Duration].render", testDurationRender)
+    property("test Render[Duration].render", testDurationRender),
   )
 
   def testRenderRenderA: Property =

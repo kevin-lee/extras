@@ -14,60 +14,60 @@ object AllSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       "OptionTFOptionOpsSpec.testOptionT",
-      OptionTFOptionOpsSpec.testOptionT
+      OptionTFOptionOpsSpec.testOptionT,
     ),
     property(
       "OptionTFOptionOpsSpec.testT",
-      OptionTFOptionOpsSpec.testT
+      OptionTFOptionOpsSpec.testT,
     ),
     property(
       "OptionTOptionOpsSpec.testOptionT",
-      OptionTOptionOpsSpec.testOptionT
+      OptionTOptionOpsSpec.testOptionT,
     ),
     property(
       "OptionTOptionOpsSpec.testT",
-      OptionTOptionOpsSpec.testT
+      OptionTOptionOpsSpec.testT,
     ),
     property(
       "OptionTFAOpsSpec.testSomeT",
-      OptionTFAOpsSpec.testSomeT
+      OptionTFAOpsSpec.testSomeT,
     ),
     property(
       "OptionTAOpsSpec.testSomeTF",
-      OptionTAOpsSpec.testSomeTF
+      OptionTAOpsSpec.testSomeTF,
     ),
     property(
       "OptionTSupportAllSpec.testAll",
-      OptionTSupportAllSpec.testAll
+      OptionTSupportAllSpec.testAll,
     ),
     property(
       "EitherTFEitherOpsSpec.testEitherT",
-      EitherTFEitherOpsSpec.testEitherT
+      EitherTFEitherOpsSpec.testEitherT,
     ),
     property(
       "EitherTEitherOpsSpec.testEitherT",
-      EitherTEitherOpsSpec.testEitherT
+      EitherTEitherOpsSpec.testEitherT,
     ),
     property(
       "EitherTFAOpsSpec.testRightT",
-      EitherTFAOpsSpec.testRightT
+      EitherTFAOpsSpec.testRightT,
     ),
     property(
       "EitherTFAOpsSpec.testLeftT",
-      EitherTFAOpsSpec.testLeftT
+      EitherTFAOpsSpec.testLeftT,
     ),
     property(
       "EitherTAOpsSpec.testRightTF",
-      EitherTAOpsSpec.testRightTF
+      EitherTAOpsSpec.testRightTF,
     ),
     property(
       "EitherTAOpsSpec.testLeftTF",
-      EitherTAOpsSpec.testLeftTF
+      EitherTAOpsSpec.testLeftTF,
     ),
     property(
       "testAll with EitherTSupport.*",
-      EitherTSupportAllSpec.testAll
-    )
+      EitherTSupportAllSpec.testAll,
+    ),
   )
 
   object OptionTFOptionOpsSpec {
@@ -94,7 +94,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -112,7 +112,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -142,7 +142,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -160,7 +160,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -189,7 +189,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -219,7 +219,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -278,7 +278,7 @@ object AllSyntaxSpec extends Properties {
           Result.assert(actual3Value.isDefined).log(s"actual3Value should be Some. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,
           Result.assert(actual4Value.isDefined).log(s"actual4Value should be Some. actual4Value: $actual4Value"),
-          actual4Value ==== expected4Value
+          actual4Value ==== expected4Value,
         )
       )
 
@@ -308,7 +308,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -338,7 +338,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -367,7 +367,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -385,7 +385,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -415,7 +415,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -433,7 +433,7 @@ object AllSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -520,7 +520,7 @@ object AllSyntaxSpec extends Properties {
           Result.assert(actual5Value.isRight).log(s"actual5Value should be Right. actual5Value: $actual5Value"),
           actual5Value ==== expected5Value,
           Result.assert(actual6Value.isLeft).log(s"actual6Value should be Left. actual6Value: $actual6Value"),
-          actual6Value ==== expected6Value
+          actual6Value ==== expected6Value,
         )
       )
     }

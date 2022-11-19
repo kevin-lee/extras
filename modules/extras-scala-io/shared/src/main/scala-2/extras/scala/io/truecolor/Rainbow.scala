@@ -108,7 +108,7 @@ object Rainbow {
         s,
         "",
         (each, index) => RainbowColor(index.value).toAsciiEsc + each,
-        extras.scala.io.Color.Reset.toAnsi
+        extras.scala.io.Color.Reset.toAnsi,
       )
 
   def rainbows(ss: Seq[String]): Seq[String] = {
@@ -127,7 +127,7 @@ object Rainbow {
         s,
         "",
         (each, index) => s"""<span style="color: ${RainbowColor(index.value).toHexHtml};">$each</span>""",
-        ""
+        "",
       )
 
 }

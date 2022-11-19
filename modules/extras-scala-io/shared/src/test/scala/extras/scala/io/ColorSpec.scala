@@ -16,7 +16,7 @@ object ColorSpec extends Properties {
     property("test Color.colored(non empty String)", testColored),
     property("test Color.colored(an empty String)", testColoredEmpty),
     property("test Color.show", testColorShow),
-    property("test Color.render(color)", testColorRender)
+    property("test Color.render(color)", testColorRender),
   )
 
   def testColor: Property = for {

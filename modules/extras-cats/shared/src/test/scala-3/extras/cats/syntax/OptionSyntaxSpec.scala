@@ -13,32 +13,32 @@ object OptionSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       "OptionTFOptionOpsSpec.testOptionT",
-      OptionTFOptionOpsSpec.testOptionT
+      OptionTFOptionOpsSpec.testOptionT,
     ),
     property(
       "OptionTFOptionOpsSpec.testT",
-      OptionTFOptionOpsSpec.testT
+      OptionTFOptionOpsSpec.testT,
     ),
     property(
       "OptionTOptionOpsSpec.testOptionT",
-      OptionTOptionOpsSpec.testOptionT
+      OptionTOptionOpsSpec.testOptionT,
     ),
     property(
       "OptionTOptionOpsSpec.testT",
-      OptionTOptionOpsSpec.testT
+      OptionTOptionOpsSpec.testT,
     ),
     property(
       "OptionTFAOpsSpec.testOptionT",
-      OptionTFAOpsSpec.testOptionT
+      OptionTFAOpsSpec.testOptionT,
     ),
     property(
       "OptionTAOpsSpec.testOptionTF",
-      OptionTAOpsSpec.testOptionTF
+      OptionTAOpsSpec.testOptionTF,
     ),
     property(
       "OptionTSupportAllSpec.testAll",
-      OptionTSupportAllSpec.testAll
-    )
+      OptionTSupportAllSpec.testAll,
+    ),
   )
 
   object OptionTFOptionOpsSpec {
@@ -65,7 +65,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -83,7 +83,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -113,7 +113,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -131,7 +131,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -160,7 +160,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -190,7 +190,7 @@ object OptionSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isDefined).log(s"actualValue should be Some. actualValue: $actualValue"),
-          actualValue ==== expectedValue
+          actualValue ==== expectedValue,
         )
       )
     }
@@ -263,7 +263,7 @@ object OptionSyntaxSpec extends Properties {
           Result.assert(actual3Value.isDefined).log(s"actual3Value should be Some. actual3Value: $actual3Value"),
           actual3Value ==== expected3Value,
           Result.assert(actual4Value.isDefined).log(s"actual4Value should be Some. actual4Value: $actual4Value"),
-          actual4Value ==== expected4Value
+          actual4Value ==== expected4Value,
         )
       )
 

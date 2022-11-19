@@ -107,7 +107,7 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
     def tickTo(expected: Outcome[Option, Throwable, A])(
       implicit ticker: Ticker,
       eq: Eq[A],
-      sh: Show[A]
+      sh: Show[A],
     ): Boolean = {
       val oc = unsafeRun(ioa)
       oc eqv expected
@@ -116,7 +116,7 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
     def tickToResult(expected: Outcome[Option, Throwable, A])(
       implicit ticker: Ticker,
       eq: Eq[A],
-      sh: Show[A]
+      sh: Show[A],
     ): Result = {
       val oc = unsafeRun(ioa)
       Result.assert(oc eqv expected).log(s"${oc.show} !== ${expected.show}")

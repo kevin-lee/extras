@@ -13,14 +13,14 @@ trait ExecutorServiceOps {
 
   def shutdownAndAwaitTermination(
     executorService: ExecutorService,
-    waitFor: FiniteDuration
+    waitFor: FiniteDuration,
   ): Unit =
     shutdownAndAwaitTerminationWithLogger(executorService, waitFor)(noLogger)
 
   @SuppressWarnings(Array("org.wartremover.warts.StringPlusAny"))
   def shutdownAndAwaitTerminationWithLogger(
     executorService: ExecutorService,
-    waitFor: FiniteDuration
+    waitFor: FiniteDuration,
   )(
     logger: (=> String) => Unit
   ): Unit = {

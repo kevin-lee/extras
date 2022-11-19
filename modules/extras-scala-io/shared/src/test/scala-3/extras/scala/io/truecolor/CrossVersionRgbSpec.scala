@@ -9,7 +9,7 @@ import hedgehog._
 trait CrossVersionRgbSpec {
 
   protected def corssVersionTests: List[Test] = List(
-    example("Rgb(valid rgbInt) should return Rgb(rgbInt)", testRgbApplyValid),
+    example("Rgb(valid rgbInt) should return Rgb(rgbInt)", testRgbApplyValid)
 //    example("Rgb(-1)", testRgbApplyLessThan0),
 //    example("Rgb(0xffffff + 1)", testRgbApplyGreaterThan0xffffff),
   )

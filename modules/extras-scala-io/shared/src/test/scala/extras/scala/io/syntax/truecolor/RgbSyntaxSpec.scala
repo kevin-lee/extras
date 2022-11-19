@@ -11,44 +11,44 @@ object RgbSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       """String value.rgb(Rgb(value)) should return value in colored String value with ASCII escape chars""",
-      testRgbRgb
+      testRgbRgb,
     ),
     property(
       """String value.rgbed(Rgb(value)) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
-      testRgbedRgb
+      testRgbedRgb,
     ),
     property(
       """String value.rgb(Int) should return value in colored String value with ASCII escape chars""",
-      testRgbInt
+      testRgbInt,
     ),
     property(
       """String value.rgb(Int < 0) should return value in colored ASCII escaped String value with 0x000000""",
-      testRgbIntLessThan0
+      testRgbIntLessThan0,
     ),
     property(
       """String value.rgb(Int > 0xffffff) should return value in colored ASCII escaped String value with 0xffffff""",
-      testRgbIntGreaterThan0xffffff
+      testRgbIntGreaterThan0xffffff,
     ),
     property(
       """"".rgb(Int) should return """"",
-      testEmptyStringRgbInt
+      testEmptyStringRgbInt,
     ),
     property(
       """String value.rgbed(Int) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
-      testRgbedInt
+      testRgbedInt,
     ),
     property(
       """String value.rgbed(Int < 0) should return value in colored ASCII escaped String value with 0x000000 ending with scala.io.AnsiColor.RESET""",
-      testRgbedIntLessThan0
+      testRgbedIntLessThan0,
     ),
     property(
       """String value.rgbed(Int > 0xffffff) should return value in colored ASCII escaped String value with 0xffffff ending with scala.io.AnsiColor.RESET""",
-      testRgbedIntGreaterThan0xffffff
+      testRgbedIntGreaterThan0xffffff,
     ),
     property(
       """"".rgbed(Int) should return """"",
-      testEmptyStringRgbedInt
-    )
+      testEmptyStringRgbedInt,
+    ),
   )
 
   def testRgbRgb: Property = for {

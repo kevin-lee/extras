@@ -38,7 +38,7 @@ object syntaxSpec extends Properties {
     property("test Vector.renderString(start, delimiter, end)", testVectorRenderStringWithStartDelimiterEnd),
 
     /* String interpolation */
-    property("test render interpolation", testRenderInterpolation)
+    property("test render interpolation", testRenderInterpolation),
   )
 
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))

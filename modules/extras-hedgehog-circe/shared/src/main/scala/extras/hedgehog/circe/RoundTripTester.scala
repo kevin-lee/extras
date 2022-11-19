@@ -46,7 +46,7 @@ object RoundTripTester {
     actual: A,
     input: A,
     json: Json,
-    printer: Printer
+    printer: Printer,
   )(
     implicit weakTypeTag: WeakTypeTag[A]
   ): String =

@@ -25,7 +25,7 @@ object syntax extends syntax {
       Array(
         "org.wartremover.warts.Overloading",
         "org.wartremover.warts.NonUnitStatements",
-        "org.wartremover.warts.MutableDataStructures"
+        "org.wartremover.warts.MutableDataStructures",
       )
     )
     def renderString(start: String, sep: String, end: String)(implicit R: Render[A]): String = {
@@ -40,7 +40,7 @@ object syntax extends syntax {
             sep,
             builder
               .append(sep)
-              .append(R.render(iterator.next()))
+              .append(R.render(iterator.next())),
           )
         else
           builder

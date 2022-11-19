@@ -23,7 +23,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     property("test syntax.runner and multiple IO.expectError", testCatsEffectRunnerWithExpectErrorMultiple),
     property("test syntax.runner and IO.errorThen", testCatsEffectRunnerWithErrorThen),
     property("test syntax.runner and two IO.errorThen", testCatsEffectRunnerWithErrorThenPair),
-    property("test syntax.runner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple)
+    property("test syntax.runner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple),
   )
 
   def testCatsEffectRunnerWithCompleteAs: Property = for {
@@ -127,7 +127,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     error   <- Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
                  .log("error")
   } yield {
@@ -145,7 +145,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     genError = Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
     error  <- genError.log("error")
     error2 <- genError.log("error2")
@@ -167,7 +167,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     errors  <- Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
                  .list(Range.linear(3, 10))
                  .log("errors")
@@ -191,7 +191,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     error   <- Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
                  .log("error")
   } yield {
@@ -211,7 +211,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     genError = Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
     error  <- genError.log("error")
     error2 <- genError.log("error2")
@@ -236,7 +236,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     errors  <- Gen
                  .element1(
                    TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                   TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                   TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                  )
                  .list(Range.linear(3, 10))
                  .log("errors")
