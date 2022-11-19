@@ -34,7 +34,7 @@ object ColorSyntaxSpec extends Properties {
     property("test txt.underlined", testUnderlined),
     property("test txt.blink", testBlink),
     property("test txt.reversed", testReversed),
-    property("test txt.invisible", testInvisible)
+    property("test txt.invisible", testInvisible),
   )
 
   import extras.scala.io.syntax.color._

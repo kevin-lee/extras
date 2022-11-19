@@ -17,40 +17,40 @@ class EitherSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       "EitherTFEitherOpsSpec.testEitherT",
-      EitherTFEitherOpsSpec.testEitherT
+      EitherTFEitherOpsSpec.testEitherT,
     ),
     property(
       "EitherTFEitherOpsSpec.testT",
-      EitherTFEitherOpsSpec.testT
+      EitherTFEitherOpsSpec.testT,
     ),
     property(
       "EitherTEitherOpsSpec.testEitherT",
-      EitherTEitherOpsSpec.testEitherT
+      EitherTEitherOpsSpec.testEitherT,
     ),
     property(
       "EitherTEitherOpsSpec.testT",
-      EitherTEitherOpsSpec.testT
+      EitherTEitherOpsSpec.testT,
     ),
     property(
       "EitherTFAOpsSpec.testRightT",
-      EitherTFAOpsSpec.testRightT
+      EitherTFAOpsSpec.testRightT,
     ),
     property(
       "EitherTFAOpsSpec.testLeftT",
-      EitherTFAOpsSpec.testLeftT
+      EitherTFAOpsSpec.testLeftT,
     ),
     property(
       "EitherTAOpsSpec.testRightTF",
-      EitherTAOpsSpec.testRightTF
+      EitherTAOpsSpec.testRightTF,
     ),
     property(
       "EitherTAOpsSpec.testLeftTF",
-      EitherTAOpsSpec.testLeftTF
+      EitherTAOpsSpec.testLeftTF,
     ),
     property(
       "testAll with EitherTSupport.*",
-      EitherTSupportAllSpec.testAll
-    )
+      EitherTSupportAllSpec.testAll,
+    ),
   )
 
   object EitherTFEitherOpsSpec {
@@ -75,7 +75,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -90,7 +90,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -120,7 +120,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -137,7 +137,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -167,7 +167,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -185,7 +185,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -215,7 +215,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isRight).log(s"actualValue should be Right. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -233,7 +233,7 @@ class EitherSyntaxSpec extends Properties {
       Result.all(
         List(
           Result.assert(actualValue.isLeft).log(s"actualValue should be Left. actualValue: $actualValue"),
-          actualValue ==== expected.value.unsafeRunSync()
+          actualValue ==== expected.value.unsafeRunSync(),
         )
       )
     }
@@ -320,7 +320,7 @@ class EitherSyntaxSpec extends Properties {
           Result.assert(actual5Value.isRight).log(s"actual5Value should be Right. actual5Value: $actual5Value"),
           actual5Value ==== expected5Value,
           Result.assert(actual6Value.isLeft).log(s"actual6Value should be Left. actual6Value: $actual6Value"),
-          actual6Value ==== expected6Value
+          actual6Value ==== expected6Value,
         )
       )
     }

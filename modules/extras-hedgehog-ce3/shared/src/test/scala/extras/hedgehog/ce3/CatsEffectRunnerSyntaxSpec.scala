@@ -15,28 +15,28 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       "test syntax.runner: IO.map(_ ==== expected) - success case",
-      testCatsEffectRunnerSuccessCase
+      testCatsEffectRunnerSuccessCase,
     ),
     property(
       "test syntax.runner and two IO.map(_ ==== expected) - success case",
-      testCatsEffectRunnerSuccessCasePair
+      testCatsEffectRunnerSuccessCasePair,
     ),
     property(
       "test syntax.runner and multiple IO.map(_ ==== expected) - success case",
-      testCatsEffectRunnerSuccessCaseMultiple
+      testCatsEffectRunnerSuccessCaseMultiple,
     ),
     property(
       "test syntax.runner and IO.attempt.map(_ ==== Left(expected)) - error case",
-      testCatsEffectRunnerErrorCase
+      testCatsEffectRunnerErrorCase,
     ),
     property(
       "test syntax.runner and two IO.attempt.map(_ ==== Left(expected)) - error case",
-      testCatsEffectRunnerErrorCasePair
+      testCatsEffectRunnerErrorCasePair,
     ),
     property(
       "test syntax.runner and multiple IO.attempt.map(_ ==== Left(expected)) - error case",
-      testCatsEffectRunnerErrorCaseMultiple
-    )
+      testCatsEffectRunnerErrorCaseMultiple,
+    ),
   )
 
   def testCatsEffectRunnerSuccessCase: Property =
@@ -63,7 +63,7 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
 
       (
         actual.map(_ ==== expected),
-        actual2.map(_ ==== n2)
+        actual2.map(_ ==== n2),
       ).mapN(_ and _)
     }
 
@@ -92,7 +92,7 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
         actual2.map(_ ==== expected2),
         actual3.map(_ ==== expected3),
         actual4.map(_ ==== expected4),
-        actual5.map(_ ==== expected5)
+        actual5.map(_ ==== expected5),
       ).sequence.map(Result.all)
     }
 
@@ -102,7 +102,7 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
       error   <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .log("error")
     } yield runIO {
@@ -119,13 +119,13 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
       error   <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .log("error")
       error2  <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .log("error2")
     } yield runIO {
@@ -138,7 +138,7 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
 
       (
         actual.attempt.map(_ ==== expected),
-        actual2.attempt.map(_ ==== expected2)
+        actual2.attempt.map(_ ==== expected2),
       ).mapN(_ and _)
     }
 
@@ -148,7 +148,7 @@ object CatsEffectRunnerSyntaxSpec extends Properties {
       errors  <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .list(Range.linear(3, 10))
                    .log("errors")

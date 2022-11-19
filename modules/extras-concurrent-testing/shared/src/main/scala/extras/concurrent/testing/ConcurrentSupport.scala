@@ -22,27 +22,27 @@ trait ConcurrentSupport {
 
   def newExecutionContext(
     executorService: ExecutorService,
-    errorLogger: ExecutionContextErrorLogger
+    errorLogger: ExecutionContextErrorLogger,
   ): ExecutionContext =
     newExecutionContextWithLogger(executorService, errorLogger)
 
   def newExecutionContextWithErrorMessageLogger(
     executorService: ExecutorService,
-    errorLogger: String => Unit
+    errorLogger: String => Unit,
   ): ExecutionContext =
     newExecutionContextWithLogger(
       executorService,
-      ErrorLogger.defaultExecutionContextErrorLogger(errorLogger)
+      ErrorLogger.defaultExecutionContextErrorLogger(errorLogger),
     )
 
   def newExecutionContextWithLogger(
     executorService: ExecutorService,
-    errorLogger: ExecutionContextErrorLogger
+    errorLogger: ExecutionContextErrorLogger,
   ): ExecutionContext =
     ExecutionContext
       .fromExecutor(
         executorService,
-        errorLogger
+        errorLogger,
       )
 
   def runAndShutdown[A](executorService: ExecutorService, waitFor: WaitFor)(

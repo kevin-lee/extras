@@ -65,9 +65,9 @@ object RoundTripTesterSpec extends Properties {
                     decoded,
                     something,
                     json,
-                    io.circe.Printer.spaces2
+                    io.circe.Printer.spaces2,
                   )
-                )
+                ),
               )
             case Left(err) =>
               Result.failure.log(s"Decoding ${json.spaces2} for testing failed with error: ${err.show}.")

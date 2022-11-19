@@ -27,7 +27,7 @@ object refinement extends refinement { self =>
     def apply[T, P](value: T)(
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
-      tt: WeakTypeTag[A]
+      tt: WeakTypeTag[A],
     ): EitherNec[String, A] =
       refineV[P](value)
         .leftMap(err => s"Failed to create ${tt.nestedTypeName}: $err")
@@ -39,7 +39,7 @@ object refinement extends refinement { self =>
     def validateAs[A](
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
-      tt: WeakTypeTag[A]
+      tt: WeakTypeTag[A],
     ): EitherNec[String, A] = self.validateAs[A](value)
   }
 

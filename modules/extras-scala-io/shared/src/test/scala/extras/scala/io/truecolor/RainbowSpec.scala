@@ -20,7 +20,7 @@ object RainbowSpec extends Properties {
     example("""test Rainbow.rainbowHtml("") should return """"", testRainbowHtmlEmptyString),
     property("test Rainbow.Index.value should return corresponding Int value", testRainbowIndexValue),
     property("test Rainbow.unsafeFromInt(valid Int) should return Rainbow.Index", testRainbowUnsafeFromIntValid),
-    property("test Rainbow.unsafeFromInt(invalid Int) should throw exception", testRainbowUnsafeFromIntInvalid)
+    property("test Rainbow.unsafeFromInt(invalid Int) should throw exception", testRainbowUnsafeFromIntInvalid),
   )
 
   def testRainbowAsciiArt: Result = {
@@ -70,7 +70,7 @@ object RainbowSpec extends Properties {
       Result.assert(actual.contains(Rainbow.Green.toAsciiEsc)).log("Should contains Green"),
       Result.assert(actual.contains(Rainbow.Blue.toAsciiEsc)).log("Should contains Blue"),
       Result.assert(actual.contains(Rainbow.Indigo.toAsciiEsc)).log("Should contains Indigo"),
-      Result.assert(actual.contains(Rainbow.Violet.toAsciiEsc)).log("Should contains Violet")
+      Result.assert(actual.contains(Rainbow.Violet.toAsciiEsc)).log("Should contains Violet"),
     )
     val length          = s.length
     val assertListToUse = if (length < 7) assertList.take(length) else assertList
@@ -91,7 +91,7 @@ object RainbowSpec extends Properties {
           .diffNamed("actual must be not the same as the input", actual, s)(_ != _)
           .log(s"actual: $actual / input: $s"),
         (withoutRainbow ==== s)
-          .log(s"result - rainbow colors should be the same as input: withoutRainbow: $withoutRainbow, input: $s")
+          .log(s"result - rainbow colors should be the same as input: withoutRainbow: $withoutRainbow, input: $s"),
       ) ++ assertListToUse
     )
 
@@ -128,7 +128,7 @@ object RainbowSpec extends Properties {
                 Rainbow.Green,
                 Rainbow.Blue,
                 Rainbow.Indigo,
-                Rainbow.Violet
+                Rainbow.Violet,
               )
                 .map(_.toHexHtml)
                 .zip(
@@ -139,7 +139,7 @@ object RainbowSpec extends Properties {
                     s4,
                     s5,
                     s6,
-                    s7
+                    s7,
                   )
                 )
                 .flatMap { case (color, text) => List(color, text) }: _*
@@ -168,7 +168,7 @@ object RainbowSpec extends Properties {
                             (Rainbow.Index.three, 3),
                             (Rainbow.Index.four, 4),
                             (Rainbow.Index.five, 5),
-                            (Rainbow.Index.six, 6)
+                            (Rainbow.Index.six, 6),
                           )
                           .log("(index, expected)")
     (index, expected) = indexAndExpected
@@ -186,7 +186,7 @@ object RainbowSpec extends Properties {
                                (3, Rainbow.Index.three),
                                (4, Rainbow.Index.four),
                                (5, Rainbow.Index.five),
-                               (6, Rainbow.Index.six)
+                               (6, Rainbow.Index.six),
                              )
                              .log("(indexInt, expected)")
     (indexInt, expected) = indexIntAndExpected

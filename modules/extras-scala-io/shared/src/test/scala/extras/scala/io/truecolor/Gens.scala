@@ -13,7 +13,7 @@ object Gens {
     Gen
       .frequency1(
         5 -> Gen.int(Range.linear(Rgb.RgbBits + 1, Int.MaxValue)),
-        5 -> Gen.int(Range.linear(Int.MinValue, -1))
+        5 -> Gen.int(Range.linear(Int.MinValue, -1)),
       )
 
   def genRgbIntAndInts: Gen[(Int, (Int, Int, Int))] = for {

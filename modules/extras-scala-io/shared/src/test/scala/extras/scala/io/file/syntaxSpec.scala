@@ -21,10 +21,10 @@ object syntaxSpec extends Properties {
     property("test File.listAllFilesRecursively with an empty directory", testFileListAllFilesRecursivelyWithEmptyDir),
     property(
       "test File.listAllFilesRecursively with not existing directory",
-      testFileListAllFilesRecursivelyNotExistingFile
+      testFileListAllFilesRecursivelyNotExistingFile,
     ),
     property("test deleteAllRecursively", testDeleteAllRecursively),
-    property("test File.deleteAllRecursively", testFileDeleteAllRecursively)
+    property("test File.deleteAllRecursively", testFileDeleteAllRecursively),
   )
 
   @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
@@ -294,7 +294,7 @@ object syntaxSpec extends Properties {
         List(
           allExist.log("Not all files exist"),
           noFileExists.log("Not all files were deleted"),
-          Result.assert(!rootFile.exists).log("rootFile still exists")
+          Result.assert(!rootFile.exists).log("rootFile still exists"),
         )
       )
     } finally {
@@ -348,7 +348,7 @@ object syntaxSpec extends Properties {
         List(
           allExist.log("Not all files exist"),
           noFileExists.log("Not all files were deleted"),
-          Result.assert(!rootFile.exists).log("rootFile still exists")
+          Result.assert(!rootFile.exists).log("rootFile still exists"),
         )
       )
     } finally {

@@ -22,7 +22,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
     property("test CatsEffectRunner and multiple IO.expectError", testCatsEffectRunnerWithExpectErrorMultiple),
     property("test CatsEffectRunner and IO.errorThen", testCatsEffectRunnerWithErrorThen),
     property("test CatsEffectRunner and two IO.errorThen", testCatsEffectRunnerWithErrorThenPair),
-    property("test CatsEffectRunner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple)
+    property("test CatsEffectRunner and multiple IO.errorThen", testCatsEffectRunnerWithErrorThenMultiple),
   )
 
   def testCatsEffectRunnerWithCompleteAs: Property =
@@ -122,7 +122,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       error   <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .log("error")
     } yield withIO { implicit ticker =>
@@ -139,7 +139,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       genError = Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
       error  <- genError.log("error")
       error2 <- genError.log("error2")
@@ -160,7 +160,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       errors  <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .list(Range.linear(3, 10))
                    .log("errors")
@@ -183,7 +183,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       error   <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .log("error")
     } yield withIO { implicit ticker =>
@@ -202,7 +202,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       genError = Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
       error  <- genError.log("error")
       error2 <- genError.log("error2")
@@ -226,7 +226,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       errors  <- Gen
                    .element1(
                      TestError.someTestError(s"Don't worry it's only a test error. $message"),
-                     TestError.anotherTestError(s"Don't worry it's only a test error. $message")
+                     TestError.anotherTestError(s"Don't worry it's only a test error. $message"),
                    )
                    .list(Range.linear(3, 10))
                    .log("errors")

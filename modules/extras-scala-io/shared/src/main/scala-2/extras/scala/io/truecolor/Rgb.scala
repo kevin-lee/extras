@@ -55,7 +55,7 @@ object Rgb {
       val invalidList = List(
         Some(redIsValid).filterNot(identity).map(_ => "Red").toList,
         Some(greenIsValid).filterNot(identity).map(_ => "Green").toList,
-        Some(blueIsValid).filterNot(identity).map(_ => "Blue").toList
+        Some(blueIsValid).filterNot(identity).map(_ => "Blue").toList,
       ).flatten
       Left(
         s"Invalid RGB color. Invalid: [${invalidList.mkString(", ")}]," +

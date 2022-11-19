@@ -34,15 +34,15 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     property("Rgb.blue.toHex should return blue in hex", testBlueToHex),
     property(
       "Rgb.red(red), Rgb.green(green) and Rgb.blue(blue) should return Rgb with updated red, green and blue values",
-      testUpdateRedGreenBlue
+      testUpdateRedGreenBlue,
     ),
     property(
       "Rgb.red(n < 0), Rgb.green(n < 0) and Rgb.blue(n < 0) should return Rgb with updated red 0, green 0 and blue 0 values",
-      testUpdateRedGreenBlueWithLessThan0
+      testUpdateRedGreenBlueWithLessThan0,
     ),
     property(
       "Rgb.red(n > 0xffffff), Rgb.green(n > 0xffffff) and Rgb.blue(n > 0xffffff) should return Rgb with updated red 0xffffff, green 0xffffff and blue 0xffffff values",
-      testUpdateRedGreenBlueWithGreaterThan0xffffff
+      testUpdateRedGreenBlueWithGreaterThan0xffffff,
     ),
     property("""Rgb(value).toHex should return value in hex ("ffffff" format)""", testToHex),
     property("""Rgb(value).toHexHtml should return value in hex ("#ffffff" format)""", testToHex),
@@ -50,20 +50,20 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     property("""Rgb(value).toAsciiEsc should return value in colored String with ASCII escape chars""", testToAsciiEsc),
     property(
       """Rgb(value).color(String value) should return value in colored String value with ASCII escape chars""",
-      testColor
+      testColor,
     ),
     property(
       """Rgb(value).color("") should return """"",
-      testColorEmptyString
+      testColorEmptyString,
     ),
     property(
       """Rgb(value).colored(String value) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
-      testColored
+      testColored,
     ),
     property(
       """Rgb(value).colored("") should return """"",
-      testColoredEmptyString
-    )
+      testColoredEmptyString,
+    ),
   ) ++ corssVersionTests
 
   def testHashCode: Property = for {
@@ -74,7 +74,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
       List(
         rgb.hashCode ==== rgb.hashCode,
         rgb.## ==== rgb.##,
-        rgb.hashCode ==== rgbInt
+        rgb.hashCode ==== rgbInt,
       )
     )
   }
@@ -91,7 +91,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         Result.diffNamed("rgb1.hashCode != rgb2.hashCode should be true", rgb1.hashCode, rgb2.hashCode)(_ != _),
         Result.diffNamed("rgb1.## != rgb2.## should be true", rgb1.##, rgb2.##)(_ != _),
         Result.diffNamed("rgb1.hashCode != rgbInt2 should be true", rgb1.hashCode, rgbInt2)(_ != _),
-        Result.diffNamed("rgb2.hashCode != rgbInt1 should be true", rgb2.hashCode, rgbInt1)(_ != _)
+        Result.diffNamed("rgb2.hashCode != rgbInt1 should be true", rgb2.hashCode, rgbInt1)(_ != _),
       )
     )
   }
@@ -126,7 +126,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     invalidRgbInt <- Gen
                        .frequency1(
                          5 -> Gen.int(Range.linear(Rgb.RgbBits + 1, Int.MaxValue)),
-                         5 -> Gen.int(Range.linear(Int.MinValue, -1))
+                         5 -> Gen.int(Range.linear(Int.MinValue, -1)),
                        )
                        .log("invalidRgbInt")
   } yield {
@@ -148,7 +148,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     invalidRgbInt <- Gen
                        .frequency1(
                          5 -> Gen.int(Range.linear(Rgb.RgbBits + 1, Int.MaxValue)),
-                         5 -> Gen.int(Range.linear(Int.MinValue, -1))
+                         5 -> Gen.int(Range.linear(Int.MinValue, -1)),
                        )
                        .log("invalidRgbInt")
   } yield {
@@ -184,7 +184,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     invalidRgbInt <- Gen
                        .frequency1(
                          5 -> Gen.int(Range.linear(Rgb.RgbBits + 1, Int.MaxValue)),
-                         5 -> Gen.int(Range.linear(Int.MinValue, -1))
+                         5 -> Gen.int(Range.linear(Int.MinValue, -1)),
                        )
                        .log("invalidRgbInt")
     choice        <- Gen.element1(1, 2, 4).log("choice")
@@ -192,7 +192,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     (rInt, gInt, bInt) = (
                            (invalidRgbInt * r) + ((r ^ 1) * oneOfRgbInt),
                            (invalidRgbInt * g) + ((g ^ 1) * oneOfRgbInt),
-                           (invalidRgbInt * b) + ((b ^ 1) * oneOfRgbInt)
+                           (invalidRgbInt * b) + ((b ^ 1) * oneOfRgbInt),
                          )
   } yield {
     val invalidColors = List(r, g, b)
@@ -229,7 +229,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     invalidRgbInt <- Gen
                        .frequency1(
                          5 -> Gen.int(Range.linear(Rgb.RgbBits + 1, Int.MaxValue)),
-                         5 -> Gen.int(Range.linear(Int.MinValue, -1))
+                         5 -> Gen.int(Range.linear(Int.MinValue, -1)),
                        )
                        .log("invalidRgbInt")
     choice        <- Gen.element1(1, 2, 4).log("choice")
@@ -237,7 +237,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     (rInt, gInt, bInt) = (
                            (invalidRgbInt * r) + ((r ^ 1) * oneOfRgbInt),
                            (invalidRgbInt * g) + ((g ^ 1) * oneOfRgbInt),
-                           (invalidRgbInt * b) + ((b ^ 1) * oneOfRgbInt)
+                           (invalidRgbInt * b) + ((b ^ 1) * oneOfRgbInt),
                          )
   } yield {
     val invalidColors                  = List(r, g, b)
@@ -344,7 +344,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
           List(
             (red.value ==== expectedRed).log("red.value ==== expectedRed"),
             (green.value ==== expectedGreen).log("green.value ==== expectedGreen"),
-            (blue.value ==== expectedBlue).log("blue.value ==== expectedBlue")
+            (blue.value ==== expectedBlue).log("blue.value ==== expectedBlue"),
           )
         )
     }
@@ -359,7 +359,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
       List(
         (rgb.red.value ==== expectedRed).log("rgb.red.value ==== expectedRed"),
         (rgb.green.value ==== expectedGreen).log("rgb.green.value ==== expectedGreen"),
-        (rgb.blue.value ==== expectedBlue).log("rgb.blue.value ==== expectedBlue")
+        (rgb.blue.value ==== expectedBlue).log("rgb.blue.value ==== expectedBlue"),
       )
     )
   }
@@ -403,7 +403,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
                   (
                     oldRed ^ 0xff,
                     oldGreen ^ 0xff,
-                    oldBlue ^ 0xff
+                    oldBlue ^ 0xff,
                   )
                 )
                 .log("(newRed, newGreen, newBlue)")
@@ -424,7 +424,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         Result.diffNamed("actual.green.value != oldGreen", actual.green.value, oldGreen)(_ != _),
         Result.diffNamed("actual.blue.value != oldBlue", actual.blue.value, oldBlue)(_ != _),
         Result.diffNamed("actual.value == (rgbInt ^ 0xffffff)", actual.value, rgbInt ^ 0xffffff)(_ == _),
-        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _)
+        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _),
       )
     )
   }
@@ -455,7 +455,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         Result.diffNamed("actual.green.value != newGreen", actual.green.value, newGreen)(_ != _),
         Result.diffNamed("actual.blue.value != newBlue", actual.blue.value, newBlue)(_ != _),
         Result.diffNamed("actual.value == 0x000000", actual.value, 0x000000)(_ == _),
-        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _)
+        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _),
       )
     )
   }
@@ -486,7 +486,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         Result.diffNamed("actual.green.value != newGreen", actual.green.value, newGreen)(_ != _),
         Result.diffNamed("actual.blue.value != newBlue", actual.blue.value, newBlue)(_ != _),
         Result.diffNamed("actual.value == 0xffffff", actual.value, 0xffffff)(_ == _),
-        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _)
+        Result.diffNamed("actual.value != rgbInt", actual.value, rgbInt)(_ != _),
       )
     )
   }

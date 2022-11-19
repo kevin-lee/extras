@@ -63,7 +63,7 @@ object TempFilesSpec extends Properties {
                 Result.failure.log("No target file found. It looks like there's some issue in the test")
               ) { targetFile =>
                 Result.assert(!targetFile.exists()).log("Failed: !targetFile.exists()")
-              }
+              },
             )
           )
         case Left(err) =>

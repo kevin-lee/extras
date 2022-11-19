@@ -14,7 +14,7 @@ object CanCloseSpec extends Properties {
     example("testAutoCloseableCanClose", testAutoCloseableCanClose),
     example("testSourceCanClose", testSourceCanClose),
     example("testMyResourceCanClose", testMyResourceCanClose),
-    example("testMyResourceCanCloseWithUsing", testMyResourceCanCloseWithUsing)
+    example("testMyResourceCanCloseWithUsing", testMyResourceCanCloseWithUsing),
   )
 
   def withCanClose[A: CanClose, B](a: A)(f: A => B): B =
@@ -48,7 +48,7 @@ object CanCloseSpec extends Properties {
     Result.all(
       List(
         actual ==== "Done",
-        result ==== Some("Closed")
+        result ==== Some("Closed"),
       )
     )
   }
@@ -70,7 +70,7 @@ object CanCloseSpec extends Properties {
     Result.all(
       List(
         actual ==== expected,
-        result ==== Some("Closed")
+        result ==== Some("Closed"),
       )
     )
   }
@@ -89,7 +89,7 @@ object CanCloseSpec extends Properties {
       List(
         closedBefore,
         actual ==== expected,
-        autoCloseable.closed ==== true
+        autoCloseable.closed ==== true,
       )
     )
   }
@@ -108,7 +108,7 @@ object CanCloseSpec extends Properties {
       List(
         closedBefore,
         actual ==== expected,
-        autoCloseable.closed ==== true
+        autoCloseable.closed ==== true,
       )
     )
   }

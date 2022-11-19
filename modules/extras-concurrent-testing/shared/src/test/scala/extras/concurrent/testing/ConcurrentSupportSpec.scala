@@ -17,20 +17,20 @@ object ConcurrentSupportSpec extends Properties {
   override def tests: List[Test] = List(
     property(
       "test ConcurrentSupport.newExecutorService(n) should create ThreadPoolExecutor with maximumPoolSize >= n",
-      testConcurrentSupportNewExecutorService
+      testConcurrentSupportNewExecutorService,
     ),
     property(
       "test ConcurrentSupport.runAndShutdown",
-      testConcurrentSupportRunAndShutdown
+      testConcurrentSupportRunAndShutdown,
     ),
     property(
       "test ConcurrentSupport.futureToValue",
-      testConcurrentSupportFutureToValue
+      testConcurrentSupportFutureToValue,
     ),
     property(
       "test ConcurrentSupport.futureToValueAndTerminate",
-      testConcurrentSupportFutureToValueAndTerminate
-    )
+      testConcurrentSupportFutureToValueAndTerminate,
+    ),
   )
 
   val halfOfAvailableProcessors: Int = Runtime.getRuntime.availableProcessors() >> 1
@@ -58,7 +58,7 @@ object ConcurrentSupportSpec extends Properties {
           actual ==== numThread or actual ==== halfOfAvailableProcessors,
           Result
             .assert(!executorService.isTerminated)
-            .log("executorService shouldn't have been terminated yet but it was.")
+            .log("executorService shouldn't have been terminated yet but it was."),
         )
       )
     } finally {

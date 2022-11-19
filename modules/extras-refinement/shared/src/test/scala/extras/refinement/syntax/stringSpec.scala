@@ -13,12 +13,12 @@ object stringSpec extends Properties {
   def allTests(stringSyntax: string): List[Test] = List(
     property(
       "NonEmptyString(value1) ++ NonEmptyString(value2) should return NonEmptyString(value1 + value2)",
-      testRefinementNonEmptyStringSyntaxConcat1(stringSyntax)
+      testRefinementNonEmptyStringSyntaxConcat1(stringSyntax),
     ),
     property(
       """NonEmptyString(value1) ++ NonEmptyString(" ") ++ NonEmptyString(value2) should return NonEmptyString(value1 + value2)""",
-      testRefinementNonEmptyStringSyntaxConcat1(stringSyntax)
-    )
+      testRefinementNonEmptyStringSyntaxConcat1(stringSyntax),
+    ),
   )
 
   def testRefinementNonEmptyStringSyntaxConcat1(stringSyntax: string): Property = for {
