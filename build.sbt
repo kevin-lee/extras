@@ -496,8 +496,8 @@ lazy val props = new {
   val Scala3Versions = List("3.0.0")
   val Scala3Version  = Scala3Versions.head
 
-//  val ProjectScalaVersion = Scala2Version
-  val ProjectScalaVersion = Scala3Version
+  val ProjectScalaVersion = Scala2Version
+//  val ProjectScalaVersion = Scala3Version
 
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
