@@ -10,7 +10,7 @@ object classesSpec extends Properties {
   override def tests: List[Test] = List(
     example("test A.fullClassName", testAFullClassName),
     example("test A.nestedClassName", testANestedClassName),
-    example("test Class[A].nestedClassName", testClassANestedClassName)
+    example("test Class[A].nestedClassName", testClassANestedClassName),
   ) ++ List[(String, String => Property)](
     ("test [%INDEX%] classes.getNestedName(a.b.[.?]*)", testClassesGetNestedName1),
     ("test [%INDEX%] classes.getNestedName(a.b.[.?]*$)", testClassesGetNestedName2),
@@ -21,7 +21,7 @@ object classesSpec extends Properties {
     ("test [%INDEX%] classes.getNestedName(a.b$)", testClassesGetNestedName7),
     ("test [%INDEX%] classes.getNestedName(a$)", testClassesGetNestedName8),
     ("test [%INDEX%] classes.getNestedName(a$b)", testClassesGetNestedName9),
-    ("test [%INDEX%] classes.getNestedName(a$b$)", testClassesGetNestedName10)
+    ("test [%INDEX%] classes.getNestedName(a$b$)", testClassesGetNestedName10),
   ).zipWithIndex.map {
     case ((name, test), index) =>
       val testName = name.replace("%INDEX%", index.toString)
@@ -48,7 +48,7 @@ object classesSpec extends Properties {
         actual1a ==== expected1,
         actual2a ==== expected2,
         actual3a ==== expected3,
-        actual4a ==== expected4
+        actual4a ==== expected4,
       )
     )
 
@@ -70,7 +70,7 @@ object classesSpec extends Properties {
         actual1a ==== expected1,
         actual2a ==== expected2,
         actual3a ==== expected3,
-        actual4a ==== expected4
+        actual4a ==== expected4,
       )
     )
 
@@ -93,7 +93,7 @@ object classesSpec extends Properties {
         actual1 ==== expected1,
         actual2 ==== expected2,
         actual3 ==== expected3,
-        actual4 ==== expected4
+        actual4 ==== expected4,
       )
     )
 

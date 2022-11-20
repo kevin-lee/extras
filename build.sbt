@@ -54,6 +54,8 @@ lazy val extras = (project in file("."))
     extrasRefinementJs,
     extrasScalaIoJvm,
     extrasScalaIoJs,
+    extrasTypeInfoJvm,
+    extrasTypeInfoJs,
     extrasConcurrentJvm,
     extrasConcurrentJs,
     extrasConcurrentTestingJvm,
