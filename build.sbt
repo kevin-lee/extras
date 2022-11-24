@@ -119,7 +119,7 @@ lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatfo
   .settings(
     crossScalaVersions  := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
-      libs.newtype.cross(CrossVersion.for3Use2_13),
+      libs.newtype.cross(CrossVersion.for3Use2_13)
     ) ++ List(libs.cats, libs.refined.cross(CrossVersion.for3Use2_13)),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
@@ -137,7 +137,7 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
       val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/main"
       if (scalaVersion.value.startsWith("2.12")) {
         List(
-          sharedSourceDir / "scala-2.12",
+          sharedSourceDir / "scala-2.12"
         )
       } else {
         List.empty
@@ -147,14 +147,14 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
       val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/test"
       if (scalaVersion.value.startsWith("2.12"))
         List(
-          sharedSourceDir / "scala-2.12",
+          sharedSourceDir / "scala-2.12"
         )
       else
         Seq.empty
     },
   )
   .dependsOn(
-    extrasCore,
+    extrasCore
   )
 
 lazy val extrasScalaIoJvm = extrasScalaIo.jvm
@@ -163,7 +163,7 @@ lazy val extrasScalaIoJs  = extrasScalaIo.js.settings(Test / fork := false)
 lazy val extrasConcurrent    = crossSubProject("concurrent", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
-    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasConcurrentJvm = extrasConcurrent.jvm
 lazy val extrasConcurrentJs  = extrasConcurrent.js.settings(Test / fork := false)
@@ -171,7 +171,7 @@ lazy val extrasConcurrentJs  = extrasConcurrent.js.settings(Test / fork := false
 lazy val extrasConcurrentTesting = crossSubProject("concurrent-testing", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
-    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore, extrasConcurrent)
 
@@ -187,7 +187,7 @@ lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatfo
                                List(libs.cats, libs.catsEffect % Test)
                              }) ++ List("org.slf4j" % "slf4j-api" % "1.7.32" % Test),
     libraryDependencies :=
-      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value)
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasConcurrentTesting % Test)
 
@@ -196,7 +196,7 @@ lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
 
 lazy val extrasHedgehogCirce    = crossSubProject("hedgehog-circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions := props.CrossScalaVersions,
+    crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= List(
       libs.cats,
       libs.hedgehogCore,
@@ -253,11 +253,11 @@ lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-core"))
     mdocOut             := file("generated-docs/docs/extras-render"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(
-      libs.catsEffect,
+      libs.catsEffect
     ) ++ {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-render" % latestVersion,
+        "io.kevinlee" %% "extras-render" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -272,11 +272,11 @@ lazy val docsExtrasCats = (project in file("docs-gen-tmp/extras-cats"))
     mdocOut             := file("generated-docs/docs/extras-cats"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(
-      libs.catsEffect,
+      libs.catsEffect
     ) ++ {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-cats" % latestVersion,
+        "io.kevinlee" %% "extras-cats" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -293,7 +293,7 @@ lazy val docsExtrasConcurrent = (project in file("docs-gen-tmp/extras-concurrent
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-concurrent" % latestVersion,
+        "io.kevinlee" %% "extras-concurrent" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -310,7 +310,7 @@ lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-hedgehog-ce3" % latestVersion,
+        "io.kevinlee" %% "extras-hedgehog-ce3" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -327,7 +327,7 @@ lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-refinement" % latestVersion,
+        "io.kevinlee" %% "extras-refinement" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
@@ -364,7 +364,7 @@ lazy val docsExtrasScalaIo = (project in file("docs-gen-tmp/extras-scala-io"))
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-scala-io" % latestVersion,
+        "io.kevinlee" %% "extras-scala-io" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -430,7 +430,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
         } else {
           options
         }
-      }
+      },
     )
     .settings(
       mavenCentralPublishSettings
@@ -473,11 +473,11 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean"
+  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean",
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc"
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
