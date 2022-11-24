@@ -48,6 +48,8 @@ lazy val extras = (project in file("."))
     extrasCoreJs,
     extrasRenderJvm,
     extrasRenderJs,
+    extrasRenderRefinedJvm,
+    extrasRenderRefinedJs,
     extrasReflectsJvm,
     extrasReflectsJs,
     extrasRefinementJvm,
@@ -80,11 +82,25 @@ lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasRenderJvm = extrasRender.jvm
 lazy val extrasRenderJs  = extrasRender.js.settings(Test / fork := false)
+
+lazy val extrasRenderRefined    = crossSubProject("render-refined", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.Scala2Versions,
+    libraryDependencies ++= libs.hedgehog ++ List(
+      libs.refined,
+      libs.newtype  % Test,
+      libs.cats     % Test,
+      "eu.timepit" %% "refined-cats" % props.RefinedVersion % Test,
+    ),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(extrasRender)
+lazy val extrasRenderRefinedJvm = extrasRenderRefined.jvm
+lazy val extrasRenderRefinedJs  = extrasRenderRefined.js.settings(Test / fork := false)
 
 lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
   .settings(
