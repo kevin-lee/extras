@@ -15,7 +15,7 @@ object Render {
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))
   def fromToString[A]: Render[A] = _.toString
 
-  def render[A](f: A => String): Render[A] = f(_)
+  @inline def render[A](f: A => String): Render[A] = f(_)
 
   implicit val unitRender: Render[Unit] = fromToString[Unit]
 
