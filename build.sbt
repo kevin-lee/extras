@@ -333,6 +333,27 @@ lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-
   )
   .settings(noPublish)
 
+lazy val docsExtrasHedgehogCirce = (project in file("docs-gen-tmp/extras-hedgehog-circe"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    name                := "docs-extras-hedgehog-circe",
+    mdocIn              := file("docs/extras-hedgehog-circe"),
+    mdocOut             := file("generated-docs/docs/extras-hedgehog-circe"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-hedgehog-circe" % latestVersion
+      )
+    } ++ List(
+      libs.hedgehogCore,
+      libs.hedgehogRunner,
+      libs.circeGeneric,
+    ),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
 lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement"))
   .enablePlugins(MdocPlugin)
   .settings(
