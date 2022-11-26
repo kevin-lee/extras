@@ -251,6 +251,7 @@ lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / for
 lazy val docs = (project in file("docs-gen-tmp/docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
   .settings(
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs"),
     name                := "docs",
     mdocIn              := file("docs/common"),
     mdocOut             := file("generated-docs/docs"),
@@ -569,7 +570,7 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasHedgehogCirce/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasTypeInfo/clean; docsExtrasTypeInfoScala2/clean; docsExtrasTypeInfoScala3/clean; docsExtrasConcurrent/clean; docs/clean",
+  "docs/clean",
 )
 addCommandAlias(
   "docsMdocAll",

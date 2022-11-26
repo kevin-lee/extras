@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-sidebar_label: 'Scala 3'
+sidebar_label: 'Types'
 id: 'scala3'
 title: 'extras-type-info - Scala 3'
 ---
