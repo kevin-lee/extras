@@ -56,7 +56,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sbt \
-            ++${{ matrix.scala.version }}! \
             clean \
             docsCleanAll \
             docsMdocAll \

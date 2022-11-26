@@ -56,7 +56,6 @@ jobs:
           GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
         run: |
           sbt \
-            ++${{ matrix.scala.version }}! \
             clean \
             docsCleanAll \
             docsMdocAll \
