@@ -569,11 +569,11 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean",
+  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasHedgehogCirce/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasTypeInfo/clean; docsExtrasTypeInfoScala2/clean; docsExtrasTypeInfoScala3/clean; docsExtrasConcurrent/clean; docs/clean",
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
