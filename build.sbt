@@ -333,6 +333,27 @@ lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-
   )
   .settings(noPublish)
 
+lazy val docsExtrasHedgehogCirce = (project in file("docs-gen-tmp/extras-hedgehog-circe"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    name                := "docs-extras-hedgehog-circe",
+    mdocIn              := file("docs/extras-hedgehog-circe"),
+    mdocOut             := file("generated-docs/docs/extras-hedgehog-circe"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-hedgehog-circe" % latestVersion
+      )
+    } ++ List(
+      libs.hedgehogCore,
+      libs.hedgehogRunner,
+      libs.circeGeneric,
+    ),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
 lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement"))
   .enablePlugins(MdocPlugin)
   .settings(
@@ -381,6 +402,65 @@ lazy val docsExtrasScalaIo = (project in file("docs-gen-tmp/extras-scala-io"))
       val latestVersion = getLatestExtrasVersion()
       List(
         "io.kevinlee" %% "extras-scala-io" % latestVersion
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasTypeInfo = (project in file("docs-gen-tmp/extras-type-info"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion        := props.Scala2Version,
+    name                := "docs-extras-type-info",
+    mdocIn              := file("docs/extras-type-info"),
+    mdocOut             := file("generated-docs/docs/extras-type-info"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-type-info" % latestVersion
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasTypeInfoScala2 = (project in file("docs-gen-tmp/extras-type-info-scala2"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion        := props.Scala2Version,
+    name                := "docs-extras-type-info-scala2",
+    mdocIn              := file("docs/extras-type-info-scala2"),
+    mdocOut             := file("generated-docs/docs/extras-type-info/scala2"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-type-info" % latestVersion
+      )
+    } ++ List(
+      libs.newtype,
+      libs.refined,
+      libs.hedgehogCore,
+      libs.hedgehogRunner,
+    ),
+    mdocVariables       := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasTypeInfoScala3 = (project in file("docs-gen-tmp/extras-type-info-scala3"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion        := "3.1.3",
+    name                := "docs-extras-type-info-scala3",
+    mdocIn              := file("docs/extras-type-info-scala3"),
+    mdocOut             := file("generated-docs/docs/extras-type-info/scala3"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-type-info" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables       := createMdocVariables(),
@@ -489,11 +569,11 @@ def createMdocVariables(): Map[String, String] = Map(
 
 addCommandAlias(
   "docsCleanAll",
-  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasConcurrent/clean; docs/clean",
+  "; docsExtrasRender/clean; docsExtrasCats/clean; docsExtrasHedgehogCe3/clean; docsExtrasHedgehogCirce/clean; docsExtrasRefinement/clean; docsExtrasReflects/clean; docsExtrasScalaIo/clean; docsExtrasTypeInfo/clean; docsExtrasTypeInfoScala2/clean; docsExtrasTypeInfoScala3/clean; docsExtrasConcurrent/clean; docs/clean",
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
@@ -545,8 +625,7 @@ lazy val props = new {
       m.name == "wartremover" ||
         m.name == "ammonite" ||
         m.name == "kind-projector" ||
-        m.name == "better-monadic-for" ||
-        m.name == "mdoc"
+        m.name == "better-monadic-for"
 
   val IncludeTest = "compile->compile;test->test"
 }
