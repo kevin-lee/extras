@@ -198,7 +198,7 @@ lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatfo
   .settings(
     crossScalaVersions  := props.CrossScalaVersions,
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
-                               List(libs.catsLatest, libs.catsEffect3 % Test)
+                               List(libs.cats, libs.catsEffect3 % Test)
                              } else {
                                List(libs.cats, libs.catsEffect % Test)
                              }) ++ List("org.slf4j" % "slf4j-api" % "1.7.32" % Test),
@@ -233,7 +233,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
   .settings(
     crossScalaVersions             := props.CrossScalaVersions,
     libraryDependencies ++= List(
-      libs.catsLatest,
+      libs.cats,
       libs.catsEffect3,
       libs.libCatsEffectTestKit excludeAll ("org.scalacheck"),
       libs.hedgehogCore,
@@ -588,12 +588,12 @@ lazy val props = new {
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   val Scala2Versions = List(
-    "2.13.6",
-    "2.12.13",
+    "2.13.10",
+    "2.12.17",
   )
   val Scala2Version  = Scala2Versions.head
 
-  val Scala3Versions = List("3.0.0")
+  val Scala3Versions = List("3.1.3")
   val Scala3Version  = Scala3Versions.head
 
   val ProjectScalaVersion = Scala2Version
@@ -605,12 +605,14 @@ lazy val props = new {
   val SonatypeCredentialHost = "s01.oss.sonatype.org"
   val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
 
-  val CatsLatestVersion = "2.7.0"
-  val CatsVersion       = "2.6.1"
+  val CatsVersion       = "2.8.0"
   val Cats2_0_0Version  = "2.0.0"
 
-  val CatsEffect3Version = "3.2.9"
-  val CatsEffectVersion  = "2.5.4"
+  val CatsEffect3Version = "3.3.14"
+  val CatsEffectVersion  = "2.5.5"
+
+  val DoobieCe2Version = "0.13.4"
+  val DoobieCe3Version = "1.0.0-RC2"
 
   val KittensVersion = "3.0.0"
 
@@ -619,7 +621,13 @@ lazy val props = new {
   val HedgehogVersion = "0.9.0"
 
   val NewtypeVersion = "0.4.4"
+
   val RefinedVersion = "0.9.27"
+  val RefinedLatestVersion = "0.10.1"
+
+  val EmbeddedPostgresVersion = "2.0.1"
+
+  val EffectieVersion = "2.0.0-beta3"
 
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
@@ -632,12 +640,15 @@ lazy val props = new {
 }
 
 lazy val libs = new {
-  lazy val catsLatest = "org.typelevel" %% "cats-core" % props.CatsLatestVersion
   lazy val cats       = "org.typelevel" %% "cats-core" % props.CatsVersion
   lazy val catsOld    = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
 
   lazy val catsEffect3 = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
   lazy val catsEffect  = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
+
+  lazy val doobieCe2Core    = "org.tpolecat" %% "doobie-core"    % props.DoobieCe2Version
+  lazy val doobieCe2Refined = "org.tpolecat" %% "doobie-refined" % props.DoobieCe2Version
+  lazy val doobieCe3Core    = "org.tpolecat" %% "doobie-core"    % props.DoobieCe3Version
 
   lazy val libCatsEffectTestKit = "org.typelevel" %% "cats-effect-testkit" % props.CatsEffect3Version
 
@@ -661,7 +672,12 @@ lazy val libs = new {
 
   lazy val newtype = "io.estatico" %% "newtype" % props.NewtypeVersion
   lazy val refined = "eu.timepit" %% "refined" % props.RefinedVersion excludeAll "org.scala-lang.modules" %% "scala-xml"
+  lazy val refinedLatest = "eu.timepit" %% "refined" % props.RefinedLatestVersion
 
+  lazy val embeddedPostgres = "io.zonky.test" % "embedded-postgres" % props.EmbeddedPostgresVersion
+
+  lazy val effectieCe2 = "io.kevinlee" %% "effectie-cats-effect2" % props.EffectieVersion
+  lazy val effectieCe3 = "io.kevinlee" %% "effectie-cats-effect3" % props.EffectieVersion
 }
 
 def isScala3(scalaVersion: String): Boolean = scalaVersion.startsWith("3.")
