@@ -46,6 +46,8 @@ lazy val extras = (project in file("."))
   .aggregate(
     extrasCoreJvm,
     extrasCoreJs,
+    extrasDoobieToolsCe2Jvm,
+    extrasDoobieToolsCe3Jvm,
     extrasRenderJvm,
     extrasRenderJs,
     extrasRenderRefinedJvm,
@@ -78,6 +80,52 @@ lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPla
   )
 lazy val extrasCoreJvm = extrasCore.jvm
 lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
+
+lazy val extrasDoobieToolsCe2    = crossSubProject("doobie-tools-ce2", crossProject(JVMPlatform))
+  .settings(
+    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++=
+      List(
+        libs.doobieCe2Core,
+        libs.embeddedPostgres % Test,
+        libs.effectieCe2      % Test,
+      ) ++
+        (if (isScala3(scalaVersion.value))
+           List.empty
+         else
+           List(
+             libs.newtype          % Test,
+             libs.doobieCe2Refined % Test,
+           )) ++
+        libs.hedgehog,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(extrasCore)
+lazy val extrasDoobieToolsCe2Jvm = extrasDoobieToolsCe2.jvm
+
+lazy val extrasDoobieToolsCe3    = crossSubProject("doobie-tools-ce3", crossProject(JVMPlatform))
+  .settings(
+    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++=
+      List(
+        libs.doobieCe3Core,
+        libs.embeddedPostgres % Test,
+        libs.effectieCe3      % Test,
+      ) ++
+        (if (isScala3(scalaVersion.value))
+           List.empty
+         else
+           List(libs.newtype)) ++
+        libs.hedgehog,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+  .dependsOn(
+    extrasCore,
+    extrasHedgehogCe3,
+  )
+lazy val extrasDoobieToolsCe3Jvm = extrasDoobieToolsCe3.jvm
 
 lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
   .settings(
