@@ -126,7 +126,7 @@ object RainbowSyntaxSpec extends Properties {
       Gen
         .constant(
           List
-            .fill(7)(raw"""<span style="color: %s;">%s</span>""")
+            .fill(7)("""<span style="color: %s;">%s</span>""")
             .mkString
             .format(
               List(
