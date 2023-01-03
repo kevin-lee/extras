@@ -13,7 +13,7 @@ trait string {
 }
 object string extends string {
 
-  private[string] final class RefinementNonEmptyStringSyntax(private val value1: String) extends AnyVal {
+  final private[string] class RefinementNonEmptyStringSyntax(private val value1: String) extends AnyVal {
     /* WARNING! Do not remove private.
      * This works for only NonEmptyString because of implicit def refinementNonEmptyStringSyntax
      * from the string trait. So removing private makes this extension method work for

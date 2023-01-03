@@ -55,7 +55,7 @@ object ConcurrentSupportSpec extends Properties {
       val actual = threadPoolExecutor.getMaximumPoolSize
       Result.all(
         List(
-          actual ==== numThread or actual ==== halfOfAvailableProcessors,
+          (actual ==== numThread).or(actual ==== halfOfAvailableProcessors),
           Result
             .assert(!executorService.isTerminated)
             .log("executorService shouldn't have been terminated yet but it was."),
@@ -74,9 +74,11 @@ object ConcurrentSupportSpec extends Properties {
     val actual = ConcurrentSupport.runAndShutdown(executorService, WaitFor(1.second)) {
       n
     }
-    actual ==== n and Result
-      .assert(executorService.isTerminated)
-      .log("executorService should have been already terminated but it wasn't.")
+    (actual ==== n).and(
+      Result
+        .assert(executorService.isTerminated)
+        .log("executorService should have been already terminated but it wasn't.")
+    )
   }
 
   def testConcurrentSupportFutureToValue: Property = for {
@@ -89,9 +91,11 @@ object ConcurrentSupportSpec extends Properties {
 
     try {
       val actual = ConcurrentSupport.futureToValue(Future(n), WaitFor(1.second))
-      actual ==== n and Result
-        .assert(!executorService.isTerminated)
-        .log("executorService shouldn't have been terminated yet but it was.")
+      (actual ==== n).and(
+        Result
+          .assert(!executorService.isTerminated)
+          .log("executorService shouldn't have been terminated yet but it was.")
+      )
     } finally {
       ExecutorServiceOps.shutdownAndAwaitTermination(executorService, 1.second)
     }
@@ -107,9 +111,11 @@ object ConcurrentSupportSpec extends Properties {
     val actual = ConcurrentSupport.futureToValueAndTerminate(executorService, WaitFor(1.second)) {
       Future(n)
     }
-    actual ==== n and Result
-      .assert(executorService.isTerminated)
-      .log("executorService should have been already terminated but it wasn't.")
+    (actual ==== n).and(
+      Result
+        .assert(executorService.isTerminated)
+        .log("executorService should have been already terminated but it wasn't.")
+    )
   }
 
 }
