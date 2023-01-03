@@ -11,6 +11,7 @@ import hedgehog._
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 import scala.reflect.ClassTag
+import scala.util.control.NonFatal
 
 /** The code inside CatsEffectRunner was not entirely but mostly copied from
   * https://git.io/JDcCP and was modified for Hedgehog
@@ -67,7 +68,7 @@ trait CatsEffectRunner {
 
       results
     } catch {
-      case t: Throwable =>
+      case NonFatal(t) =>
         t.printStackTrace()
         throw t // scalafix:ok DisableSyntax.throw
     }
@@ -75,7 +76,7 @@ trait CatsEffectRunner {
   def unsafeRunSync[A](ioa: SyncIO[A]): Outcome[Id, Throwable, A] =
     try Outcome.succeeded[Id, Throwable, A](ioa.unsafeRunSync())
     catch {
-      case t: Throwable => Outcome.errored(t)
+      case NonFatal(t) => Outcome.errored(t)
     }
 
   implicit def materializeRuntime(implicit ticker: Ticker): unsafe.IORuntime =

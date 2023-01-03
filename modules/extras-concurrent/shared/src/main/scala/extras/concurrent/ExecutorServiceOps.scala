@@ -33,7 +33,7 @@ trait ExecutorServiceOps {
           s"and await termination for ${waitFor.toMillis} ms (${waitFor.toSeconds} s)"
       )
       if (!executorService.awaitTermination(waitFor.toMillis, TimeUnit.MILLISECONDS)) {
-        logger(s"calling executorService.shutdownNow()")
+        logger("calling executorService.shutdownNow()")
         val _ = executorService.shutdownNow()
 
         logger(
