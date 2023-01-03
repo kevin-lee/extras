@@ -27,12 +27,28 @@ ThisBuild / scmInfo    :=
 
 ThisBuild / licenses   := props.licenses
 
-ThisBuild / resolvers += "sonatype-snapshots" at s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
+ThisBuild / resolvers += "sonatype-snapshots".at(
+  s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
+)
 
 ThisBuild / scalafixConfig := (
   if (scalaVersion.value.startsWith("3")) file(".scalafix-scala3.conf").some
   else file(".scalafix-scala2.conf").some
 )
+
+ThisBuild / scalafixScalaBinaryVersion := {
+  val log = sLog.value
+  val newVersion = if (scalaVersion.value.startsWith("3")) {
+    (ThisBuild / scalafixScalaBinaryVersion).value
+  } else {
+    CrossVersion.binaryScalaVersion(scalaVersion.value)
+  }
+
+  log.info(s">> Change ThisBuild / scalafixScalaBinaryVersion from ${(ThisBuild / scalafixScalaBinaryVersion).value} to $newVersion")
+  newVersion
+}
+
+ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.2.12"
 
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
@@ -283,7 +299,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
     libraryDependencies ++= List(
       libs.cats,
       libs.catsEffect3,
-      libs.libCatsEffectTestKit excludeAll ("org.scalacheck"),
+      libs.libCatsEffectTestKit.excludeAll("org.scalacheck"),
       libs.hedgehogCore,
       libs.hedgehogRunner,
     ) ++ libs.hedgehog,
@@ -653,8 +669,8 @@ lazy val props = new {
   val SonatypeCredentialHost = "s01.oss.sonatype.org"
   val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
 
-  val CatsVersion       = "2.8.0"
-  val Cats2_0_0Version  = "2.0.0"
+  val CatsVersion      = "2.8.0"
+  val Cats2_0_0Version = "2.0.0"
 
   val CatsEffect3Version = "3.3.14"
   val CatsEffectVersion  = "2.5.5"
@@ -670,7 +686,7 @@ lazy val props = new {
 
   val NewtypeVersion = "0.4.4"
 
-  val RefinedVersion = "0.9.27"
+  val RefinedVersion       = "0.9.27"
   val RefinedLatestVersion = "0.10.1"
 
   val EmbeddedPostgresVersion = "2.0.1"
@@ -688,8 +704,8 @@ lazy val props = new {
 }
 
 lazy val libs = new {
-  lazy val cats       = "org.typelevel" %% "cats-core" % props.CatsVersion
-  lazy val catsOld    = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
+  lazy val cats    = "org.typelevel" %% "cats-core" % props.CatsVersion
+  lazy val catsOld = "org.typelevel" %% "cats-core" % props.Cats2_0_0Version
 
   lazy val catsEffect3 = "org.typelevel" %% "cats-effect" % props.CatsEffect3Version
   lazy val catsEffect  = "org.typelevel" %% "cats-effect" % props.CatsEffectVersion
@@ -719,7 +735,8 @@ lazy val libs = new {
   def scalaReflect(scalaVersion: String): ModuleID = "org.scala-lang" % "scala-reflect" % scalaVersion
 
   lazy val newtype = "io.estatico" %% "newtype" % props.NewtypeVersion
-  lazy val refined = "eu.timepit" %% "refined" % props.RefinedVersion excludeAll "org.scala-lang.modules" %% "scala-xml"
+  lazy val refined =
+    ("eu.timepit" %% "refined" % props.RefinedVersion).excludeAll("org.scala-lang.modules" %% "scala-xml")
   lazy val refinedLatest = "eu.timepit" %% "refined" % props.RefinedLatestVersion
 
   lazy val embeddedPostgres = "io.zonky.test" % "embedded-postgres" % props.EmbeddedPostgresVersion
