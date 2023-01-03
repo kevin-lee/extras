@@ -78,7 +78,7 @@ object RoundTripTester {
 
     def test(): Result
   }
-  private final case class BuilderA[A: Encoder: Decoder: Show: WeakTypeTag](a: A, _indent: Int) extends Builder[A] {
+  final private case class BuilderA[A: Encoder: Decoder: Show: WeakTypeTag](a: A, _indent: Int) extends Builder[A] {
     def indent(indent: Int): Builder[A] = copy(_indent = indent)
 
     def test(): Result = roundTripTest(a, _indent)

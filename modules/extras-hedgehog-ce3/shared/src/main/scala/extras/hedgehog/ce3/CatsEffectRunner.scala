@@ -1,9 +1,9 @@
 package extras.hedgehog.ce3
 
 import CatsEffectRunner.{IoOps, SyncIoOps}
-import cats.effect.{IO, Outcome, SyncIO, unsafe}
+import cats.effect.{unsafe, IO, Outcome, SyncIO}
 import cats.syntax.all._
-import cats.{Eq, Id, Order, Show, ~>}
+import cats.{~>, Eq, Id, Order, Show}
 import extras.hedgehog.ce3
 import extras.tools._
 import hedgehog._
@@ -110,7 +110,7 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
       sh: Show[A],
     ): Boolean = {
       val oc = unsafeRun(ioa)
-      oc eqv expected
+      oc.eqv(expected)
     }
 
     def tickToResult(expected: Outcome[Option, Throwable, A])(
@@ -119,7 +119,7 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
       sh: Show[A],
     ): Result = {
       val oc = unsafeRun(ioa)
-      Result.assert(oc eqv expected).log(s"${oc.show} !== ${expected.show}")
+      Result.assert(oc.eqv(expected)).log(s"${oc.show} !== ${expected.show}")
     }
 
     def completeAs(expected: A)(implicit ticker: Ticker, eq: Eq[A], sh: Show[A]): Result =
@@ -200,12 +200,12 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
   final class SyncIoOps[A](private val ioa: SyncIO[A]) extends AnyVal {
     def completeAsSync(expected: A)(implicit eq: Eq[A], sh: Show[A]): Result = {
       val a = ioa.unsafeRunSync()
-      Result.assert(a eqv expected).log(s"${a.show} !== ${expected.show}")
+      Result.assert(a.eqv(expected)).log(s"${a.show} !== ${expected.show}")
     }
 
     def completeAsEqualToSync(expected: A)(implicit eq: Eq[A]): Boolean = {
       val a = ioa.unsafeRunSync()
-      a eqv expected
+      a.eqv(expected)
     }
   }
 }

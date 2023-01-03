@@ -49,7 +49,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     val actual    = IO(n)
     val actual2   = IO(n2)
 
-    actual.completeAs(expected) and actual2.completeAs(expected2)
+    actual.completeAs(expected).and(actual2.completeAs(expected2))
   }
 
   def testCatsEffectRunnerWithCompleteAsMultiple: Property = for {
@@ -96,11 +96,13 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     val actual  = IO(n)
     val actual2 = IO(n2)
 
-    actual.completeThen { actual =>
-      actual ==== expected
-    } and actual2.completeThen { actual =>
-      actual ==== expected2
-    }
+    actual
+      .completeThen { actual =>
+        actual ==== expected
+      }
+      .and(actual2.completeThen { actual =>
+        actual ==== expected2
+      })
   }
 
   def testCatsEffectRunnerWithCompleteThenMultiple: Property = for {
@@ -159,7 +161,7 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     val actual  = IO.raiseError[Int](error)
     val actual2 = IO.raiseError[String](error2)
 
-    actual.expectError(expected) and actual2.expectError(expected2)
+    actual.expectError(expected).and(actual2.expectError(expected2))
   }
 
   def testCatsEffectRunnerWithExpectErrorMultiple: Property = for {
@@ -224,11 +226,13 @@ object ManualCatsEffectRunnerSyntaxSpec extends Properties {
     val actual    = IO.raiseError[Int](error)
     val actual2   = IO.raiseError[Int](error2)
 
-    actual.errorThen { actual =>
-      actual ==== expected
-    } and actual2.errorThen { actual =>
-      actual ==== expected2
-    }
+    actual
+      .errorThen { actual =>
+        actual ==== expected
+      }
+      .and(actual2.errorThen { actual =>
+        actual ==== expected2
+      })
   }
 
   def testCatsEffectRunnerWithErrorThenMultiple: Property = for {

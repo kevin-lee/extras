@@ -23,7 +23,7 @@ object refinement extends refinement { self =>
   import scala.reflect.runtime.universe._
 
   @SuppressWarnings(Array("org.wartremover.warts.DefaultArguments"))
-  private[refinement] final class PartiallyAppliedRefinement[A](private val dummy: Boolean = false) extends AnyVal {
+  final private[refinement] class PartiallyAppliedRefinement[A](private val dummy: Boolean = false) extends AnyVal {
     def apply[T, P](value: T)(
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
@@ -35,7 +35,7 @@ object refinement extends refinement { self =>
         .map(_.coerce[A])
   }
 
-  private[refinement] final class RefinementSyntax[T, P](private val value: T) extends AnyVal {
+  final private[refinement] class RefinementSyntax[T, P](private val value: T) extends AnyVal {
     def validateAs[A](
       implicit coercible: Coercible[Refined[T, P], A],
       validate: Validate[T, P],
@@ -43,7 +43,7 @@ object refinement extends refinement { self =>
     ): EitherNec[String, A] = self.validateAs[A](value)
   }
 
-  private[refinement] final class CoercibleRefinementSyntax[A, T, P](private val value: A) extends AnyVal {
+  final private[refinement] class CoercibleRefinementSyntax[A, T, P](private val value: A) extends AnyVal {
     def toValue(implicit coercible: Coercible[A, Refined[T, P]]): T = coercible(value).value
   }
 

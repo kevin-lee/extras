@@ -352,7 +352,7 @@ object AllSyntaxSpec extends Properties {
     import cats.data.EitherT
     import cats.effect.*
     import cats.syntax.either.*
-    import extras.cats.syntax.EitherSyntax.{rightT, leftT}
+    import extras.cats.syntax.EitherSyntax.{leftT, rightT}
 
     def testRightT: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
@@ -400,7 +400,7 @@ object AllSyntaxSpec extends Properties {
     import cats.data.EitherT
     import cats.effect.*
     import cats.syntax.either.*
-    import extras.cats.syntax.EitherSyntax.{rightTF, leftTF}
+    import extras.cats.syntax.EitherSyntax.{leftTF, rightTF}
 
     def testRightTF: Property = for {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")

@@ -87,7 +87,7 @@ object syntaxSpec extends Properties {
       val expected = List.empty[File]
       val actual   = listAllFilesRecursively(rootFile)
 
-      makeSureRootFileIsAFile and actual.sorted ==== expected.sorted
+      makeSureRootFileIsAFile.and(actual.sorted ==== expected.sorted)
     } finally {
       Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
       Try(tempDir).foreach(_ => ())
@@ -131,7 +131,7 @@ object syntaxSpec extends Properties {
       val expected = List.empty[File]
       val actual   = listAllFilesRecursively(rootFile)
 
-      makeSureNotExist and actual.sorted ==== expected.sorted
+      makeSureNotExist.and(actual.sorted ==== expected.sorted)
     } finally {
       Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
       Try(tempDir).foreach(_ => ())
@@ -198,7 +198,7 @@ object syntaxSpec extends Properties {
       val expected = List.empty[File]
       val actual   = rootFile.listAllFilesRecursively
 
-      makeSureRootFileIsAFile and actual.sorted ==== expected.sorted
+      makeSureRootFileIsAFile.and(actual.sorted ==== expected.sorted)
     } finally {
       Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
       Try(tempDir).foreach(_ => ())
@@ -242,7 +242,7 @@ object syntaxSpec extends Properties {
       val expected = List.empty[File]
       val actual   = rootFile.listAllFilesRecursively
 
-      makeSureNotExist and actual.sorted ==== expected.sorted
+      makeSureNotExist.and(actual.sorted ==== expected.sorted)
     } finally {
       Try(FileUtils.cleanUpFilesInside(tempDir)).foreach(_ => ())
       Try(tempDir).foreach(_ => ())
