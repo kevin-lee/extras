@@ -9,7 +9,7 @@ import scala.concurrent.duration.FiniteDuration
   */
 trait ExecutorServiceOps {
 
-  private def noLogger(s: => String): Unit = ()
+  private val noLogger: (=> String) => Unit = _ => ()
 
   def shutdownAndAwaitTermination(
     executorService: ExecutorService,
@@ -56,6 +56,7 @@ trait ExecutorServiceOps {
     } catch {
       case ie: InterruptedException =>
         logger("InterruptedException has been caught while terminating ExecutorService.")
+        logger(s"InterruptedException: ${ie.getMessage}")
         logger("Calling executorService.shutdownNow()")
         val _ = executorService.shutdownNow()
         logger(

@@ -108,7 +108,6 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
     def tickTo(expected: Outcome[Option, Throwable, A])(
       implicit ticker: Ticker,
       eq: Eq[A],
-      sh: Show[A],
     ): Boolean = {
       val oc = unsafeRun(ioa)
       oc.eqv(expected)
@@ -126,7 +125,7 @@ private[ce3] object CatsEffectRunner extends CatsEffectRunner {
     def completeAs(expected: A)(implicit ticker: Ticker, eq: Eq[A], sh: Show[A]): Result =
       tickToResult(Outcome.Succeeded(expected.some))
 
-    def completeAndEqualTo(expected: A)(implicit ticker: Ticker, eq: Eq[A], sh: Show[A]): Boolean =
+    def completeAndEqualTo(expected: A)(implicit ticker: Ticker, eq: Eq[A]): Boolean =
       tickTo(Outcome.Succeeded(Some(expected)))
 
     def completeThen(assertion: A => Result)(implicit ticker: Ticker): Result =

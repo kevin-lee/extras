@@ -3,6 +3,7 @@ package extras.reflects.syntax
 import hedgehog._
 import hedgehog.runner._
 
+import scala.annotation.nowarn
 import scala.reflect.ClassTag
 
 /** @author Kevin Lee
@@ -91,7 +92,7 @@ object tagsSpec extends Properties {
     import SomeTestTypes._
     import extras.reflects.syntax.tags._
 
-    def foo[A: ClassTag](a: A)(implicit ct: ClassTag[A]): String = ct.nestedRuntimeClassName
+    def foo[A](@nowarn a: A)(implicit ct: ClassTag[A]): String = ct.nestedRuntimeClassName
 
     val expected1 = "SomeTestTypes.Aaa"
     val actual1   = foo(Aaa.bbb(123))

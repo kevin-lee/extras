@@ -88,7 +88,7 @@ object Rgb {
   def unsafeFromHexString(hex: String): Rgb =
     fromHexString(hex).fold(err => sys.error(err), identity)
 
-  def unapply(rgb: Rgb): Option[(Red, Green, Blue)] = Some((rgb.red, rgb.green, rgb.blue))
+  def unapply(rgb: Rgb): Some[(Red, Green, Blue)] = Some((rgb.red, rgb.green, rgb.blue))
 
   @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
   implicit class RgbOps(private val rgb: Rgb) extends AnyVal {

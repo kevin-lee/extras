@@ -81,7 +81,7 @@ object RgbSyntaxSpec extends Properties {
     text <- Gen.string(Gen.alphaNum, Range.linear(1, 30)).log("text")
   } yield {
     import extras.scala.io.syntax.truecolor.rgb._
-    val rgb      = Rgb.unsafeFromInt(rgbInt)
+    val _        = Rgb.unsafeFromInt(rgbInt)
     val expected = TestTools.toRgbAsciiEsc(redInt, greenInt, blueInt) + text
     val actual   = text.rgb(rgbInt)
     actual ==== expected

@@ -19,13 +19,13 @@ import java.nio.file.Files
   */
 trait RunWithDb {
 
-  def propertyWithDb[F[*]: Fx: Async: MonadCancelThrow](
+  def propertyWithDb[F[*]](
     name: String,
     stringToProperty: String => Property,
   ): Test =
     property(name, stringToProperty(name)).withTests(count = 1).noShrinking
 
-  def withDb[F[*]: Fx: Async: MonadCancelThrow](
+  def withDb[F[*]: Fx: Async](
     testName: String
   )(test: Transactor[F] => F[Result]): F[Result] = {
     Ce3Resource
