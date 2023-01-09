@@ -592,6 +592,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
           options
         }
       },
+      scalacOptions := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value)
     )
     .settings(
       mavenCentralPublishSettings
@@ -746,3 +747,23 @@ lazy val libs = new {
 }
 
 def isScala3(scalaVersion: String): Boolean = scalaVersion.startsWith("3.")
+
+lazy val scala3cLanguageOptions =
+  List(
+    "dynamics",
+    "existentials",
+    "higherKinds",
+    "reflectiveCalls",
+    "experimental.macros",
+    "implicitConversions",
+  ).map("-language:" + _)
+
+def scalacOptionsPostProcess(scalaVersion: String, options: Seq[String]): Seq[String] =
+  if (scalaVersion.startsWith("3.")) {
+    scala3cLanguageOptions ++
+      options.filterNot(o =>
+        o == "-language:dynamics,existentials,higherKinds,reflectiveCalls,experimental.macros,implicitConversions" || o == "UTF-8",
+      )
+  } else {
+    options.filterNot(_ == "UTF-8")
+  }

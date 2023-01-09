@@ -20,13 +20,13 @@ import java.nio.file.Files
   */
 trait RunWithDb {
 
-  def propertyWithDb[F[*]: Fx: Async: ContextShift: BracketThrow](
+  def propertyWithDb[F[*]](
     name: String,
     stringToProperty: String => Property,
   ): Test =
     property(name, stringToProperty(name)).withTests(count = 1).noShrinking
 
-  def withDb[F[*]: Fx: Async: ContextShift: BracketThrow: RunSync](
+  def withDb[F[*]: Fx: Async: ContextShift: RunSync](
     testName: String
   )(test: Transactor[F] => F[Result]): Result =
     RunSync[F].runSync(

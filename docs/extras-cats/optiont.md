@@ -118,7 +118,7 @@ def run[F[_]: Sync](): F[Option[Int]] = (for {
   a <- foo(123).someT
   b <- 2.someTF[F]
   c <- bar(b).optionT
-  d <- divide(a, b).t
+  d <- divide(a, c).t
 } yield d).value
 
 println(run[IO]().unsafeRunSync())

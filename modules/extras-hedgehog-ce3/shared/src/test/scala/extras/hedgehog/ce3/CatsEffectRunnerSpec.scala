@@ -62,7 +62,7 @@ object CatsEffectRunnerSpec extends Properties with CatsEffectRunner {
 
       (
         actual.map(_ ==== expected),
-        actual2.map(_ ==== n2),
+        actual2.map(_ ==== expected2),
       ).mapN(_ and _)
     }
 

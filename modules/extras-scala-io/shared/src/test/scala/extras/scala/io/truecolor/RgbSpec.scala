@@ -293,7 +293,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     invalidHexString <- Gen
                           .string(Gen.element1('%', '@', '!', '*', '(', ')'), Range.linear(2, 10))
                           .flatMap { head =>
-                            Gen.string(Gen.unicode, Range.linear(6, 50))
+                            Gen.string(Gen.unicode, Range.linear(6, 50)).map(head + _)
                           }
                           .log("invalidHexString")
   } yield {

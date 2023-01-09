@@ -31,4 +31,6 @@ addSbtPlugin("io.kevinlee" % "sbt-devoops-github"    % sbtDevOopsVersion)
 
 addSbtPlugin("io.kevinlee" % "sbt-devoops-starter"   % sbtDevOopsVersion)
 
+addSbtPlugin("io.github.davidgregory084" % "sbt-tpolecat" % "0.4.1")
+
 dependencyOverrides += "org.scala-lang.modules" %% "scala-xml" % "2.1.0"

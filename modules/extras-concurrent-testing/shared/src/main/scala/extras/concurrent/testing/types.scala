@@ -16,6 +16,8 @@ object types {
   sealed trait ErrorLogger[-A <: Throwable] extends (A => Unit)
   sealed trait ExecutionContextErrorLogger extends ErrorLogger[Throwable]
   object ErrorLogger {
+    // $COVERAGE-OFF$
+
     final case class DefaultExecutionContextErrorLogger(errorLogger: String => Unit)
         extends ExecutionContextErrorLogger {
 
@@ -35,6 +37,9 @@ object types {
           defaultTimeoutExceptionLogger(errorLogger)(ex)
 
         case NonFatal(ex) =>
+          errorLogger(ex.toString)
+
+        case ex =>
           errorLogger(ex.toString)
       }
     }
@@ -64,6 +69,7 @@ object types {
 
     lazy val printlnDefaultErrorLogger: ErrorLogger[Throwable] = DefaultErrorLogger(println(_))
 
+    // $COVERAGE-ON$
   }
 
 }

@@ -121,7 +121,7 @@ def run[F[_]: Sync](): F[Either[MyError, Int]] = (for {
   a <- foo(123).rightT
   b <- 2.rightTF[F, MyError]
   c <- bar(b).eitherT
-  d <- divide(a, b).t
+  d <- divide(a, c).t
 } yield d).value
 
 println(run[IO]().unsafeRunSync())
