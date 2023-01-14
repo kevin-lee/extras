@@ -37,14 +37,16 @@ ThisBuild / scalafixConfig := (
 )
 
 ThisBuild / scalafixScalaBinaryVersion := {
-  val log = sLog.value
+  val log        = sLog.value
   val newVersion = if (scalaVersion.value.startsWith("3")) {
     (ThisBuild / scalafixScalaBinaryVersion).value
   } else {
     CrossVersion.binaryScalaVersion(scalaVersion.value)
   }
 
-  log.info(s">> Change ThisBuild / scalafixScalaBinaryVersion from ${(ThisBuild / scalafixScalaBinaryVersion).value} to $newVersion")
+  log.info(
+    s">> Change ThisBuild / scalafixScalaBinaryVersion from ${(ThisBuild / scalafixScalaBinaryVersion).value} to $newVersion"
+  )
   newVersion
 }
 
@@ -62,6 +64,8 @@ lazy val extras = (project in file("."))
   .aggregate(
     extrasCoreJvm,
     extrasCoreJs,
+    extrasCirceJvm,
+    extrasCirceJs,
     extrasDoobieToolsCe2Jvm,
     extrasDoobieToolsCe3Jvm,
     extrasRenderJvm,
@@ -96,6 +100,27 @@ lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPla
   )
 lazy val extrasCoreJvm = extrasCore.jvm
 lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
+
+lazy val extrasCirce    = crossSubProject("circe", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions  := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog ++
+    (if (isScala3(scalaVersion.value)) List(
+      libs.circeCore_0_14_3,
+      libs.circeParser_0_14_3 % Test,
+      libs.circeGeneric_0_14_3 % Test,
+      libs.circeLiteral_0_14_3 % Test,
+
+    ) else List(
+      libs.circeCore,
+      libs.circeParser % Test,
+      libs.circeGeneric % Test,
+      libs.circeLiteral % Test,
+    )),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+lazy val extrasCirceJvm = extrasCirce.jvm
+lazy val extrasCirceJs  = extrasCirce.js.settings(Test / fork := false)
 
 lazy val extrasDoobieToolsCe2    = crossSubProject("doobie-tools-ce2", crossProject(JVMPlatform))
   .settings(
@@ -592,7 +617,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
           options
         }
       },
-      scalacOptions := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value)
+      scalacOptions     := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value),
     )
     .settings(
       mavenCentralPublishSettings
@@ -682,6 +707,7 @@ lazy val props = new {
   val KittensVersion = "3.0.0"
 
   val CirceVersion = "0.14.1"
+  val Circe_0_14_3_Version = "0.14.3"
 
   val HedgehogVersion = "0.9.0"
 
@@ -719,9 +745,17 @@ lazy val libs = new {
 
   lazy val kittens = "org.typelevel" %% "kittens" % props.KittensVersion
 
-  lazy val circeCore    = "io.circe" %% "circe-core"    % props.CirceVersion
-  lazy val circeParser  = "io.circe" %% "circe-parser"  % props.CirceVersion
-  lazy val circeGeneric = "io.circe" %% "circe-generic" % props.CirceVersion
+  lazy val circeCore           = "io.circe" %% "circe-core"    % props.CirceVersion
+  lazy val circeCore_0_14_3    = "io.circe" %% "circe-core"    % props.Circe_0_14_3_Version
+
+  lazy val circeParser         = "io.circe" %% "circe-parser"  % props.CirceVersion
+  lazy val circeParser_0_14_3  = "io.circe" %% "circe-parser"  % props.Circe_0_14_3_Version
+
+  lazy val circeGeneric        = "io.circe" %% "circe-generic" % props.CirceVersion
+  lazy val circeGeneric_0_14_3 = "io.circe" %% "circe-generic" % props.Circe_0_14_3_Version
+
+  lazy val circeLiteral        = "io.circe" %% "circe-literal" % props.CirceVersion
+  lazy val circeLiteral_0_14_3 = "io.circe" %% "circe-literal" % props.Circe_0_14_3_Version
 
   lazy val hedgehogCore   = "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion
   lazy val hedgehogRunner = "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion
