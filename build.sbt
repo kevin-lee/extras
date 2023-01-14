@@ -1,7 +1,7 @@
 import sbtcrossproject.CrossProject
 
-ThisBuild / scalaVersion     := props.ProjectScalaVersion
-ThisBuild / organization     := props.Org
+ThisBuild / scalaVersion := props.ProjectScalaVersion
+ThisBuild / organization := props.Org
 ThisBuild / organizationName := "Kevin's Code"
 
 ThisBuild / testFrameworks ~=
@@ -16,8 +16,8 @@ ThisBuild / developers := List(
   )
 )
 
-ThisBuild / homepage   := Some(url(s"https://github.com/${props.GitHubUser}/${props.RepoName}"))
-ThisBuild / scmInfo    :=
+ThisBuild / homepage := Some(url(s"https://github.com/${props.GitHubUser}/${props.RepoName}"))
+ThisBuild / scmInfo :=
   Some(
     ScmInfo(
       url(s"https://github.com/${props.GitHubUser}/${props.RepoName}"),
@@ -25,7 +25,7 @@ ThisBuild / scmInfo    :=
     )
   )
 
-ThisBuild / licenses   := props.licenses
+ThisBuild / licenses := props.licenses
 
 ThisBuild / resolvers += "sonatype-snapshots".at(
   s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
@@ -55,7 +55,7 @@ ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
-    name                := props.RepoName,
+    name := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .settings(mavenCentralPublishSettings)
@@ -94,7 +94,7 @@ lazy val extras = (project in file("."))
 
 lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
@@ -103,20 +103,22 @@ lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 
 lazy val extrasCirce    = crossSubProject("circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog ++
-    (if (isScala3(scalaVersion.value)) List(
-      libs.circeCore_0_14_3,
-      libs.circeParser_0_14_3 % Test,
-      libs.circeGeneric_0_14_3 % Test,
-      libs.circeLiteral_0_14_3 % Test,
-
-    ) else List(
-      libs.circeCore,
-      libs.circeParser % Test,
-      libs.circeGeneric % Test,
-      libs.circeLiteral % Test,
-    )),
+      (if (isScala3(scalaVersion.value))
+         List(
+           libs.circeCore_0_14_3,
+           libs.circeParser_0_14_3  % Test,
+           libs.circeGeneric_0_14_3 % Test,
+           libs.circeLiteral_0_14_3 % Test,
+         )
+       else
+         List(
+           libs.circeCore,
+           libs.circeParser         % Test,
+           libs.circeGeneric        % Test,
+           libs.circeLiteral        % Test,
+         )),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasCirceJvm = extrasCirce.jvm
@@ -125,7 +127,7 @@ lazy val extrasCirceJs  = extrasCirce.js.settings(Test / fork := false)
 lazy val extrasDoobieToolsCe2    = crossSubProject("doobie-tools-ce2", crossProject(JVMPlatform))
   .settings(
     scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++=
       List(
         libs.doobieCe2Core,
@@ -148,7 +150,7 @@ lazy val extrasDoobieToolsCe2Jvm = extrasDoobieToolsCe2.jvm
 lazy val extrasDoobieToolsCe3    = crossSubProject("doobie-tools-ce3", crossProject(JVMPlatform))
   .settings(
     scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++=
       List(
         libs.doobieCe3Core,
@@ -170,7 +172,7 @@ lazy val extrasDoobieToolsCe3Jvm = extrasDoobieToolsCe3.jvm
 
 lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasRenderJvm = extrasRender.jvm
@@ -178,7 +180,7 @@ lazy val extrasRenderJs  = extrasRender.js.settings(Test / fork := false)
 
 lazy val extrasRenderRefined    = crossSubProject("render-refined", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.Scala2Versions,
+    crossScalaVersions := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
       libs.refined,
       libs.newtype  % Test,
@@ -194,7 +196,7 @@ lazy val extrasRenderRefinedJs  = extrasRenderRefined.js.settings(Test / fork :=
 lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatform, JSPlatform))
   .settings(
 //    crossScalaVersions  := props.Scala2Versions,
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog ++
       (
         if (isScala3(scalaVersion.value)) List.empty
@@ -208,7 +210,7 @@ lazy val extrasReflectsJs  = extrasReflects.js.settings(Test / fork := false)
 
 lazy val extrasTypeInfo    = crossSubProject("type-info", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog ++
       (
         if (isScala3(scalaVersion.value)) List.empty
@@ -222,7 +224,7 @@ lazy val extrasTypeInfoJs  = extrasTypeInfo.js.settings(Test / fork := false)
 
 lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.Scala2Versions,
+    crossScalaVersions := props.Scala2Versions,
     libraryDependencies ++= libs.hedgehog ++ List(
       libs.newtype.cross(CrossVersion.for3Use2_13)
     ) ++ List(libs.cats, libs.refined.cross(CrossVersion.for3Use2_13)),
@@ -235,7 +237,7 @@ lazy val extrasRefinementJs  = extrasRefinement.js.settings(Test / fork := false
 
 lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
@@ -267,7 +269,7 @@ lazy val extrasScalaIoJs  = extrasScalaIo.js.settings(Test / fork := false)
 
 lazy val extrasConcurrent    = crossSubProject("concurrent", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasConcurrentJvm = extrasConcurrent.jvm
@@ -275,7 +277,7 @@ lazy val extrasConcurrentJs  = extrasConcurrent.js.settings(Test / fork := false
 
 lazy val extrasConcurrentTesting = crossSubProject("concurrent-testing", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore, extrasConcurrent)
@@ -285,7 +287,7 @@ lazy val extrasConcurrentTestingJs  = extrasConcurrentTesting.js.settings(Test /
 
 lazy val extrasCats = crossSubProject("cats", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.cats, libs.catsEffect3 % Test)
                              } else {
@@ -301,7 +303,7 @@ lazy val extrasCatsJs  = extrasCats.js.settings(Test / fork := false)
 
 lazy val extrasHedgehogCirce    = crossSubProject("hedgehog-circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions  := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= List(
       libs.cats,
       libs.hedgehogCore,
@@ -320,7 +322,7 @@ lazy val extrasHedgehogCirceJs  = extrasHedgehogCirce.js.settings(Test / fork :=
 
 lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPlatform, JSPlatform))
   .settings(
-    crossScalaVersions             := props.CrossScalaVersions,
+    crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= List(
       libs.cats,
       libs.catsEffect3,
@@ -328,7 +330,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
       libs.hedgehogCore,
       libs.hedgehogRunner,
     ) ++ libs.hedgehog,
-    libraryDependencies            :=
+    libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Test / console / scalacOptions := List.empty,
   )
@@ -341,22 +343,22 @@ lazy val docs = (project in file("docs-gen-tmp/docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
   .settings(
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs"),
-    name                := "docs",
-    mdocIn              := file("docs/common"),
-    mdocOut             := file("generated-docs/docs"),
+    name := "docs",
+    mdocIn := file("docs/common"),
+    mdocOut := file("generated-docs/docs"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
-    mdocVariables       := createMdocVariables(),
-    docusaurDir         := (ThisBuild / baseDirectory).value / "website",
-    docusaurBuildDir    := docusaurDir.value / "build",
+    mdocVariables := createMdocVariables(),
+    docusaurDir := (ThisBuild / baseDirectory).value / "website",
+    docusaurBuildDir := docusaurDir.value / "build",
   )
   .settings(noPublish)
 
 lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-core"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-render",
-    mdocIn              := file("docs/extras-render"),
-    mdocOut             := file("generated-docs/docs/extras-render"),
+    name := "docs-extras-render",
+    mdocIn := file("docs/extras-render"),
+    mdocOut := file("generated-docs/docs/extras-render"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(
       libs.catsEffect
@@ -366,16 +368,16 @@ lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-core"))
         "io.kevinlee" %% "extras-render" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasCats = (project in file("docs-gen-tmp/extras-cats"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-cats",
-    mdocIn              := file("docs/extras-cats"),
-    mdocOut             := file("generated-docs/docs/extras-cats"),
+    name := "docs-extras-cats",
+    mdocIn := file("docs/extras-cats"),
+    mdocOut := file("generated-docs/docs/extras-cats"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= List(
       libs.catsEffect
@@ -385,16 +387,16 @@ lazy val docsExtrasCats = (project in file("docs-gen-tmp/extras-cats"))
         "io.kevinlee" %% "extras-cats" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasConcurrent = (project in file("docs-gen-tmp/extras-concurrent"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-concurrent",
-    mdocIn              := file("docs/extras-concurrent"),
-    mdocOut             := file("generated-docs/docs/extras-concurrent"),
+    name := "docs-extras-concurrent",
+    mdocIn := file("docs/extras-concurrent"),
+    mdocOut := file("generated-docs/docs/extras-concurrent"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -402,16 +404,16 @@ lazy val docsExtrasConcurrent = (project in file("docs-gen-tmp/extras-concurrent
         "io.kevinlee" %% "extras-concurrent" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-ce3"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-hedgehog-ce3",
-    mdocIn              := file("docs/extras-hedgehog-ce3"),
-    mdocOut             := file("generated-docs/docs/extras-hedgehog-ce3"),
+    name := "docs-extras-hedgehog-ce3",
+    mdocIn := file("docs/extras-hedgehog-ce3"),
+    mdocOut := file("generated-docs/docs/extras-hedgehog-ce3"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -419,16 +421,16 @@ lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-
         "io.kevinlee" %% "extras-hedgehog-ce3" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasHedgehogCirce = (project in file("docs-gen-tmp/extras-hedgehog-circe"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-hedgehog-circe",
-    mdocIn              := file("docs/extras-hedgehog-circe"),
-    mdocOut             := file("generated-docs/docs/extras-hedgehog-circe"),
+    name := "docs-extras-hedgehog-circe",
+    mdocIn := file("docs/extras-hedgehog-circe"),
+    mdocOut := file("generated-docs/docs/extras-hedgehog-circe"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -440,16 +442,16 @@ lazy val docsExtrasHedgehogCirce = (project in file("docs-gen-tmp/extras-hedgeho
       libs.hedgehogRunner,
       libs.circeGeneric,
     ),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-refinement",
-    mdocIn              := file("docs/extras-refinement"),
-    mdocOut             := file("generated-docs/docs/extras-refinement"),
+    name := "docs-extras-refinement",
+    mdocIn := file("docs/extras-refinement"),
+    mdocOut := file("generated-docs/docs/extras-refinement"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -458,16 +460,16 @@ lazy val docsExtrasRefinement = (project in file("docs-gen-tmp/extras-refinement
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasReflects = (project in file("docs-gen-tmp/extras-reflects"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-reflects",
-    mdocIn              := file("docs/extras-reflects"),
-    mdocOut             := file("generated-docs/docs/extras-reflects"),
+    name := "docs-extras-reflects",
+    mdocIn := file("docs/extras-reflects"),
+    mdocOut := file("generated-docs/docs/extras-reflects"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -477,16 +479,16 @@ lazy val docsExtrasReflects = (project in file("docs-gen-tmp/extras-reflects"))
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasScalaIo = (project in file("docs-gen-tmp/extras-scala-io"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name                := "docs-extras-scala-io",
-    mdocIn              := file("docs/extras-scala-io"),
-    mdocOut             := file("generated-docs/docs/extras-scala-io"),
+    name := "docs-extras-scala-io",
+    mdocIn := file("docs/extras-scala-io"),
+    mdocOut := file("generated-docs/docs/extras-scala-io"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -494,17 +496,17 @@ lazy val docsExtrasScalaIo = (project in file("docs-gen-tmp/extras-scala-io"))
         "io.kevinlee" %% "extras-scala-io" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasTypeInfo = (project in file("docs-gen-tmp/extras-type-info"))
   .enablePlugins(MdocPlugin)
   .settings(
-    scalaVersion        := props.Scala2Version,
-    name                := "docs-extras-type-info",
-    mdocIn              := file("docs/extras-type-info"),
-    mdocOut             := file("generated-docs/docs/extras-type-info"),
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-type-info",
+    mdocIn := file("docs/extras-type-info"),
+    mdocOut := file("generated-docs/docs/extras-type-info"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -512,17 +514,17 @@ lazy val docsExtrasTypeInfo = (project in file("docs-gen-tmp/extras-type-info"))
         "io.kevinlee" %% "extras-type-info" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasTypeInfoScala2 = (project in file("docs-gen-tmp/extras-type-info-scala2"))
   .enablePlugins(MdocPlugin)
   .settings(
-    scalaVersion        := props.Scala2Version,
-    name                := "docs-extras-type-info-scala2",
-    mdocIn              := file("docs/extras-type-info-scala2"),
-    mdocOut             := file("generated-docs/docs/extras-type-info/scala2"),
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-type-info-scala2",
+    mdocIn := file("docs/extras-type-info-scala2"),
+    mdocOut := file("generated-docs/docs/extras-type-info/scala2"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -535,17 +537,17 @@ lazy val docsExtrasTypeInfoScala2 = (project in file("docs-gen-tmp/extras-type-i
       libs.hedgehogCore,
       libs.hedgehogRunner,
     ),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
 lazy val docsExtrasTypeInfoScala3 = (project in file("docs-gen-tmp/extras-type-info-scala3"))
   .enablePlugins(MdocPlugin)
   .settings(
-    scalaVersion        := "3.1.3",
-    name                := "docs-extras-type-info-scala3",
-    mdocIn              := file("docs/extras-type-info-scala3"),
-    mdocOut             := file("generated-docs/docs/extras-type-info/scala3"),
+    scalaVersion := "3.1.3",
+    name := "docs-extras-type-info-scala3",
+    mdocIn := file("docs/extras-type-info-scala3"),
+    mdocOut := file("generated-docs/docs/extras-type-info/scala3"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -553,7 +555,7 @@ lazy val docsExtrasTypeInfoScala3 = (project in file("docs-gen-tmp/extras-type-i
         "io.kevinlee" %% "extras-type-info" % latestVersion
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    mdocVariables       := createMdocVariables(),
+    mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
@@ -565,7 +567,7 @@ def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "
 lazy val mavenCentralPublishSettings: SettingsDefinition = List(
   /* Publish to Maven Central { */
   sonatypeCredentialHost := props.SonatypeCredentialHost,
-  sonatypeRepository     := props.SonatypeRepository,
+  sonatypeRepository := props.SonatypeRepository,
   /* } Publish to Maven Central */
 )
 
@@ -573,8 +575,8 @@ def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(s"modules/$prefixedName"))
     .settings(
-      name           := prefixedName,
-      Test / fork    := true,
+      name := prefixedName,
+      Test / fork := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
@@ -595,21 +597,21 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
   crossProject
     .in(file(s"modules/$prefixedName"))
     .settings(
-      name              := prefixedName,
+      name := prefixedName,
       semanticdbEnabled := true,
       semanticdbVersion := scalafixSemanticdb.revision,
-      Test / fork       := true,
+      Test / fork := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
-      scalafixConfig    := (
+      scalafixConfig := (
         if (scalaVersion.value.startsWith("3"))
           ((ThisBuild / baseDirectory).value / ".scalafix-scala3.conf").some
         else
           ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
       ),
       wartremoverErrors ++= Warts.allBut(Wart.Any, Wart.Nothing, Wart.ImplicitConversion, Wart.ImplicitParameter),
-      scalacOptions     := {
+      scalacOptions := {
         val options = scalacOptions.value
         if (isScala3(scalaVersion.value)) {
           options.filterNot(_.startsWith("-P:wartremover"))
@@ -617,7 +619,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
           options
         }
       },
-      scalacOptions     := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value),
+      scalacOptions := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value),
     )
     .settings(
       mavenCentralPublishSettings
@@ -706,7 +708,7 @@ lazy val props = new {
 
   val KittensVersion = "3.0.0"
 
-  val CirceVersion = "0.14.1"
+  val CirceVersion         = "0.14.1"
   val Circe_0_14_3_Version = "0.14.3"
 
   val HedgehogVersion = "0.9.0"
@@ -745,11 +747,11 @@ lazy val libs = new {
 
   lazy val kittens = "org.typelevel" %% "kittens" % props.KittensVersion
 
-  lazy val circeCore           = "io.circe" %% "circe-core"    % props.CirceVersion
-  lazy val circeCore_0_14_3    = "io.circe" %% "circe-core"    % props.Circe_0_14_3_Version
+  lazy val circeCore        = "io.circe" %% "circe-core" % props.CirceVersion
+  lazy val circeCore_0_14_3 = "io.circe" %% "circe-core" % props.Circe_0_14_3_Version
 
-  lazy val circeParser         = "io.circe" %% "circe-parser"  % props.CirceVersion
-  lazy val circeParser_0_14_3  = "io.circe" %% "circe-parser"  % props.Circe_0_14_3_Version
+  lazy val circeParser        = "io.circe" %% "circe-parser" % props.CirceVersion
+  lazy val circeParser_0_14_3 = "io.circe" %% "circe-parser" % props.Circe_0_14_3_Version
 
   lazy val circeGeneric        = "io.circe" %% "circe-generic" % props.CirceVersion
   lazy val circeGeneric_0_14_3 = "io.circe" %% "circe-generic" % props.Circe_0_14_3_Version
