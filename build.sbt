@@ -68,6 +68,10 @@ lazy val extras = (project in file("."))
     extrasCirceJs,
     extrasDoobieToolsCe2Jvm,
     extrasDoobieToolsCe3Jvm,
+    extrasFs2V2TextJvm,
+    extrasFs2V2TextJs,
+    extrasFs2V3TextJvm,
+    extrasFs2V3TextJs,
     extrasRenderJvm,
     extrasRenderJs,
     extrasRenderRefinedJvm,
@@ -170,6 +174,30 @@ lazy val extrasDoobieToolsCe3    = crossSubProject("doobie-tools-ce3", crossProj
   )
 lazy val extrasDoobieToolsCe3Jvm = extrasDoobieToolsCe3.jvm
 
+lazy val extrasFs2V2Text    = crossSubProject("fs2-v2-text", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog ++ List(
+      libs.fs2V2,
+      libs.http4sServerDsl_0_22 % Test,
+    ),
+  )
+lazy val extrasFs2V2TextJvm = extrasFs2V2Text.jvm
+lazy val extrasFs2V2TextJs  = extrasFs2V2Text.js.settings(Test / fork := false)
+
+lazy val extrasFs2V3Text    = crossSubProject("fs2-v3-text", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog ++ List(
+      libs.fs2V3,
+      libs.http4sServer_0_23    % Test,
+      libs.http4sServerDsl_0_23 % Test,
+    ),
+  )
+  .dependsOn(extrasHedgehogCe3 % Test)
+lazy val extrasFs2V3TextJvm = extrasFs2V3Text.jvm
+lazy val extrasFs2V3TextJs  = extrasFs2V3Text.js.settings(Test / fork := false)
+
 lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
@@ -235,7 +263,7 @@ lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatfo
 lazy val extrasRefinementJvm = extrasRefinement.jvm
 lazy val extrasRefinementJs  = extrasRefinement.js.settings(Test / fork := false)
 
-lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
+lazy val extrasScalaIo    = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++= libs.hedgehog,
@@ -263,7 +291,6 @@ lazy val extrasScalaIo = crossSubProject("scala-io", crossProject(JVMPlatform, J
   .dependsOn(
     extrasCore
   )
-
 lazy val extrasScalaIoJvm = extrasScalaIo.jvm
 lazy val extrasScalaIoJs  = extrasScalaIo.js.settings(Test / fork := false)
 
@@ -711,6 +738,12 @@ lazy val props = new {
   val CirceVersion         = "0.14.1"
   val Circe_0_14_3_Version = "0.14.3"
 
+  val Fs2V2Version = "2.5.11"
+  val Fs2V3Version = "3.3.0"
+
+  val Http4s_0_22_Version = "0.22.15"
+  val Http4s_0_23_Version = "0.23.16"
+
   val HedgehogVersion = "0.9.0"
 
   val NewtypeVersion = "0.4.4"
@@ -758,6 +791,15 @@ lazy val libs = new {
 
   lazy val circeLiteral        = "io.circe" %% "circe-literal" % props.CirceVersion
   lazy val circeLiteral_0_14_3 = "io.circe" %% "circe-literal" % props.Circe_0_14_3_Version
+
+  lazy val fs2V2 = "co.fs2" %% "fs2-core" % props.Fs2V2Version
+  lazy val fs2V3 = "co.fs2" %% "fs2-core" % props.Fs2V3Version
+
+  lazy val http4sServer_0_22    = "org.http4s" %% "http4s-server" % props.Http4s_0_22_Version
+  lazy val http4sServerDsl_0_22 = "org.http4s" %% "http4s-dsl"    % props.Http4s_0_22_Version
+
+  lazy val http4sServer_0_23    = "org.http4s" %% "http4s-server" % props.Http4s_0_23_Version
+  lazy val http4sServerDsl_0_23 = "org.http4s" %% "http4s-dsl"    % props.Http4s_0_23_Version
 
   lazy val hedgehogCore   = "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion
   lazy val hedgehogRunner = "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion
