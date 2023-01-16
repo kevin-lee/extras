@@ -35,7 +35,8 @@ object Something {
   implicit val somethingEncoder: Encoder[Something] = deriveEncoder[Something]
     .withFields { a =>
       List(
-        "name" -> Json.fromString(a.name),
+        "doubled-n" -> (a.n * 2).asJson,
+        "name" -> a.name.asJson,
         "some-fixed-value" -> "blah blah".asJson,
       )
     }
