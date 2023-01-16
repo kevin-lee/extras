@@ -1,6 +1,5 @@
 package extras.circe.codecs
 
-import extras.circe.codecs.encoder._
 import hedgehog._
 import hedgehog.runner._
 import io.circe.generic.semiauto._
@@ -31,6 +30,7 @@ object encoderSpec extends Properties {
       }
 
       object Something {
+        import extras.circe.codecs.encoder._
         implicit val somethingEncoder: Encoder[Something] =
           io.circe
             .generic
@@ -74,6 +74,7 @@ object encoderSpec extends Properties {
       }
 
       object Something {
+        import extras.circe.codecs.encoder._
         implicit val somethingEncoder: Encoder[Something] = deriveEncoder[Something]
           .withFields { a =>
             List(
