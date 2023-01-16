@@ -1,0 +1,47 @@
+---
+sidebar_position: 2
+id: 'codecs-encoder'
+title: 'Extension method for Encoder'
+---
+
+## Encoder[A].withFields
+With `withFields`, you can add additional fields to the JSON encoded by an existing `Encoder`.
+
+```scala
+import extras.circe.codecs.encoder._
+
+Encoder[A].withFields { a =>
+    List(
+      "name1" -> a.someValue1.asJson,
+      "name2" -> a.someValue2.asJson
+    )
+  }
+```
+
+
+e.g.)
+
+```scala mdoc:reset-object
+import io.circe._
+import io.circe.syntax._
+import io.circe.generic.semiauto._
+import extras.circe.codecs.encoder._
+
+final case class Something(n: Int) {
+  def name: String = "Foo"
+}
+
+object Something {
+  implicit val somethingEncoder: Encoder[Something] = deriveEncoder[Something]
+    .withFields { a =>
+      List(
+        "name" -> Json.fromString(a.name),
+        "some-fixed-value" -> "blah blah".asJson,
+      )
+    }
+}
+
+val something = Something(123)
+something.asJson
+something.asJson.spaces2
+```

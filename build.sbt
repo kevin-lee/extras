@@ -380,7 +380,7 @@ lazy val docs = (project in file("docs-gen-tmp/docs"))
   )
   .settings(noPublish)
 
-lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-core"))
+lazy val docsExtrasRender = (project in file("docs-gen-tmp/extras-render"))
   .enablePlugins(MdocPlugin)
   .settings(
     name := "docs-extras-render",
@@ -586,6 +586,82 @@ lazy val docsExtrasTypeInfoScala3 = (project in file("docs-gen-tmp/extras-type-i
   )
   .settings(noPublish)
 
+lazy val docsExtrasCirce = (project in file("docs-gen-tmp/extras-circe"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-circe",
+    mdocIn := file("docs/extras-circe"),
+    mdocOut := file("generated-docs/docs/extras-circe"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-circe" % latestVersion,
+        libs.circeCore,
+        libs.circeParser,
+        libs.circeGeneric,
+        libs.circeLiteral,
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasFs2 = (project in file("docs-gen-tmp/extras-fs2"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-fs2",
+    mdocIn := file("docs/extras-fs2/common"),
+    mdocOut := file("generated-docs/docs/extras-fs2"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasFs2V2Text = (project in file("docs-gen-tmp/extras-fs2/v2/text"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-extras-fs2-v2-text",
+    mdocIn := file("docs/extras-extras-fs2/v2/text"),
+    mdocOut := file("generated-docs/docs/extras-fs2/v2/text"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-fs2-v2-text" % latestVersion
+      )
+    } ++ List(
+      libs.newtype,
+      libs.refined,
+      libs.hedgehogCore,
+      libs.hedgehogRunner,
+    ),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasFs2V3Text = (project in file("docs-gen-tmp/extras-fs2/v3/text"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    scalaVersion := "3.1.3",
+    name := "docs-extras-extras-fs2-v3-text",
+    mdocIn := file("docs/extras-extras-fs2/v3/text"),
+    mdocOut := file("generated-docs/docs/extras-fs2/v3/text"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-fs2-v3-text" % latestVersion
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
 // scalafmt: off
 
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
@@ -693,7 +769,7 @@ addCommandAlias(
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasReflects/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docs/mdoc",
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
