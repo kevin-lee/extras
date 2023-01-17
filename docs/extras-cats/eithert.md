@@ -22,7 +22,7 @@ fab.eitherT // EitherT[F, A, B]
 fab.t // EitherT[F, A, B]
 ```
 
-```scala mdoc:reset-object
+```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
 
@@ -61,7 +61,7 @@ When you have `fb: F[B]`, instead of `EitherT.right[A](fb)`, you can simply do
 fb.rightT[A] // EitherT[F, A, B]
 ```
 
-```scala mdoc:reset-object
+```scala mdoc:reset-object:height=4
 import cats.effect._
 
 import extras.cats.syntax.all._
@@ -80,7 +80,7 @@ When you have `fa: F[A]`, instead of `EitherT.left[B](fa)`, you can simply do
 fa.leftT[B] // EitherT[F, A, B]
 ```
 
-```scala mdoc:reset-object
+```scala mdoc:reset-object:height=4
 import cats.effect._
 
 import extras.cats.syntax.all._

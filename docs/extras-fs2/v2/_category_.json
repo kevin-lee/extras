@@ -1,0 +1,10 @@
+{
+  "label": "v2",
+  "position": 1,
+  "collapsible": false,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "description": "Extras extras-fs2-text For FS2 v2"
+  }
+}
