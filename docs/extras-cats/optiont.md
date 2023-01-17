@@ -22,7 +22,7 @@ foa.optionT // OptionT[F, A]
 foa.t // OptionT[F, A]
 ```
 
-```scala mdoc:reset-object
+```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
 
@@ -61,7 +61,7 @@ When you have `fa: F[A]`, instead of `OptionT.liftF(fa)`, you can simply do
 fa.someT // OptionT[F, A]
 ```
 
-```scala mdoc:reset-object
+```scala mdoc:reset-object:height=4
 import cats.effect._
 
 import extras.cats.syntax.all._
