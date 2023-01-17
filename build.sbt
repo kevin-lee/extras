@@ -632,7 +632,8 @@ lazy val docsExtrasFs2V2 = (project in file("docs-gen-tmp/extras-fs2/v2"))
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-fs2-v2-text" % latestVersion
+        "io.kevinlee" %% "extras-fs2-v2-text" % latestVersion,
+        libs.http4sServerDsl_0_22,
       )
     },
     mdocVariables := createMdocVariables(),
@@ -650,7 +651,8 @@ lazy val docsExtrasFs2V3 = (project in file("docs-gen-tmp/extras-fs2/v3"))
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-fs2-v3-text" % latestVersion
+        "io.kevinlee" %% "extras-fs2-v3-text" % latestVersion,
+        libs.http4sServerDsl_0_23,
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables := createMdocVariables(),
