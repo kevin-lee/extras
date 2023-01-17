@@ -621,36 +621,31 @@ lazy val docsExtrasFs2 = (project in file("docs-gen-tmp/extras-fs2"))
   )
   .settings(noPublish)
 
-lazy val docsExtrasFs2V2Text = (project in file("docs-gen-tmp/extras-fs2/v2/text"))
+lazy val docsExtrasFs2V2 = (project in file("docs-gen-tmp/extras-fs2/v2"))
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.Scala2Version,
-    name := "docs-extras-extras-fs2-v2-text",
-    mdocIn := file("docs/extras-extras-fs2/v2/text"),
-    mdocOut := file("generated-docs/docs/extras-fs2/v2/text"),
+    name := "docs-extras-fs2-v2",
+    mdocIn := file("docs/extras-fs2/v2"),
+    mdocOut := file("generated-docs/docs/extras-fs2/v2"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
         "io.kevinlee" %% "extras-fs2-v2-text" % latestVersion
       )
-    } ++ List(
-      libs.newtype,
-      libs.refined,
-      libs.hedgehogCore,
-      libs.hedgehogRunner,
-    ),
+    },
     mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
-lazy val docsExtrasFs2V3Text = (project in file("docs-gen-tmp/extras-fs2/v3/text"))
+lazy val docsExtrasFs2V3 = (project in file("docs-gen-tmp/extras-fs2/v3"))
   .enablePlugins(MdocPlugin)
   .settings(
-    scalaVersion := "3.1.3",
-    name := "docs-extras-extras-fs2-v3-text",
-    mdocIn := file("docs/extras-extras-fs2/v3/text"),
-    mdocOut := file("generated-docs/docs/extras-fs2/v3/text"),
+    scalaVersion := props.Scala2Version,
+    name := "docs-extras-fs2-v3",
+    mdocIn := file("docs/extras-fs2/v3"),
+    mdocOut := file("generated-docs/docs/extras-fs2/v3"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -769,7 +764,7 @@ addCommandAlias(
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasFs2/mdoc; docsExtrasFs2V2/mdoc; docsExtrasFs2V3/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
