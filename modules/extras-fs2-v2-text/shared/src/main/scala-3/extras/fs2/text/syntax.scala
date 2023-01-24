@@ -1,6 +1,6 @@
 package extras.fs2.text
 
-import cats.effect.Sync
+import fs2.Stream.Compiler
 import fs2.{text, Stream}
 
 /** @author Kevin Lee
@@ -8,7 +8,7 @@ import fs2.{text, Stream}
   */
 object syntax {
   extension [F[*]](byteStream: Stream[F, Byte]) {
-    def utf8String(using Sync[F]): F[String] =
+    def utf8String(using Compiler[F, F]): F[String] =
       byteStream
         .through(text.utf8Decode)
         .through(text.lines)
