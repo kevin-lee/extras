@@ -1,6 +1,6 @@
 package extras.fs2.text
 
-import cats.effect.Sync
+import fs2.Stream.Compiler
 import fs2.{text, Stream}
 
 /** @author Kevin Lee
@@ -9,7 +9,7 @@ import fs2.{text, Stream}
 object syntax {
 
   implicit class byteStreamOps[F[*]](private val byteStream: Stream[F, Byte]) {
-    def utf8String(implicit sync: Sync[F]): F[String] =
+    def utf8String(implicit compiler: Compiler[F, F]): F[String] =
       byteStream
         .through(text.utf8Decode)
         .through(text.lines)
