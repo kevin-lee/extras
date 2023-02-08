@@ -94,6 +94,8 @@ lazy val extras = (project in file("."))
     extrasHedgehogCirceJs,
     extrasHedgehogCatsEffect3Jvm,
     extrasHedgehogCatsEffect3Js,
+    extrasTestingToolsJvm,
+    extrasTestingToolsJs,
   )
 
 lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
@@ -365,6 +367,19 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
 
 lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCe3.jvm
 lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / fork := false)
+
+lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= libs.hedgehog,
+    libraryDependencies :=
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    Test / console / scalacOptions := List.empty,
+  )
+  .dependsOn(extrasCore)
+
+lazy val extrasTestingToolsJvm = extrasTestingTools.jvm
+lazy val extrasTestingToolsJs  = extrasTestingTools.js.settings(Test / fork := false)
 
 lazy val docs = (project in file("docs-gen-tmp/docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
@@ -908,8 +923,10 @@ lazy val libs = new {
 
   lazy val embeddedPostgres = "io.zonky.test" % "embedded-postgres" % props.EmbeddedPostgresVersion
 
-  lazy val effectieCe2 = "io.kevinlee" %% "effectie-cats-effect2" % props.EffectieVersion
-  lazy val effectieCe3 = "io.kevinlee" %% "effectie-cats-effect3" % props.EffectieVersion
+  lazy val effectieCore   = "io.kevinlee" %% "effectie-core"         % props.EffectieVersion
+  lazy val effectieSyntax = "io.kevinlee" %% "effectie-syntax"       % props.EffectieVersion
+  lazy val effectieCe2    = "io.kevinlee" %% "effectie-cats-effect2" % props.EffectieVersion
+  lazy val effectieCe3    = "io.kevinlee" %% "effectie-cats-effect3" % props.EffectieVersion
 }
 
 def isScala3(scalaVersion: String): Boolean = scalaVersion.startsWith("3.")
