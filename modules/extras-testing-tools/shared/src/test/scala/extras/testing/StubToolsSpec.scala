@@ -33,7 +33,7 @@ object StubToolsSpec extends Properties {
     Try(testType.foo(1))
       .fold(
         {
-          case err: StubTools.MissingStubException =>
+          case err: StubTools.MissingStubException[_] =>
             val message = err.getMessage
             message.split("\n").take(3).toList match {
               case first :: second :: third :: Nil =>

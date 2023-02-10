@@ -96,6 +96,8 @@ lazy val extras = (project in file("."))
     extrasHedgehogCatsEffect3Js,
     extrasTestingToolsJvm,
     extrasTestingToolsJs,
+    extrasTestingToolsCatsJvm,
+    extrasTestingToolsCatsJs,
   )
 
 lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
@@ -380,6 +382,42 @@ lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMP
 
 lazy val extrasTestingToolsJvm = extrasTestingTools.jvm
 lazy val extrasTestingToolsJs  = extrasTestingTools.js.settings(Test / fork := false)
+
+lazy val extrasTestingToolsCats = crossSubProject("testing-tools-cats", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= List(
+      libs.cats,
+      libs.catsEffect % Test,
+    ) ++ libs.hedgehog,
+    libraryDependencies :=
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    Compile / unmanagedSourceDirectories ++= {
+      val sharedSourceDir = (baseDirectory.value / ".." / "shared").getCanonicalFile / "src" / "main"
+      if (isScala3(scalaVersion.value))
+        Seq(
+          sharedSourceDir / "scala-2.13_3"
+        )
+      else if (scalaVersion.value.startsWith("2.13"))
+        Seq(
+          sharedSourceDir / "scala-2.13_3"
+        )
+      else if (scalaVersion.value.startsWith("2.12"))
+        Seq(
+          sharedSourceDir / "scala-2.12"
+        )
+      else
+        Seq.empty
+    },
+    Test / console / scalacOptions := List.empty,
+  )
+  .dependsOn(
+    extrasCore,
+    extrasTestingTools,
+  )
+
+lazy val extrasTestingToolsCatsJvm = extrasTestingToolsCats.jvm
+lazy val extrasTestingToolsCatsJs  = extrasTestingToolsCats.js.settings(Test / fork := false)
 
 lazy val docs = (project in file("docs-gen-tmp/docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
