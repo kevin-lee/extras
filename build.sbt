@@ -888,7 +888,7 @@ lazy val props = new {
 
   val EmbeddedPostgresVersion = "2.0.1"
 
-  val EffectieVersion = "2.0.0-beta4"
+  val EffectieVersion = "2.0.0-beta5"
 
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
