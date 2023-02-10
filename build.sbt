@@ -879,6 +879,8 @@ lazy val props = new {
 
   val HedgehogVersion = "0.9.0"
 
+  val HedgehogExtraVersion = "0.3.0"
+
   val NewtypeVersion = "0.4.4"
 
   val RefinedVersion       = "0.9.27"
@@ -937,6 +939,9 @@ lazy val libs = new {
   lazy val hedgehogCore   = "qa.hedgehog" %% "hedgehog-core"   % props.HedgehogVersion
   lazy val hedgehogRunner = "qa.hedgehog" %% "hedgehog-runner" % props.HedgehogVersion
   lazy val hedgehogSbt    = "qa.hedgehog" %% "hedgehog-sbt"    % props.HedgehogVersion
+
+  lazy val hedgehogExtraCore    = "io.kevinlee" %% "hedgehog-extra-core"    % props.HedgehogExtraVersion
+  lazy val hedgehogExtraRefined = "io.kevinlee" %% "hedgehog-extra-refined" % props.HedgehogExtraVersion
 
   lazy val hedgehog = List(
     hedgehogCore,
