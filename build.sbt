@@ -103,7 +103,6 @@ lazy val extras = (project in file("."))
 lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasCoreJvm = extrasCore.jvm
@@ -112,21 +111,20 @@ lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 lazy val extrasCirce    = crossSubProject("circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog ++
-      (if (isScala3(scalaVersion.value))
-         List(
-           libs.circeCore_0_14_3,
-           libs.circeParser_0_14_3  % Test,
-           libs.circeGeneric_0_14_3 % Test,
-           libs.circeLiteral_0_14_3 % Test,
-         )
-       else
-         List(
-           libs.circeCore,
-           libs.circeParser         % Test,
-           libs.circeGeneric        % Test,
-           libs.circeLiteral        % Test,
-         )),
+    libraryDependencies ++= (if (isScala3(scalaVersion.value))
+                               List(
+                                 libs.circeCore_0_14_3,
+                                 libs.circeParser_0_14_3  % Test,
+                                 libs.circeGeneric_0_14_3 % Test,
+                                 libs.circeLiteral_0_14_3 % Test,
+                               )
+                             else
+                               List(
+                                 libs.circeCore,
+                                 libs.circeParser         % Test,
+                                 libs.circeGeneric        % Test,
+                                 libs.circeLiteral        % Test,
+                               )),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasCirceJvm = extrasCirce.jvm
@@ -148,8 +146,7 @@ lazy val extrasDoobieToolsCe2    = crossSubProject("doobie-tools-ce2", crossProj
            List(
              libs.newtype          % Test,
              libs.doobieCe2Refined % Test,
-           )) ++
-        libs.hedgehog,
+           )),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore)
@@ -168,8 +165,7 @@ lazy val extrasDoobieToolsCe3    = crossSubProject("doobie-tools-ce3", crossProj
         (if (isScala3(scalaVersion.value))
            List.empty
          else
-           List(libs.newtype)) ++
-        libs.hedgehog,
+           List(libs.newtype)),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(
@@ -181,7 +177,7 @@ lazy val extrasDoobieToolsCe3Jvm = extrasDoobieToolsCe3.jvm
 lazy val extrasFs2V2Text    = crossSubProject("fs2-v2-text", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog ++ List(
+    libraryDependencies ++= List(
       libs.fs2V2,
       libs.http4sServerDsl_0_22 % Test,
     ),
@@ -192,7 +188,7 @@ lazy val extrasFs2V2TextJs  = extrasFs2V2Text.js.settings(Test / fork := false)
 lazy val extrasFs2V3Text    = crossSubProject("fs2-v3-text", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog ++ List(
+    libraryDependencies ++= List(
       libs.fs2V3,
       libs.http4sServer_0_23    % Test,
       libs.http4sServerDsl_0_23 % Test,
@@ -213,7 +209,7 @@ lazy val extrasRenderJs  = extrasRender.js.settings(Test / fork := false)
 lazy val extrasRenderRefined    = crossSubProject("render-refined", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.Scala2Versions,
-    libraryDependencies ++= libs.hedgehog ++ List(
+    libraryDependencies ++= List(
       libs.refined,
       libs.newtype  % Test,
       libs.cats     % Test,
@@ -229,11 +225,10 @@ lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatfor
   .settings(
 //    crossScalaVersions  := props.Scala2Versions,
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog ++
-      (
-        if (isScala3(scalaVersion.value)) List.empty
-        else List(libs.scalaReflect(scalaVersion.value))
-      ),
+    libraryDependencies ++= (
+      if (isScala3(scalaVersion.value)) List.empty
+      else List(libs.scalaReflect(scalaVersion.value))
+    ),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest)
@@ -243,11 +238,10 @@ lazy val extrasReflectsJs  = extrasReflects.js.settings(Test / fork := false)
 lazy val extrasTypeInfo    = crossSubProject("type-info", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog ++
-      (
-        if (isScala3(scalaVersion.value)) List.empty
-        else List(libs.scalaReflect(scalaVersion.value))
-      ),
+    libraryDependencies ++= (
+      if (isScala3(scalaVersion.value)) List.empty
+      else List(libs.scalaReflect(scalaVersion.value))
+    ),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
   .dependsOn(extrasCore % props.IncludeTest)
@@ -257,7 +251,7 @@ lazy val extrasTypeInfoJs  = extrasTypeInfo.js.settings(Test / fork := false)
 lazy val extrasRefinement = crossSubProject("refinement", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.Scala2Versions,
-    libraryDependencies ++= libs.hedgehog ++ List(
+    libraryDependencies ++= List(
       libs.newtype.cross(CrossVersion.for3Use2_13)
     ) ++ List(libs.cats, libs.refined.cross(CrossVersion.for3Use2_13)),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
@@ -270,7 +264,6 @@ lazy val extrasRefinementJs  = extrasRefinement.js.settings(Test / fork := false
 lazy val extrasScalaIo    = crossSubProject("scala-io", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
       val sharedSourceDir = baseDirectory.value.getParentFile / "shared/src/main"
@@ -360,7 +353,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
       libs.libCatsEffectTestKit.excludeAll("org.scalacheck"),
       libs.hedgehogCore,
       libs.hedgehogRunner,
-    ) ++ libs.hedgehog,
+    ),
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Test / console / scalacOptions := List.empty,
@@ -373,7 +366,6 @@ lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / for
 lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
-    libraryDependencies ++= libs.hedgehog,
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Test / console / scalacOptions := List.empty,
@@ -389,7 +381,7 @@ lazy val extrasTestingToolsCats = crossSubProject("testing-tools-cats", crossPro
     libraryDependencies ++= List(
       libs.cats,
       libs.catsEffect % Test,
-    ) ++ libs.hedgehog,
+    ),
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Compile / unmanagedSourceDirectories ++= {
