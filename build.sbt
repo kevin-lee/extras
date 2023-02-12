@@ -483,36 +483,73 @@ lazy val docsExtrasConcurrent = (project in file("docs-gen-tmp/extras-concurrent
   )
   .settings(noPublish)
 
-lazy val docsExtrasHedgehogCe3 = (project in file("docs-gen-tmp/extras-hedgehog-ce3"))
+lazy val docsExtrasDoobieTools = (project in file("docs-gen-tmp/extras-doobie-tools"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name := "docs-extras-hedgehog-ce3",
-    mdocIn := file("docs/extras-hedgehog-ce3"),
-    mdocOut := file("generated-docs/docs/extras-hedgehog-ce3"),
-    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-hedgehog-ce3"),
+    name := "docs-extras-doobie-tools",
+    mdocIn := file("docs/extras-doobie-tools/common"),
+    mdocOut := file("generated-docs/docs/extras-doobie-tools"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-doobie-tools"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasDoobieToolsCe2 = (project in file("docs-gen-tmp/extras-doobie-tools-ce2"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    name := "docs-extras-doobie-tools-ce2",
+    mdocIn := file("docs/extras-doobie-tools/ce2"),
+    mdocOut := file("generated-docs/docs/extras-doobie-tools/ce2"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-doobie-tools" / "ce2"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-hedgehog-ce3" % latestVersion
+        "io.kevinlee" %% "extras-doobie-tools-ce2" % latestVersion,
+        libs.doobieCe2Core,
+        libs.embeddedPostgres,
+        libs.effectieCe2,
       )
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
     mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
 
-lazy val docsExtrasHedgehogCirce = (project in file("docs-gen-tmp/extras-hedgehog-circe"))
+lazy val docsExtrasDoobieToolsCe3 = (project in file("docs-gen-tmp/extras-doobie-tools-ce3"))
   .enablePlugins(MdocPlugin)
   .settings(
-    name := "docs-extras-hedgehog-circe",
-    mdocIn := file("docs/extras-hedgehog-circe"),
-    mdocOut := file("generated-docs/docs/extras-hedgehog-circe"),
-    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-hedgehog-circe"),
+    name := "docs-extras-doobie-tools-ce3",
+    mdocIn := file("docs/extras-doobie-tools/ce3"),
+    mdocOut := file("generated-docs/docs/extras-doobie-tools/ce3"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-doobie-tools" / "ce3"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-hedgehog-circe" % latestVersion
+        "io.kevinlee" %% "extras-doobie-tools-ce3" % latestVersion,
+        libs.doobieCe3Core,
+        libs.embeddedPostgres,
+        libs.effectieCe3,
+      )
+    } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+lazy val docsExtrasHedgehog = (project in file("docs-gen-tmp/extras-hedgehog"))
+  .enablePlugins(MdocPlugin)
+  .settings(
+    name := "docs-extras-hedgehog",
+    mdocIn := file("docs/extras-hedgehog"),
+    mdocOut := file("generated-docs/docs/extras-hedgehog"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-hedgehog"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-hedgehog-ce3"   % latestVersion,
+        "io.kevinlee" %% "extras-hedgehog-circe" % latestVersion,
       )
     } ++ List(
       libs.hedgehogCore,
@@ -686,7 +723,7 @@ lazy val docsExtrasFs2V2 = (project in file("docs-gen-tmp/extras-fs2/v2"))
     name := "docs-extras-fs2-v2",
     mdocIn := file("docs/extras-fs2/v2"),
     mdocOut := file("generated-docs/docs/extras-fs2/v2"),
-    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2/v2"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2" / "v2"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -706,7 +743,7 @@ lazy val docsExtrasFs2V3 = (project in file("docs-gen-tmp/extras-fs2/v3"))
     name := "docs-extras-fs2-v3",
     mdocIn := file("docs/extras-fs2/v3"),
     mdocOut := file("generated-docs/docs/extras-fs2/v3"),
-    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2/v3"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2" / "v3"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
@@ -826,7 +863,7 @@ addCommandAlias(
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehogCe3/mdoc; docsExtrasHedgehogCirce/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasFs2/mdoc; docsExtrasFs2V2/mdoc; docsExtrasFs2V3/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
+  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehog/mdoc; docsExtrasDoobieTools/mdoc; docsExtrasDoobieToolsCe2/mdoc; docsExtrasDoobieToolsCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasFs2/mdoc; docsExtrasFs2V2/mdoc; docsExtrasFs2V3/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
 )
 
 lazy val props = new {
