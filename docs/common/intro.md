@@ -39,22 +39,19 @@ Show [**all `extras` versions
   ```scala
   "io.kevinlee" %% "extras-cats" % "@VERSION@"
   ```
+* [extras-circe](extras-circe)
+  ```scala
+  "io.kevinlee" %% "extras-circe" % "@VERSION@"
+  ```
 * [extras-scala-io](extras-scala-io)
   ```scala
   "io.kevinlee" %% "extras-scala-io" % "@VERSION@"
   ```
-* [extras-concurrent](extras-concurrent)
-  ```scala
-  "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
-  ```
-  ```scala
-  "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
-  ```
-* [extras-hedgehog-ce3](extras-hedgehog-ce3)
+* [extras-hedgehog-ce3](extras-hedgehog/extras-hedgehog-ce3)
   ```scala
   "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
   ```
-* [extras-hedgehog-circe](extras-hedgehog-circe)
+* [extras-hedgehog-circe](extras-hedgehog/extras-hedgehog-circe)
   ```scala
   "io.kevinlee" %% "extras-hedgehog-circe" % "@VERSION@" % Test
   ```
@@ -65,6 +62,27 @@ Show [**all `extras` versions
 * [extras-type-info](extras-type-info)
   ```scala
   "io.kevinlee" %% "extras-type-info" % "@VERSION@"
+  ```
+* [extras-doobie-tools](extras-doobie-tools)
+  ```scala
+  "io.kevinlee" %% "extras-doobie-tools-ce2" % "@VERSION@"
+  ```
+  ```scala
+  "io.kevinlee" %% "extras-doobie-tools-ce3" % "@VERSION@"
+  ```
+* extras-testing-tools
+  ```scala
+  "io.kevinlee" %% "extras-testing" % "@VERSION@"
+  ```
+  ```scala
+  "io.kevinlee" %% "extras-testing-cats" % "@VERSION@"
+  ```
+* [extras-concurrent](extras-concurrent)
+  ```scala
+  "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
+  ```
+  ```scala
+  "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
   ```
 
 * ~~[extras-reflects](extras-reflects) (n/a to Scala 3)~~ - **Deprecated**
