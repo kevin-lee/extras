@@ -72,10 +72,10 @@ Show [**all `extras` versions
   ```
 * extras-testing-tools
   ```scala
-  "io.kevinlee" %% "extras-testing" % "@VERSION@"
+  "io.kevinlee" %% "extras-testing-tools" % "@VERSION@"
   ```
   ```scala
-  "io.kevinlee" %% "extras-testing-cats" % "@VERSION@"
+  "io.kevinlee" %% "extras-testing-tools-cats" % "@VERSION@"
   ```
 * [extras-concurrent](extras-concurrent)
   ```scala
