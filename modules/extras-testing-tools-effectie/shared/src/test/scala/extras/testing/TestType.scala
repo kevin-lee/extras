@@ -1,0 +1,22 @@
+package extras.testing
+
+import cats.Monad
+import cats.syntax.all._
+import effectie.core.Fx
+
+trait TestType[F[*]] {
+  def foo(n: Int): F[Int]
+  def bar(n: Int): F[Int]
+}
+
+object TestTypeStub {
+  def apply[F[*]: Fx: Monad](f4Foo: => Option[Int => Int], f4Bar: => Option[Int => F[Int]]): TestType[F] =
+    new TestType[F] {
+
+      override def foo(n: Int): F[Int] =
+        StubToolsFx.stub(f4Foo).map(_(n))
+
+      override def bar(n: Int): F[Int] =
+        StubToolsFx.stub(f4Bar).flatMap(_(n))
+    }
+}
