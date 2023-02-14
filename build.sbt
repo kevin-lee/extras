@@ -98,6 +98,8 @@ lazy val extras = (project in file("."))
     extrasTestingToolsJs,
     extrasTestingToolsCatsJvm,
     extrasTestingToolsCatsJs,
+    extrasTestingToolsEffectieJvm,
+    extrasTestingToolsEffectieJs,
   )
 
 lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPlatform))
@@ -410,6 +412,47 @@ lazy val extrasTestingToolsCats = crossSubProject("testing-tools-cats", crossPro
 
 lazy val extrasTestingToolsCatsJvm = extrasTestingToolsCats.jvm
 lazy val extrasTestingToolsCatsJs  = extrasTestingToolsCats.js.settings(Test / fork := false)
+
+lazy val extrasTestingToolsEffectie = crossSubProject("testing-tools-effectie", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= List(
+      libs.cats,
+      libs.effectieCore,
+      libs.effectieSyntax % Test,
+      libs.effectieCe2    % Test,
+      libs.catsEffect     % Test,
+    ),
+    libraryDependencies :=
+      removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    Compile / unmanagedSourceDirectories ++= {
+      val sharedSourceDir = (baseDirectory.value / ".." / "shared").getCanonicalFile / "src" / "main"
+      if (isScala3(scalaVersion.value))
+        Seq(
+          sharedSourceDir / "scala-2.13_3"
+        )
+      else if (scalaVersion.value.startsWith("2.13"))
+        Seq(
+          sharedSourceDir / "scala-2.13_3"
+        )
+      else if (scalaVersion.value.startsWith("2.12"))
+        Seq(
+          sharedSourceDir / "scala-2.12"
+        )
+      else
+        Seq.empty
+    },
+    Test / console / scalacOptions := List.empty,
+  )
+  .dependsOn(
+    extrasCore,
+    extrasTestingTools,
+    extrasConcurrent        % Test,
+    extrasConcurrentTesting % Test,
+  )
+
+lazy val extrasTestingToolsEffectieJvm = extrasTestingToolsEffectie.jvm
+lazy val extrasTestingToolsEffectieJs  = extrasTestingToolsEffectie.js.settings(Test / fork := false)
 
 lazy val docs = (project in file("docs-gen-tmp/docs"))
   .enablePlugins(MdocPlugin, DocusaurPlugin)
