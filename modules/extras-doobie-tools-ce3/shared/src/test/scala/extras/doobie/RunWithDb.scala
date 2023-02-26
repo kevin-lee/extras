@@ -19,7 +19,7 @@ import java.nio.file.Files
   */
 trait RunWithDb {
 
-  def propertyWithDb[F[*]](
+  def propertyWithDb(
     name: String,
     stringToProperty: String => Property,
   ): Test =
