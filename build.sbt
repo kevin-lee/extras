@@ -50,7 +50,7 @@ ThisBuild / scalafixScalaBinaryVersion := {
   newVersion
 }
 
-ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.2.12"
+ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.2.15"
 
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)

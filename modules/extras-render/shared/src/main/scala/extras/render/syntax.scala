@@ -21,6 +21,7 @@ object syntax extends syntax {
   }
 
   final class RenderSyntaxIterable[A](private val as: Iterable[A]) extends AnyVal {
+    /* WARNING: This method uses mutable data structure internally for performance */
     @SuppressWarnings(
       Array(
         "org.wartremover.warts.Overloading",
@@ -46,13 +47,16 @@ object syntax extends syntax {
           builder
 
       val iterator = as.iterator
-      if (iterator.hasNext) {
+
+      val theFinalBuilder = if (iterator.hasNext) {
         builder.append(R.render(iterator.next()))
         loop(iterator, sep, builder)
+      } else {
+        builder
       }
 
-      if (end.nonEmpty) builder.append(end)
-      builder.result()
+      if (end.nonEmpty) theFinalBuilder.append(end)
+      theFinalBuilder.result()
     }
 
     @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
