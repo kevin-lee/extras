@@ -5,13 +5,14 @@ import cats.syntax.all._
 import effectie.core.FxCtor
 import extras.testing.StubTools.MissingStubException
 import extras.testing.StubToolsFx.StubToolsFxPartiallyApplied
+import extras.testing.StubToolsFx.stubToolsFxPartiallyApplied
 
 /** @author Kevin Lee
   * @since 2023-02-09
   */
 trait StubToolsFx {
-  def stub[F[*]]: StubToolsFx.StubToolsFxPartiallyApplied[F] =
-    new StubToolsFxPartiallyApplied[F]
+  final def stub[F[*]]: StubToolsFx.StubToolsFxPartiallyApplied[F] =
+    stubToolsFxPartiallyApplied.asInstanceOf[StubToolsFxPartiallyApplied[F]] // scalafix:ok DisableSyntax.asInstanceOf
 }
 object StubToolsFx extends StubToolsFx with StubTools {
   implicit def missingStubException$ : MissingStubException[StubToolsFx] = super.missingStubException[StubToolsFx]
@@ -25,5 +26,7 @@ object StubToolsFx extends StubToolsFx with StubTools {
       F.pureOrError(f).flatMap(F.fromOption[A](_)(whenMissing))
 
   }
+
+  private[StubToolsFx] val stubToolsFxPartiallyApplied = new StubToolsFxPartiallyApplied
 
 }

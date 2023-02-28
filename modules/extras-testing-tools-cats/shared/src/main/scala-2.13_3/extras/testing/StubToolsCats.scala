@@ -3,14 +3,15 @@ package extras.testing
 import cats.MonadThrow
 import cats.syntax.all._
 import extras.testing.StubTools.MissingStubException
-import extras.testing.StubToolsCats.StubToolsCatsPartiallyApplied
+import extras.testing.StubToolsCats.{stubToolsCatsPartiallyApplied, StubToolsCatsPartiallyApplied}
 
 /** @author Kevin Lee
   * @since 2023-02-09
   */
 trait StubToolsCats {
-  def stub[F[*]]: StubToolsCats.StubToolsCatsPartiallyApplied[F] =
-    new StubToolsCatsPartiallyApplied[F]
+  final def stub[F[*]]: StubToolsCats.StubToolsCatsPartiallyApplied[F] =
+    stubToolsCatsPartiallyApplied
+      .asInstanceOf[StubToolsCatsPartiallyApplied[F]] // scalafix:ok DisableSyntax.asInstanceOf
 }
 object StubToolsCats extends StubToolsCats with StubTools {
   implicit def missingStubException$ : MissingStubException[StubToolsCats] = super.missingStubException[StubToolsCats]
@@ -24,5 +25,7 @@ object StubToolsCats extends StubToolsCats with StubTools {
       F.catchNonFatal(f).flatMap(F.fromOption[A](_, whenMissing))
 
   }
+
+  private[StubToolsCats] val stubToolsCatsPartiallyApplied = new StubToolsCatsPartiallyApplied
 
 }
