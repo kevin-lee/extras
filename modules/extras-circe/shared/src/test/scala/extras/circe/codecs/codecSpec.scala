@@ -1,16 +1,19 @@
 package extras.circe.codecs
 
-import cats.Show
 import cats.syntax.all._
+import extras.circe.codecs.encoder.NamingConflictError
 import hedgehog._
 import hedgehog.runner._
-import io.circe.Decoder
+import io.circe._
 import io.circe.generic.semiauto._
 
+import scala.reflect.ClassTag
+import scala.util.Try
+
 /** @author Kevin Lee
-  * @since 2023-03-05
+  * @since 2023-03-06
   */
-object decoderSpec extends Properties {
+object codecSpec extends Properties {
   override def tests: List[Test] = List(
     property("test rename all fields", testRenameAllFields),
     property("test rename some fields", testRenameSomeFields),
@@ -29,19 +32,18 @@ object decoderSpec extends Properties {
       final case class Something(n: Int, s: String, bd: BigDecimal)
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
             "n"  -> "productNumber",
             "s"  -> "name",
             "bd" -> "price",
           )
       }
 
-      val expected = Something(n, s, bd)
-
-      val input = {
+      val expected     = Something(n, s, bd)
+      val expectedJson = {
         import io.circe.literal._
         json"""{
                  "productNumber":$n,
@@ -49,9 +51,21 @@ object decoderSpec extends Properties {
                  "price": $bd
                }"""
       }
+
+      import io.circe.syntax._
+      val encoded = expected.asJson
+
+      val encodingResult = encoded ==== expectedJson
+
       import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) => actual ==== expected
+      decode[Something](encoded.noSpaces) match {
+        case Right(actual) =>
+          Result.all(
+            List(
+              encodingResult,
+              actual ==== expected,
+            )
+          )
         case Left(err) => Result.failure.log(s"Decoding JSON to Something failed with error: ${err.getMessage}")
       }
 
@@ -66,17 +80,17 @@ object decoderSpec extends Properties {
       final case class Something(n: Int, s: String, bd: BigDecimal)
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
             "s" -> "name"
           )
       }
 
       val expected = Something(n, s, bd)
 
-      val input = {
+      val expectedJson = {
         import io.circe.literal._
         json"""{
                  "n":$n,
@@ -84,9 +98,21 @@ object decoderSpec extends Properties {
                  "bd": $bd
                }"""
       }
+
+      import io.circe.syntax._
+      val encoded = expected.asJson
+
+      val encodingResult = encoded ==== expectedJson
+
       import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) => actual ==== expected
+      decode[Something](encoded.noSpaces) match {
+        case Right(actual) =>
+          Result.all(
+            List(
+              encodingResult,
+              actual ==== expected,
+            )
+          )
         case Left(err) => Result.failure.log(s"Decoding JSON to Something failed with error: ${err.getMessage}")
       }
     }
@@ -100,10 +126,10 @@ object decoderSpec extends Properties {
       final case class Something(n: Int, s: String, bd: BigDecimal)
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
             "a" -> "productNumber",
             "b" -> "name",
             "c" -> "price",
@@ -112,7 +138,7 @@ object decoderSpec extends Properties {
 
       val expected = Something(n, s, bd)
 
-      val input = {
+      val expectedJson = {
         import io.circe.literal._
         json"""{
                  "n":$n,
@@ -121,9 +147,20 @@ object decoderSpec extends Properties {
                }"""
       }
 
+      import io.circe.syntax._
+      val encoded = expected.asJson
+
+      val encodingResult = encoded ==== expectedJson
+
       import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) => actual ==== expected
+      decode[Something](encoded.noSpaces) match {
+        case Right(actual) =>
+          Result.all(
+            List(
+              encodingResult,
+              actual ==== expected,
+            )
+          )
         case Left(err) => Result.failure.log(s"Decoding JSON to Something failed with error: ${err.getMessage}")
       }
     }
@@ -137,10 +174,10 @@ object decoderSpec extends Properties {
       final case class Something(n: Int, bd: BigDecimal, code: String)
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
             "n"  -> "productNumber",
             "s"  -> "name",
             "bd" -> "price",
@@ -149,7 +186,7 @@ object decoderSpec extends Properties {
 
       val expected = Something(n, bd, s)
 
-      val input = {
+      val expectedJson = {
         import io.circe.literal._
         json"""{
                  "productNumber":$n,
@@ -158,9 +195,20 @@ object decoderSpec extends Properties {
                }"""
       }
 
+      import io.circe.syntax._
+      val encoded = expected.asJson
+
+      val encodingResult = encoded ==== expectedJson
+
       import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) => actual ==== expected
+      decode[Something](encoded.noSpaces) match {
+        case Right(actual) =>
+          Result.all(
+            List(
+              encodingResult,
+              actual ==== expected,
+            )
+          )
         case Left(err) => Result.failure.log(s"Decoding JSON to Something failed with error: ${err.getMessage}")
       }
     }
@@ -172,10 +220,10 @@ object decoderSpec extends Properties {
       final case class Something(n: Int, s: Option[String], s2: Option[String])
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
             "n"  -> "productNumber",
             "s"  -> "name",
             "s2" -> "code",
@@ -184,7 +232,7 @@ object decoderSpec extends Properties {
 
       val expected = Something(n, none, none)
 
-      val input = {
+      val expectedJson = {
         import io.circe.literal._
         json"""{
                "productNumber":$n,
@@ -193,62 +241,77 @@ object decoderSpec extends Properties {
              }"""
       }
 
+      import io.circe.syntax._
+      val encoded = expected.asJson
+
+      val encodingResult = encoded ==== expectedJson
+
       import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) => actual ==== expected
+      decode[Something](encoded.noSpaces) match {
+        case Right(actual) =>
+          Result.all(
+            List(
+              encodingResult,
+              actual ==== expected,
+            )
+          )
         case Left(err) => Result.failure.log(s"Decoding JSON to Something failed with error: ${err.getMessage}")
       }
     }
 
   def testRenameWithExistingNewNameFields: Property =
     for {
-      n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
-      s <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
-      bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
+      n    <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      n2   <- Gen.int(Range.linear(1, Int.MaxValue)).log("n2")
+      s    <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      name <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_ + s).log("name")
+      bd   <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
     } yield {
       final case class Something(n: Int, s: String, name: String, productNumber: Int, bd: BigDecimal)
       object Something {
 
-        import extras.circe.codecs.decoder._
+        import extras.circe.codecs.codec._
 
-        implicit val somethingDecoder: Decoder[Something] =
-          deriveDecoder[Something].renameFields(
-            "n" -> "productNumber",
-            "s" -> "name",
+        implicit val somethingCodec: Codec[Something] =
+          deriveCodec[Something].renameFields(
+            "n"  -> "productNumber",
+            "s"  -> "name",
             "bd" -> "price",
           )
 
-        implicit val somethingShow: Show[Something] = Show.fromToString
       }
 
-      val input = {
-        import io.circe.literal._
-        json"""{
-                 "productNumber":$n,
-                 "name": $s,
-                 "price": $bd
-               }"""
-      }
+      val something = Something(n, s, name, n2, bd)
 
-      import io.circe.parser._
-      decode[Something](input.noSpaces) match {
-        case Right(actual) =>
-          Result
-            .failure
-            .log(
-              s"""Expected decode failure due to field name conflict but got the following one instead.
-                 |> ${actual.show}
-                 |> """.stripMargin
-            )
+      val expected =
+        NamingConflictError(
+          List("s" -> "name", "n" -> "productNumber").sorted,
+          implicitly[ClassTag[Something]].runtimeClass.getName,
+        )
 
-        case Left(err) =>
-          Result.any(
+      import io.circe.syntax._
+
+      Try(something.asJson) match {
+        case scala.util.Failure(err) =>
+          Result.all(
             List(
-              err.getMessage ==== "Attempt to decode value on failed cursor: DownField(name)", // for Scala 2
-              err.getMessage ==== "Missing required field: DownField(name)", // for Scala 3
+              err ==== expected,
+              err.getMessage ==== (
+                s"There are newName values conflict with the existing filed names for ${expected.typeName}. " +
+                  "conflicted newNames (oldName -> newName): " +
+                  s"${expected.names.map { case (oldName, newName) => s"$oldName -> $newName" }.mkString("[", ", ", "]")}"
+              ),
             )
           )
 
+        case scala.util.Success(json) =>
+          Result
+            .failure
+            .log(
+              s"""Expected EncoderExtras.NamingConflictError but got the following JSON
+                 |${json.spaces2}
+                 |>""".stripMargin
+            )
       }
     }
 
