@@ -1,5 +1,6 @@
 package extras.circe.codecs
 
+import cats.syntax.all._
 import hedgehog._
 import hedgehog.runner._
 import io.circe.generic.semiauto._
@@ -12,6 +13,12 @@ object encoderSpec extends Properties {
   override def tests: List[Test] = List(
     property("test EncoderExtras.addFields", testEncoderExtrasAddFields),
     property("extra round-trip test for EncoderExtras.addFields", roundTripTestEncoderExtrasAddFields),
+    property("test rename all fields", testRenameAllFields),
+    property("test rename some fields", testRenameSomeFields),
+    property("test rename with no matching field", testRenameNoMatchingField),
+    property("test rename with missing field", testRenameMissingField),
+    property("test rename None fields", testRenameNoneFields),
+    property("test rename fields with existing new names", testRenameWithExistingNewNameFields),
   )
 
   def testEncoderExtrasAddFields: Property =
@@ -116,6 +123,203 @@ object encoderSpec extends Properties {
           Result.failure.log(s"Failed to decode Something with error: ${err.getMessage}")
       }
 
+    }
+
+  def testRenameAllFields: Property =
+    for {
+      n  <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s  <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
+    } yield {
+      final case class Something(n: Int, s: String, bd: BigDecimal)
+      object Something {
+        import extras.circe.codecs.encoder._
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "n"  -> "productNumber",
+            "s"  -> "name",
+            "bd" -> "price",
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+                 "productNumber":$n,
+                 "name": $s,
+                 "price": $bd
+               }"""
+
+      val something = Something(n, s, bd)
+
+      import io.circe.syntax._
+
+      val actual = something.asJson
+      actual ==== expected
+    }
+
+  def testRenameSomeFields: Property =
+    for {
+      n  <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s  <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
+    } yield {
+      final case class Something(n: Int, s: String, bd: BigDecimal)
+      object Something {
+        import extras.circe.codecs.encoder._
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "s" -> "name"
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+                 "n":$n,
+                 "name": $s,
+                 "bd": $bd
+               }"""
+
+      val something = Something(n, s, bd)
+      import io.circe.syntax._
+      val actual    = something.asJson
+
+      actual ==== expected
+    }
+
+  def testRenameNoMatchingField: Property =
+    for {
+      n  <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s  <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
+    } yield {
+      final case class Something(n: Int, s: String, bd: BigDecimal)
+      object Something {
+        import extras.circe.codecs.encoder._
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "a" -> "productNumber",
+            "b" -> "name",
+            "c" -> "price",
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+                 "n":$n,
+                 "s": $s,
+                 "bd": $bd
+               }"""
+
+      val something = Something(n, s, bd)
+      import io.circe.syntax._
+      val actual    = something.asJson
+
+      actual ==== expected
+    }
+
+  def testRenameMissingField: Property =
+    for {
+      n  <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s  <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
+    } yield {
+      final case class Something(n: Int, bd: BigDecimal, code: String)
+      object Something {
+        import extras.circe.codecs.encoder._
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "n"  -> "productNumber",
+            "s"  -> "name",
+            "bd" -> "price",
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+                 "productNumber":$n,
+                 "price": $bd,
+                 "code": $s
+               }"""
+
+      val something = Something(n, bd, s)
+      import io.circe.syntax._
+      val actual    = something.asJson
+
+      actual ==== expected
+    }
+
+  def testRenameNoneFields: Property =
+    for {
+      n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+    } yield {
+      final case class Something(n: Int, s: Option[String], s2: Option[String])
+      object Something {
+
+        import extras.circe.codecs.encoder._
+
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "n"  -> "productNumber",
+            "s"  -> "name",
+            "s2" -> "code",
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+               "productNumber":$n,
+               "name": null,
+               "code": null
+             }"""
+
+      val something = Something(n, none, none)
+      import io.circe.syntax._
+      val actual    = something.asJson
+
+      actual ==== expected
+    }
+
+  def testRenameWithExistingNewNameFields: Property =
+    for {
+      n    <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s    <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      name <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_ + s).log("name")
+    } yield {
+      final case class Something(n: Int, s: String, name: String)
+      object Something {
+
+        import extras.circe.codecs.encoder._
+
+        implicit val somethingEncoder: Encoder[Something] =
+          deriveEncoder[Something].renameFields(
+            "n" -> "productNumber",
+            "s" -> "name",
+          )
+      }
+
+      import io.circe.literal._
+
+      val expected =
+        json"""{
+                 "productNumber":$n,
+                 "name": $s
+               }"""
+
+      val something = Something(n, s, name)
+      import io.circe.syntax._
+      val actual    = something.asJson
+
+      actual ==== expected
     }
 
 }
