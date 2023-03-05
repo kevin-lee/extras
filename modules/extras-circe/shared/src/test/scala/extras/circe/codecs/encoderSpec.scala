@@ -1,10 +1,14 @@
 package extras.circe.codecs
 
 import cats.syntax.all._
+import extras.circe.codecs.encoder.NamingConflictError
 import hedgehog._
 import hedgehog.runner._
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder, Json}
+
+import scala.reflect.ClassTag
+import scala.util.Try
 
 /** @author Kevin Lee
   * @since 2023-01-14
@@ -292,34 +296,56 @@ object encoderSpec extends Properties {
   def testRenameWithExistingNewNameFields: Property =
     for {
       n    <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      n2   <- Gen.int(Range.linear(1, Int.MaxValue)).log("n2")
       s    <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
       name <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_ + s).log("name")
+      bd   <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
     } yield {
-      final case class Something(n: Int, s: String, name: String)
+      final case class Something(n: Int, s: String, name: String, productNumber: Int, bd: BigDecimal)
       object Something {
 
         import extras.circe.codecs.encoder._
 
         implicit val somethingEncoder: Encoder[Something] =
           deriveEncoder[Something].renameFields(
-            "n" -> "productNumber",
-            "s" -> "name",
+            "n"  -> "productNumber",
+            "s"  -> "name",
+            "bd" -> "price",
           )
       }
 
-      import io.circe.literal._
+      val something = Something(n, s, name, n2, bd)
 
-      val expected =
-        json"""{
-                 "productNumber":$n,
-                 "name": $s
-               }"""
-
-      val something = Something(n, s, name)
       import io.circe.syntax._
-      val actual    = something.asJson
+      val expected =
+        NamingConflictError(
+          List("s" -> "name", "n" -> "productNumber").sorted,
+          implicitly[ClassTag[Something]].runtimeClass.getName,
+        )
 
-      actual ==== expected
+      Try(something.asJson) match {
+        case scala.util.Failure(err) =>
+          Result.all(
+            List(
+              err ==== expected,
+              err.getMessage ==== (
+                s"There are newName values conflict with the existing filed names for ${expected.typeName}. " +
+                  "conflicted newNames (oldName -> newName): " +
+                  s"${expected.names.map { case (oldName, newName) => s"$oldName -> $newName" }.mkString("[", ", ", "]")}"
+              ),
+            )
+          )
+
+        case scala.util.Success(json) =>
+          Result
+            .failure
+            .log(
+              s"""Expected EncoderExtras.NamingConflictError but got the following JSON
+                 |${json.spaces2}
+                 |>""".stripMargin
+            )
+      }
+
     }
 
 }
