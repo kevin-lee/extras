@@ -146,14 +146,14 @@ object encoderSpec extends Properties {
           )
       }
 
-      import io.circe.literal._
-
-      val expected =
+      val expected = {
+        import io.circe.literal._
         json"""{
                  "productNumber":$n,
                  "name": $s,
                  "price": $bd
                }"""
+      }
 
       val something = Something(n, s, bd)
 
@@ -178,14 +178,14 @@ object encoderSpec extends Properties {
           )
       }
 
-      import io.circe.literal._
-
-      val expected =
+      val expected = {
+        import io.circe.literal._
         json"""{
                  "n":$n,
                  "name": $s,
                  "bd": $bd
                }"""
+      }
 
       val something = Something(n, s, bd)
       import io.circe.syntax._
@@ -211,14 +211,14 @@ object encoderSpec extends Properties {
           )
       }
 
-      import io.circe.literal._
-
-      val expected =
+      val expected = {
+        import io.circe.literal._
         json"""{
                  "n":$n,
                  "s": $s,
                  "bd": $bd
                }"""
+      }
 
       val something = Something(n, s, bd)
       import io.circe.syntax._
@@ -244,14 +244,14 @@ object encoderSpec extends Properties {
           )
       }
 
-      import io.circe.literal._
-
-      val expected =
+      val expected = {
+        import io.circe.literal._
         json"""{
                  "productNumber":$n,
                  "price": $bd,
                  "code": $s
                }"""
+      }
 
       val something = Something(n, bd, s)
       import io.circe.syntax._
@@ -277,14 +277,14 @@ object encoderSpec extends Properties {
           )
       }
 
-      import io.circe.literal._
-
-      val expected =
+      val expected = {
+        import io.circe.literal._
         json"""{
                "productNumber":$n,
                "name": null,
                "code": null
              }"""
+      }
 
       val something = Something(n, none, none)
       import io.circe.syntax._
