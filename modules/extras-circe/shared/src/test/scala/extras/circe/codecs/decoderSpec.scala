@@ -202,8 +202,8 @@ object decoderSpec extends Properties {
 
   def testRenameWithExistingNewNameFields: Property =
     for {
-      n <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
-      s <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+      n  <- Gen.int(Range.linear(1, Int.MaxValue)).log("n")
+      s  <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
       bd <- Gen.double(Range.linearFrac(0.10d, Double.MaxValue)).map(BigDecimal(_)).log("bd")
     } yield {
       final case class Something(n: Int, s: String, name: String, productNumber: Int, bd: BigDecimal)
@@ -213,8 +213,8 @@ object decoderSpec extends Properties {
 
         implicit val somethingDecoder: Decoder[Something] =
           deriveDecoder[Something].renameFields(
-            "n" -> "productNumber",
-            "s" -> "name",
+            "n"  -> "productNumber",
+            "s"  -> "name",
             "bd" -> "price",
           )
 
