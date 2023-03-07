@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 id: 'codecs-encoder'
-title: 'Extension method for Encoder'
+title: 'Encoder'
 ---
 
 ## Encoder[A].withFields
