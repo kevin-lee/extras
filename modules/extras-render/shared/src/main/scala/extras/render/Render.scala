@@ -17,6 +17,11 @@ object Render {
 
   @inline def render[A](f: A => String): Render[A] = f(_)
 
+  implicit final class RenderOps[A](private val renderA: Render[A]) extends AnyVal {
+    def contramap[B](f: B => A): Render[B] = b => renderA.render(f(b))
+
+  }
+
   implicit val unitRender: Render[Unit] = fromToString[Unit]
 
   implicit val booleanRender: Render[Boolean] = fromToString[Boolean]

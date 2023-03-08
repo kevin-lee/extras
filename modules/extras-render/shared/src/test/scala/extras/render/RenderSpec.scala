@@ -26,6 +26,9 @@ object RenderSpec extends Properties {
     property("test Render[Symbol].render", testSymbolRender),
     property("test Render[UUID].render", testUuidRender),
     property("test Render[Duration].render", testDurationRender),
+    property("test Render[A].contramap[B] (1)", testRenderContramap1),
+    property("test Render[A].contramap[B] (2)", testRenderContramap2),
+    property("test Render[A].contramap[B] (3)", testRenderContramap3),
   )
 
   def testRenderRenderA: Property =
@@ -167,6 +170,39 @@ object RenderSpec extends Properties {
       duration = Duration(length, timeUnit)
     } yield {
       Render[Duration].render(duration) ==== duration.toString
+    }
+
+  def testRenderContramap1: Property =
+    for {
+      uuid <- Gen.constant(UUID.randomUUID()).log("uuid")
+    } yield {
+      final case class Id(value: UUID)
+      val id = Id(uuid)
+
+      val renderId: Render[Id] = Render[UUID].contramap(_.value)
+      renderId.render(id) ==== uuid.toString
+    }
+
+  def testRenderContramap2: Property =
+    for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      final case class Id(value: Int)
+      val id = Id(n)
+
+      val renderId: Render[Id] = Render[Int].contramap(_.value)
+      renderId.render(id) ==== n.toString
+    }
+
+  def testRenderContramap3: Property =
+    for {
+      s <- Gen.string(Gen.unicodeAll, Range.linear(1, 100)).log("s")
+    } yield {
+      final case class Id(value: String)
+      val id = Id(s)
+
+      val renderId: Render[Id] = Render[String].contramap(_.value)
+      renderId.render(id) ==== s
     }
 
 }
