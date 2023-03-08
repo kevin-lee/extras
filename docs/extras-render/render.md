@@ -56,3 +56,32 @@ def bar[A: Render](a: A): Unit =
 
 bar(Foo(1, "Something"))
 ```
+
+## `Render` from Existing `Render`
+If the value of your type can be rendered by an existing `Render`, you can easily create `Render` for your type from the existing one with `contramap`.
+
+```scala
+Render[A].contramap[B](A => B): Render[B]
+```
+
+### Usage Example
+```scala mdoc:reset-object
+import java.util.UUID
+import extras.render.Render
+
+final case class Id(value: UUID) extends AnyVal
+object Id {
+  implicit val idRender: Render[Id] = Render[UUID].contramap(_.value)
+}
+
+import extras.render.syntax._
+Id(UUID.randomUUID()).render
+
+final case class Name(value: String) extends AnyVal
+object Name {
+  implicit val nameRender: Render[Name] = Render[String].contramap(_.value)
+}
+
+Name("Kevin").render
+```
+
