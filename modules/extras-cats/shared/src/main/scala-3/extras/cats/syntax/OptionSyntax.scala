@@ -29,6 +29,10 @@ trait OptionSyntax {
   extension [F[_], A](fOfOption: F[Option[A]]) {
     inline def innerMap[B](f: A => B)(using F: Functor[F]): F[Option[B]] =
       F.map(fOfOption)(_.map(f))
+
+    inline def innerFlatMap[B](f: A => Option[B])(using F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.flatMap(f))
+
   }
 
 }
