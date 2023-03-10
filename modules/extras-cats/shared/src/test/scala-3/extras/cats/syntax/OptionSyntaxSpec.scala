@@ -39,6 +39,10 @@ object OptionSyntaxSpec extends Properties {
       "OptionTSupportAllSpec.testAll",
       OptionTSupportAllSpec.testAll,
     ),
+    property(
+      "test F[Option[A]].InnerMap(A => B): F[Option[B]]",
+      FOfOptionInnerOpsSpec.testInnerMap,
+    ),
   )
 
   object OptionTFOptionOpsSpec {
@@ -268,6 +272,32 @@ object OptionSyntaxSpec extends Properties {
       )
 
     }
+
+  }
+
+  object FOfOptionInnerOpsSpec {
+
+    val ecp             = new ExecutionContextProvider
+    given rt: IORuntime = IoAppUtils.runtime(ecp.es)
+
+    import cats.effect.*
+    import extras.cats.syntax.option.*
+
+    def fab[F[_]: Sync, A](oa: Option[A]): F[Option[A]] = Sync[F].delay(oa)
+
+    def testInnerMap: Property =
+      for {
+        optionN <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).option.log("optionN")
+      } yield {
+        val f: Int => Int = _ * 2
+
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN.map(f)
+
+        input
+          .innerMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
 
   }
 
