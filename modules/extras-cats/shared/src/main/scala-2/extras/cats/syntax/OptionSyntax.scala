@@ -47,6 +47,10 @@ object OptionSyntax {
   final class FOfOptionInnerOps[F[_], A](private val fOfOption: F[Option[A]]) extends AnyVal {
     @inline def innerMap[B](f: A => B)(implicit F: Functor[F]): F[Option[B]] =
       F.map(fOfOption)(_.map(f))
+
+    @inline def innerFlatMap[B](f: A => Option[B])(implicit F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.flatMap(f))
+
   }
 
 }
