@@ -1,8 +1,9 @@
 package extras.cats.syntax
 
-import cats.{Applicative, Functor}
+import EitherSyntax.{EitherTAOps, EitherTEitherOps, EitherTFAOps, EitherTFEitherOps, FOfEitherInnerOps}
 import cats.data.EitherT
-import EitherSyntax.{EitherTAOps, EitherTEitherOps, EitherTFAOps, EitherTFEitherOps}
+import cats.syntax.either._
+import cats.{Applicative, FlatMap, Functor, Monad}
 
 /** @author Kevin Lee
   * @since 2021-07-21
@@ -19,6 +20,8 @@ trait EitherSyntax {
 
   implicit final def eitherTAOps[A](a: A): EitherTAOps[A] = new EitherTAOps(a)
 
+  implicit final def fOfEitherInnerOps[F[_], A, B](fOfEither: F[Either[A, B]]): FOfEitherInnerOps[F, A, B] =
+    new FOfEitherInnerOps(fOfEither)
 }
 
 object EitherSyntax {
@@ -41,6 +44,33 @@ object EitherSyntax {
   final class EitherTAOps[A](private val a: A) extends AnyVal {
     @inline def rightTF[F[_]: Applicative, B]: EitherT[F, B, A] = EitherT.rightT[F, B](a)
     @inline def leftTF[F[_]: Applicative, B]: EitherT[F, A, B]  = EitherT.leftT[F, B](a)
+  }
+
+  final class FOfEitherInnerOps[F[_], A, B](private val fOfEither: F[Either[A, B]]) extends AnyVal {
+    @inline def innerMap[D](f: B => D)(implicit F: Functor[F]): F[Either[A, D]] =
+      F.map(fOfEither)(_.map(f))
+
+    @inline def innerFlatMap[D](f: B => Either[A, D])(implicit F: Functor[F]): F[Either[A, D]] =
+      F.map(fOfEither)(_.flatMap(f))
+
+    @inline def innerFlatMapF[D](f: B => F[Either[A, D]])(implicit F: Monad[F]): F[Either[A, D]] =
+      F.flatMap(fOfEither) {
+        case Left(a) => F.pure(a.asLeft[D])
+        case Right(b) => f(b)
+      }
+
+    @inline def innerGetOrElse[D >: B](ifLeft: => D)(implicit F: Functor[F]): F[D] =
+      F.map(fOfEither)(_.getOrElse(ifLeft))
+
+    @inline def innerGetOrElseF[D >: B](ifLeft: => F[D])(implicit F: Monad[F]): F[D] =
+      F.flatMap(fOfEither)(_.fold(_ => ifLeft, F.pure))
+
+    @inline def innerFold[D](ifLeft: => D)(f: B => D)(implicit F: Functor[F]): F[D] =
+      F.map(fOfEither)(_.fold(_ => ifLeft, f))
+
+    @inline def innerFoldF[D](ifLeft: => F[D])(f: B => F[D])(implicit F: FlatMap[F]): F[D] =
+      F.flatMap(fOfEither)(_.fold(_ => ifLeft, f))
+
   }
 
 }

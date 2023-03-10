@@ -46,6 +46,34 @@ object EitherSyntaxSpec extends Properties {
       "testAll with EitherTSupport._",
       EitherTSupportAllSpec.testAll,
     ),
+    property(
+      "test F[Either[A, B]].innerMap(B => D): F[Either[A, D]]",
+      FOfEitherInnerOpsSpec.testInnerMap,
+    ),
+    property(
+      "test F[Either[A, B]].innerFlatMap(A => Either[A, D]): F[Either[A, D]]",
+      FOfEitherInnerOpsSpec.testInnerFlatMap,
+    ),
+    property(
+      "test F[Either[A, B]].innerFlatMapF(A => F[Either[A, D]]): F[Either[A, D]]",
+      FOfEitherInnerOpsSpec.testInnerFlatMapF,
+    ),
+    property(
+      "test F[Either[A, B]].innerGetOrElse[D >: B](=> B): F[D]",
+      FOfEitherInnerOpsSpec.testInnerGetOrElse,
+    ),
+    property(
+      "test F[Either[A, B]].innerGetOrElseF[D >: B](=> F[B]): F[D]",
+      FOfEitherInnerOpsSpec.testInnerGetOrElseF,
+    ),
+    property(
+      "test F[Either[A, B]].innerFold[D](=> D)(B => D): F[D]",
+      FOfEitherInnerOpsSpec.testInnerFold,
+    ),
+    property(
+      "test F[Either[A, B]].innerFoldF[D](=> F[D])(B => F[D]): F[D]",
+      FOfEitherInnerOpsSpec.testInnerFoldF,
+    ),
   )
 
   object EitherSyntaxSpec {
@@ -228,11 +256,11 @@ object EitherSyntaxSpec extends Properties {
       n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
       s <- Gen.string(Gen.alphaNum, Range.linear(0, 20)).log("S")
     } yield {
-      import extras.cats.syntax.either._
       import cats.Applicative
       import cats.data.EitherT
       import cats.effect._
       import cats.syntax.all._
+      import extras.cats.syntax.either._
 
       val input1         = EitherSyntaxSpec.fab[IO, String, Int](n.asRight[String])
       val expected1      = EitherT(input1)
@@ -319,6 +347,148 @@ object EitherSyntaxSpec extends Properties {
         )
       )
     }
+
+  }
+
+  object FOfEitherInnerOpsSpec {
+
+    import cats.effect._
+    import cats.syntax.either._
+    import extras.cats.syntax.either.fOfEitherInnerOps
+
+    def fab[F[_]: Sync, A, B](eab: Either[A, B]): F[Either[A, B]] = Sync[F].delay(eab)
+
+    def testInnerMap: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+      } yield {
+        val f: Int => Int = _ * 2
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.map(f)
+
+        input
+          .innerMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFlatMap: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+      } yield {
+        val f: Int => Either[String, Int] = n => (n * 2).asRight
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.flatMap(f)
+
+        input
+          .innerFlatMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFlatMapF: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+      } yield {
+        val f: Int => Either[String, Int] = n => (n * 2).asRight
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.flatMap(f)
+
+        input
+          .innerFlatMapF(a => IO.pure(f(a)))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerGetOrElse: Property =
+      for {
+        defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        eitherSI    <- Gen
+                         .choice1(
+                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                         )
+                         .log("eitherSI")
+      } yield {
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.getOrElse(defaultLeft)
+
+        input
+          .innerGetOrElse(defaultLeft)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerGetOrElseF: Property =
+      for {
+        defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        eitherSI    <- Gen
+                         .choice1(
+                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                         )
+                         .log("eitherSI")
+      } yield {
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.getOrElse(defaultLeft)
+
+        input
+          .innerGetOrElseF(IO.pure(defaultLeft))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFold: Property =
+      for {
+        defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        eitherSI    <- Gen
+                         .choice1(
+                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                         )
+                         .log("eitherSI")
+      } yield {
+        val f: Int => Int = _ * 2
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.fold(_ => defaultLeft, f)
+
+        input
+          .innerFold(defaultLeft)(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFoldF: Property =
+      for {
+        defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        eitherSI    <- Gen
+                         .choice1(
+                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                         )
+                         .log("eitherSI")
+      } yield {
+        val f: Int => Int = _ * 2
+        val input         = fab[IO, String, Int](eitherSI)
+        val expected      = eitherSI.fold(_ => defaultLeft, f)
+
+        input
+          .innerFoldF(IO.pure(defaultLeft))(a => IO.pure(f(a)))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
 
   }
 
