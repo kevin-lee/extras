@@ -26,4 +26,9 @@ trait OptionSyntax {
     inline def someTF[F[_]: Applicative]: OptionT[F, A] = OptionT.some[F](a)
   }
 
+  extension [F[_], A](fOfOption: F[Option[A]]) {
+    inline def innerMap[B](f: A => B)(using F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.map(f))
+  }
+
 }

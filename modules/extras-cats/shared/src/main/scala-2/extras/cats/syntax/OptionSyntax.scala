@@ -2,7 +2,7 @@ package extras.cats.syntax
 
 import cats.data.OptionT
 import cats.{Applicative, Functor}
-import extras.cats.syntax.OptionSyntax.{OptionTAOps, OptionTFAOps, OptionTFOptionOps, OptionTOptionOps}
+import extras.cats.syntax.OptionSyntax._
 
 /** @author Kevin Lee
   * @since 2021-07-22
@@ -18,6 +18,9 @@ trait OptionSyntax {
   implicit def optionTFAOps[F[_], A](fa: F[A]): OptionTFAOps[F, A] = new OptionTFAOps(fa)
 
   implicit def optionTAOps[A](a: A): OptionTAOps[A] = new OptionTAOps(a)
+
+  implicit def fOfOptionInnerOps[F[_], A](fOfOption: F[Option[A]]): FOfOptionInnerOps[F, A] =
+    new FOfOptionInnerOps(fOfOption)
 
 }
 
@@ -39,6 +42,11 @@ object OptionSyntax {
 
   final class OptionTAOps[A](private val a: A) extends AnyVal {
     @inline def someTF[F[_]: Applicative]: OptionT[F, A] = OptionT.some[F](a)
+  }
+
+  final class FOfOptionInnerOps[F[_], A](private val fOfOption: F[Option[A]]) extends AnyVal {
+    @inline def innerMap[B](f: A => B)(implicit F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.map(f))
   }
 
 }
