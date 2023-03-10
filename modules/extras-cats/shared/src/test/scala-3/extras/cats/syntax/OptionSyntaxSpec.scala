@@ -47,6 +47,10 @@ object OptionSyntaxSpec extends Properties {
       "test F[Option[A]].innerFlatMap(A => Option[B]): F[Option[B]]",
       FOfOptionInnerOpsSpec.testInnerFlatMap,
     ),
+    property(
+      "test F[Option[A]].innerFlatMapF(A => F[Option[B]]): F[Option[B]]",
+      FOfOptionInnerOpsSpec.testInnerFlatMapF,
+    ),
   )
 
   object OptionTFOptionOpsSpec {
@@ -315,6 +319,20 @@ object OptionSyntaxSpec extends Properties {
 
         input
           .innerFlatMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFlatMapF: Property =
+      for {
+        optionN <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).option.log("optionN")
+      } yield {
+        val f: Int => Option[Int] = n => (n * 2).some
+
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN.flatMap(f)
+
+        input
+          .innerFlatMapF(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
       }.unsafeRunSync()
 

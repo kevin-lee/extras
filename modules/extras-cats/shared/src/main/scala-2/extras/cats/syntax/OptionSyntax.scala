@@ -1,7 +1,8 @@
 package extras.cats.syntax
 
 import cats.data.OptionT
-import cats.{Applicative, Functor}
+import cats.syntax.option._
+import cats.{Applicative, Functor, Monad}
 import extras.cats.syntax.OptionSyntax._
 
 /** @author Kevin Lee
@@ -50,6 +51,9 @@ object OptionSyntax {
 
     @inline def innerFlatMap[B](f: A => Option[B])(implicit F: Functor[F]): F[Option[B]] =
       F.map(fOfOption)(_.flatMap(f))
+
+    @inline def innerFlatMapF[B](f: A => F[Option[B]])(implicit F: Monad[F]): F[Option[B]] =
+      F.flatMap(fOfOption)(oa => oa.fold(F.pure(none[B]))(f))
 
   }
 
