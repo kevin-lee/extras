@@ -1,6 +1,6 @@
 package extras.cats.syntax
 
-import cats.{Applicative, Functor, Monad}
+import cats.{Applicative, FlatMap, Functor, Monad}
 import cats.syntax.option.*
 import cats.data.OptionT
 
@@ -36,6 +36,18 @@ trait OptionSyntax {
 
     inline def innerFlatMapF[B](f: A => F[Option[B]])(using F: Monad[F]): F[Option[B]] =
       F.flatMap(fOfOption)(oa => oa.fold(F.pure(none[B]))(f))
+
+    inline def innerGetOrElse[B >: A](ifEmpty: => B)(implicit F: Functor[F]): F[B] =
+      F.map(fOfOption)(_.getOrElse(ifEmpty))
+
+    inline def innerGetOrElseF[B >: A](ifEmpty: => F[B])(implicit F: Monad[F]): F[B] =
+      F.flatMap(fOfOption)(_.fold(ifEmpty)(F.pure))
+
+    inline def innerFold[B](ifEmpty: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
+      F.map(fOfOption)(_.fold(ifEmpty)(f))
+
+    inline def innerFoldF[B](ifEmpty: => F[B])(f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+      F.flatMap(fOfOption)(_.fold(ifEmpty)(f))
 
   }
 
