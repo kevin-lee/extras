@@ -1,5 +1,6 @@
 package extras.cats.syntax
 
+import cats.syntax.all.*
 import cats.effect.Sync
 import cats.effect.unsafe.IORuntime
 import extras.cats.testing.{ExecutionContextProvider, IoAppUtils}
@@ -50,6 +51,22 @@ object OptionSyntaxSpec extends Properties {
     property(
       "test F[Option[A]].innerFlatMapF(A => F[Option[B]]): F[Option[B]]",
       FOfOptionInnerOpsSpec.testInnerFlatMapF,
+    ),
+    property(
+      "test F[Option[A]].innerGetOrElse[B >: A](=> B): F[B]",
+      FOfOptionInnerOpsSpec.testInnerGetOrElse,
+    ),
+    property(
+      "test F[Option[A]].innerGetOrElseF[B >: A](=> F[B]): F[B]",
+      FOfOptionInnerOpsSpec.testInnerGetOrElseF,
+    ),
+    property(
+      "test F[Option[A]].innerFold[B >: A](=> B)(A => B): F[B]",
+      FOfOptionInnerOpsSpec.testInnerFold,
+    ),
+    property(
+      "test F[Option[A]].innerFoldF[B >: A](=> F[B])(A => F[B]): F[B]",
+      FOfOptionInnerOpsSpec.testInnerFoldF,
     ),
   )
 
@@ -333,6 +350,77 @@ object OptionSyntaxSpec extends Properties {
 
         input
           .innerFlatMapF(a => IO.pure(f(a)))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerGetOrElse: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN.getOrElse(defaultValue)
+
+        input
+          .innerGetOrElse(defaultValue)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerGetOrElseF: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN.getOrElse(defaultValue)
+
+        input
+          .innerGetOrElseF(IO.pure(defaultValue))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFold: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        val f: Int => Int = _ * 2
+
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN.fold(defaultValue)(f)
+
+        input
+          .innerFold(defaultValue)(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerFoldF: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        val f: Int => Int = _ * 2
+        val input         = fab[IO, Int](optionN)
+        val expected      = optionN.fold(defaultValue)(f)
+
+        input
+          .innerFoldF(IO.pure(defaultValue))(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
       }.unsafeRunSync()
 
