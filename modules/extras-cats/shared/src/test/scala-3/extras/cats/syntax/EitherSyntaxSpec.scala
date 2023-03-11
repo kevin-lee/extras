@@ -56,12 +56,24 @@ class EitherSyntaxSpec extends Properties {
       FOfEitherInnerOpsSpec.testInnerMap,
     ),
     property(
-      "test F[Either[A, B]].innerFlatMap(A => Either[A, D]): F[Either[A, D]]",
+      "test F[Either[A, B]].innerFlatMap(B => Either[A, D]): F[Either[A, D]]",
       FOfEitherInnerOpsSpec.testInnerFlatMap,
     ),
     property(
-      "test F[Either[A, B]].innerFlatMapF(A => F[Either[A, D]]): F[Either[A, D]]",
+      "test F[Either[A, B]].innerFlatMapF(B => F[Either[A, D]]): F[Either[A, D]]",
       FOfEitherInnerOpsSpec.testInnerFlatMapF,
+    ),
+    property(
+      "test F[Either[A, B]].innerLeftMap(A => C): F[Either[C, B]]",
+      FOfEitherInnerOpsSpec.testInnerLeftMap,
+    ),
+    property(
+      "test F[Either[A, B]].innerLeftFlatMap(A => Either[C, B]): F[Either[C, B]]",
+      FOfEitherInnerOpsSpec.testInnerLeftFlatMap,
+    ),
+    property(
+      "test F[Either[A, B]].innerLeftFlatMapF(A => F[Either[C, B]]): F[Either[C, B]]",
+      FOfEitherInnerOpsSpec.testInnerLeftFlatMapF,
     ),
     property(
       "test F[Either[A, B]].innerGetOrElse[D >: B](=> B): F[D]",
@@ -420,6 +432,66 @@ class EitherSyntaxSpec extends Properties {
 
         input
           .innerFlatMapF(a => IO.pure(f(a)))
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerLeftMap: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+        prefix   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("prefix")
+      } yield {
+        val f: String => String = prefix + _
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.leftMap(f)
+
+        input
+          .innerLeftMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerLeftFlatMap: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+        prefix   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("prefix")
+      } yield {
+        val f: String => Either[String, Int] = a => (prefix + a).asLeft[Int]
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.leftFlatMap(f)
+
+        input
+          .innerLeftFlatMap(f)
+          .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerLeftFlatMapF: Property =
+      for {
+        eitherSI <- Gen
+                      .choice1(
+                        Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
+                        Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
+                      )
+                      .log("eitherSI")
+        prefix   <- Gen.string(Gen.alphaNum, Range.linear(5, 10)).log("prefix")
+      } yield {
+        val f: String => Either[String, Int] = a => (prefix + a).asLeft[Int]
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.leftFlatMap(f)
+
+        input
+          .innerLeftFlatMapF(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
       }.unsafeRunSync()
 
