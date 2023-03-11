@@ -3,6 +3,7 @@ package extras.cats.syntax
 import cats.{Applicative, FlatMap, Functor, Monad}
 import cats.data.EitherT
 import cats.syntax.either.*
+import cats.syntax.foldable.*
 
 /** @author Kevin Lee
   * @since 2021-07-28
@@ -30,6 +31,25 @@ trait EitherSyntax {
   }
 
   extension [F[_], A, B](fOfEither: F[Either[A, B]]) {
+
+    inline def innerFind(f: B => Boolean)(using F: Functor[F]): F[Option[B]] =
+      F.map(fOfEither)(_.find(f))
+
+    inline def innerFilterOrElse[C >: A](f: B => Boolean, leftIfFalse: => C)(using F: Functor[F]): F[Either[C, B]] =
+      F.map(fOfEither)(_.filterOrElse(f, leftIfFalse))
+
+    inline def innerExists(f: B => Boolean)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.exists(f))
+
+    inline def innerForall(f: B => Boolean)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.forall(f))
+
+    inline def innerContains(b: B)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.contains(b))
+
+    inline def innerCollectFirst[D >: B](pf: PartialFunction[B, D])(using F: Functor[F]): F[Option[D]] =
+      F.map(fOfEither)(_.collectFirst(pf))
+
     inline def innerMap[D](f: B => D)(using F: Functor[F]): F[Either[A, D]] =
       F.map(fOfEither)(_.map(f))
 
@@ -59,6 +79,15 @@ trait EitherSyntax {
 
     inline def innerGetOrElseF[D >: B](ifLeft: => F[D])(using F: Monad[F]): F[D] =
       F.flatMap(fOfEither)(_.fold(_ => ifLeft, F.pure))
+
+    inline def innerOrElse[C >: A, D >: B](ifLeft: => Either[C, D])(using F: Functor[F]): F[Either[C, D]] =
+      F.map(fOfEither)(_.orElse(ifLeft))
+
+    inline def innerOrElseF[C >: A, D >: B](ifLeft: => F[Either[C, D]])(using F: Monad[F]): F[Either[C, D]] =
+      F.flatMap(fOfEither) {
+        case r @ Right(_) => F.pure(r)
+        case Left(_) => ifLeft
+      }
 
     inline def innerFold[D](ifLeft: => D)(f: B => D)(using F: Functor[F]): F[D] =
       F.map(fOfEither)(_.fold(_ => ifLeft, f))

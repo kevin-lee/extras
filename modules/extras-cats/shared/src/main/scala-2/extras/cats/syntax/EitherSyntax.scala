@@ -3,6 +3,7 @@ package extras.cats.syntax
 import EitherSyntax.{EitherTAOps, EitherTEitherOps, EitherTFAOps, EitherTFEitherOps, FOfEitherInnerOps}
 import cats.data.EitherT
 import cats.syntax.either._
+import cats.syntax.foldable._
 import cats.{Applicative, FlatMap, Functor, Monad}
 
 /** @author Kevin Lee
@@ -47,6 +48,25 @@ object EitherSyntax {
   }
 
   final class FOfEitherInnerOps[F[_], A, B](private val fOfEither: F[Either[A, B]]) extends AnyVal {
+
+    @inline def innerFind(f: B => Boolean)(implicit F: Functor[F]): F[Option[B]] =
+      F.map(fOfEither)(_.find(f))
+
+    @inline def innerFilterOrElse[C >: A](f: B => Boolean, leftIfFalse: => C)(implicit F: Functor[F]): F[Either[C, B]] =
+      F.map(fOfEither)(_.filterOrElse(f, leftIfFalse))
+
+    @inline def innerExists(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.exists(f))
+
+    @inline def innerForall(f: B => Boolean)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.forall(f))
+
+    @inline def innerContains(b: B)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfEither)(_.contains(b))
+
+    @inline def innerCollectFirst[D >: B](pf: PartialFunction[B, D])(implicit F: Functor[F]): F[Option[D]] =
+      F.map(fOfEither)(_.collectFirst(pf))
+
     @inline def innerMap[D](f: B => D)(implicit F: Functor[F]): F[Either[A, D]] =
       F.map(fOfEither)(_.map(f))
 
@@ -76,6 +96,15 @@ object EitherSyntax {
 
     @inline def innerGetOrElseF[D >: B](ifLeft: => F[D])(implicit F: Monad[F]): F[D] =
       F.flatMap(fOfEither)(_.fold(_ => ifLeft, F.pure))
+
+    @inline def innerOrElse[C >: A, D >: B](ifLeft: => Either[C, D])(implicit F: Functor[F]): F[Either[C, D]] =
+      F.map(fOfEither)(_.orElse(ifLeft))
+
+    @inline def innerOrElseF[C >: A, D >: B](ifLeft: => F[Either[C, D]])(implicit F: Monad[F]): F[Either[C, D]] =
+      F.flatMap(fOfEither) {
+        case r @ Right(_) => F.pure(r)
+        case Left(_) => ifLeft
+      }
 
     @inline def innerFold[D](ifLeft: => D)(f: B => D)(implicit F: Functor[F]): F[D] =
       F.map(fOfEither)(_.fold(_ => ifLeft, f))
