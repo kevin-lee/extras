@@ -28,6 +28,22 @@ trait OptionSyntax {
   }
 
   extension [F[_], A](fOfOption: F[Option[A]]) {
+
+    inline def innerFilter(f: A => Boolean)(using F: Functor[F]): F[Option[A]] =
+      F.map(fOfOption)(_.filter(f))
+
+    inline def innerExists(f: A => Boolean)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.exists(f))
+
+    inline def innerContains(a: A)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.contains(a))
+
+    inline def innerForall(f: A => Boolean)(using F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.forall(f))
+
+    inline def innerCollect[B](pf: PartialFunction[A, B])(using F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.collect(pf))
+
     inline def innerMap[B](f: A => B)(using F: Functor[F]): F[Option[B]] =
       F.map(fOfOption)(_.map(f))
 
@@ -37,16 +53,25 @@ trait OptionSyntax {
     inline def innerFlatMapF[B](f: A => F[Option[B]])(using F: Monad[F]): F[Option[B]] =
       F.flatMap(fOfOption)(oa => oa.fold(F.pure(none[B]))(f))
 
-    inline def innerGetOrElse[B >: A](ifEmpty: => B)(implicit F: Functor[F]): F[B] =
+    inline def innerGetOrElse[B >: A](ifEmpty: => B)(using F: Functor[F]): F[B] =
       F.map(fOfOption)(_.getOrElse(ifEmpty))
 
-    inline def innerGetOrElseF[B >: A](ifEmpty: => F[B])(implicit F: Monad[F]): F[B] =
+    inline def innerGetOrElseF[B >: A](ifEmpty: => F[B])(using F: Monad[F]): F[B] =
       F.flatMap(fOfOption)(_.fold(ifEmpty)(F.pure))
 
-    inline def innerFold[B](ifEmpty: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
+    inline def innerOrElse[B >: A](alternative: => Option[B])(using F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.orElse(alternative))
+
+    inline def innerOrElseF[B >: A](alternative: => F[Option[B]])(using F: Monad[F]): F[Option[B]] =
+      F.flatMap(fOfOption) {
+        case someA @ Some(_) => F.pure(someA)
+        case None => alternative
+      }
+
+    inline def innerFold[B](ifEmpty: => B)(f: A => B)(using F: Functor[F]): F[B] =
       F.map(fOfOption)(_.fold(ifEmpty)(f))
 
-    inline def innerFoldF[B](ifEmpty: => F[B])(f: A => F[B])(implicit F: FlatMap[F]): F[B] =
+    inline def innerFoldF[B](ifEmpty: => F[B])(f: A => F[B])(using F: FlatMap[F]): F[B] =
       F.flatMap(fOfOption)(_.fold(ifEmpty)(f))
 
   }

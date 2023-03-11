@@ -46,6 +46,22 @@ object OptionSyntax {
   }
 
   final class FOfOptionInnerOps[F[_], A](private val fOfOption: F[Option[A]]) extends AnyVal {
+
+    @inline def innerFilter(f: A => Boolean)(implicit F: Functor[F]): F[Option[A]] =
+      F.map(fOfOption)(_.filter(f))
+
+    @inline def innerExists(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.exists(f))
+
+    @inline def innerContains(a: A)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.contains(a))
+
+    @inline def innerForall(f: A => Boolean)(implicit F: Functor[F]): F[Boolean] =
+      F.map(fOfOption)(_.forall(f))
+
+    @inline def innerCollect[B](pf: PartialFunction[A, B])(implicit F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.collect(pf))
+
     @inline def innerMap[B](f: A => B)(implicit F: Functor[F]): F[Option[B]] =
       F.map(fOfOption)(_.map(f))
 
@@ -60,6 +76,15 @@ object OptionSyntax {
 
     @inline def innerGetOrElseF[B >: A](ifEmpty: => F[B])(implicit F: Monad[F]): F[B] =
       F.flatMap(fOfOption)(_.fold(ifEmpty)(F.pure))
+
+    @inline def innerOrElse[B >: A](alternative: => Option[B])(implicit F: Functor[F]): F[Option[B]] =
+      F.map(fOfOption)(_.orElse(alternative))
+
+    @inline def innerOrElseF[B >: A](alternative: => F[Option[B]])(implicit F: Monad[F]): F[Option[B]] =
+      F.flatMap(fOfOption) {
+        case someA @ Some(_) => F.pure(someA)
+        case None => alternative
+      }
 
     @inline def innerFold[B](ifEmpty: => B)(f: A => B)(implicit F: Functor[F]): F[B] =
       F.map(fOfOption)(_.fold(ifEmpty)(f))
