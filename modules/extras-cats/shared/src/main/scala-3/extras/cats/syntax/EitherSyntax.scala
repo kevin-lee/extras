@@ -47,7 +47,7 @@ trait EitherSyntax {
     inline def innerContains(b: B)(using F: Functor[F]): F[Boolean] =
       F.map(fOfEither)(_.contains(b))
 
-    inline def innerCollectFirst[D >: B](pf: PartialFunction[B, D])(using F: Functor[F]): F[Option[D]] =
+    inline def innerCollectFirst[D](pf: PartialFunction[B, D])(using F: Functor[F]): F[Option[D]] =
       F.map(fOfEither)(_.collectFirst(pf))
 
     inline def innerMap[D](f: B => D)(using F: Functor[F]): F[Either[A, D]] =
