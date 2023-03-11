@@ -42,6 +42,18 @@ trait EitherSyntax {
         case Right(b) => f(b)
       }
 
+    inline def innerLeftMap[C](f: A => C)(using F: Functor[F]): F[Either[C, B]] =
+      F.map(fOfEither)(_.leftMap(f))
+
+    inline def innerLeftFlatMap[C](f: A => Either[C, B])(using F: Functor[F]): F[Either[C, B]] =
+      F.map(fOfEither)(_.leftFlatMap(f))
+
+    inline def innerLeftFlatMapF[C](f: A => F[Either[C, B]])(using F: Monad[F]): F[Either[C, B]] =
+      F.flatMap(fOfEither) {
+        case Left(a) => f(a)
+        case Right(b) => F.pure(b.asRight[C])
+      }
+
     inline def innerGetOrElse[D >: B](ifLeft: => D)(using F: Functor[F]): F[D] =
       F.map(fOfEither)(_.getOrElse(ifLeft))
 
