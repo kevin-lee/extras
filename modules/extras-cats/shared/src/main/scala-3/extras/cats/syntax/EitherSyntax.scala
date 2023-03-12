@@ -89,11 +89,11 @@ trait EitherSyntax {
         case Left(_) => ifLeft
       }
 
-    inline def innerFold[D](ifLeft: => D)(f: B => D)(using F: Functor[F]): F[D] =
-      F.map(fOfEither)(_.fold(_ => ifLeft, f))
+    inline def innerFold[D](forLeft: A => D)(forRight: B => D)(using F: Functor[F]): F[D] =
+      F.map(fOfEither)(_.fold(forLeft, forRight))
 
-    inline def innerFoldF[D](ifLeft: => F[D])(f: B => F[D])(using F: FlatMap[F]): F[D] =
-      F.flatMap(fOfEither)(_.fold(_ => ifLeft, f))
+    inline def innerFoldF[D](forLeft: A => F[D])(forRight: B => F[D])(using F: FlatMap[F]): F[D] =
+      F.flatMap(fOfEither)(_.fold(forLeft, forRight))
   }
 
 }
