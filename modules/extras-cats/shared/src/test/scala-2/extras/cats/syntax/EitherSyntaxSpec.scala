@@ -743,40 +743,39 @@ object EitherSyntaxSpec extends Properties {
 
     def testInnerFold: Property =
       for {
+        n        <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+        s        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+        eitherSI <- Gen.element1(n.asRight[String], s.asLeft[Int]).log("eitherSI")
+
         defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
-        eitherSI    <- Gen
-                         .choice1(
-                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
-                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
-                         )
-                         .log("eitherSI")
       } yield {
-        val f: Int => Int = _ * 2
+        val f: Int => Int     = _ * 2
+        val lf: String => Int = leftValue => if (leftValue === s) defaultLeft else defaultLeft + 10
 
         val input    = fab[IO, String, Int](eitherSI)
         val expected = eitherSI.fold(_ => defaultLeft, f)
 
         input
-          .innerFold(defaultLeft)(f)
+          .innerFold(lf)(f)
           .map(actual => actual ==== expected)
       }.unsafeRunSync()
 
     def testInnerFoldF: Property =
       for {
+        n        <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+        s        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+        eitherSI <- Gen.element1(n.asRight[String], s.asLeft[Int]).log("eitherSI")
+
         defaultLeft <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
-        eitherSI    <- Gen
-                         .choice1(
-                           Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).map(_.asRight[String]),
-                           Gen.string(Gen.alphaNum, Range.linear(1, 10)).map(_.asLeft[Int]),
-                         )
-                         .log("eitherSI")
       } yield {
-        val f: Int => Int = _ * 2
-        val input         = fab[IO, String, Int](eitherSI)
-        val expected      = eitherSI.fold(_ => defaultLeft, f)
+        val f: Int => Int     = _ * 2
+        val lf: String => Int = leftValue => if (leftValue === s) defaultLeft else defaultLeft + 10
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = eitherSI.fold(_ => defaultLeft, f)
 
         input
-          .innerFoldF(IO.pure(defaultLeft))(a => IO.pure(f(a)))
+          .innerFoldF(l => IO.pure(lf(l)))(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
       }.unsafeRunSync()
 
