@@ -6,12 +6,14 @@ title: 'F[Either[A, B]]'
 
 ## Extension Methods for `F[Either[A, B]]`
 
-### innerMap
+## innerMap
 
 ```scala
 val foa: F[Either[A, B]] = ...
 foa.innerMap(B => D) // F[Either[A, D]]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -24,11 +26,13 @@ foa.innerMap(_ + 999)
 ```
 
 
-### innerFlatMap
+## innerFlatMap
 ```scala
 val feab: F[Either[A, B]] = ...
 feab.innerFlatMap(B => Either[A, D]) // F[Either[A, D]]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -41,12 +45,14 @@ feab.innerFlatMap(b => (b + 999).asRight[String])
   .unsafeRunSync()
 ```
 
-### innerFlatMapF
+## innerFlatMapF
 ```scala
 val feab: F[Either[A, B]] = ...
 
 feab.innerFlatMapF(B => F[Either[A, D]]) // F[Either[A, D]]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -59,11 +65,72 @@ feab.innerFlatMapF(b => IO.pure((b + 999).asRight))
   .unsafeRunSync()
 ```
 
-### innerGetOrElse
+
+## innerLeftMap
+```scala
+val feab: F[Either[A, B]] = ...
+feab.innerLeftMap(A => C) // F[Either[C, B]]
+```
+
+### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val feab = IO.pure("Error".asLeft[Int])
+
+feab.innerLeftMap("Failed: " + _)
+  .unsafeRunSync()
+```
+
+## innerLeftFlatMap
+```scala
+val feab: F[Either[A, B]] = ...
+feab.innerFlatMap(A => Either[C, B]) // F[Either[C, B]]
+```
+
+### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val feab = IO.pure("Error".asLeft[Int])
+
+feab.innerLeftFlatMap(a => ("Failed: " + a).asLeft[Int])
+  .unsafeRunSync()
+```
+
+## innerLeftFlatMapF
+```scala
+val feab: F[Either[A, B]] = ...
+feab.innerFlatMapF(A => F[Either[C, B]]) // F[Either[C, B]]
+```
+
+### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val feab = IO.pure("Error".asLeft[Int])
+
+feab.innerLeftFlatMapF(a => IO.pure(("Failed: " + a).asLeft[Int]))
+  .unsafeRunSync()
+```
+
+
+## innerGetOrElse
 ```scala
 val feab: F[Either[A, B]] = ...
 feab.innerGetOrElse[D >: B](=> D) // F[D]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -81,11 +148,13 @@ feab2.innerGetOrElse(0)
   .unsafeRunSync()
 ```
 
-### innerGetOrElseF
+## innerGetOrElseF
 ```scala
 val feab: F[Either[A, B]] = ...
 feab.innerGetOrElseF[D >: B](=> F[D]) // F[D]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -103,11 +172,13 @@ feab2.innerGetOrElseF(IO.pure(0))
   .unsafeRunSync()
 ```
 
-### innerFold
+## innerFold
 ```scala
 val feab: F[Either[A, B]] = ...
 feab.innerFold[D](=> D)(B => D) // F[D]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
@@ -125,11 +196,13 @@ feab2.innerFold(_ => 0)(_ + 999)
   .unsafeRunSync()
 ```
 
-### innerFoldF
+## innerFoldF
 ```scala
 val feab: F[Either[A, B]] = ...
 feab.innerFoldF[D](=> F[D])(B => F[D]) // F[D]
 ```
+
+### Example
 ```scala mdoc:reset-object:height=4
 import cats.syntax.all._
 import cats.effect._
