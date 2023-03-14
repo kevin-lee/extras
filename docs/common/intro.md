@@ -5,7 +5,7 @@ title: 'Extras'
 slug: '/'
 ---
 
-# extras
+## extras
 
 [![Build Status](https://github.com/Kevin-Lee/extras/workflows/Build-All/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Build-All)
 [![Release Status](https://github.com/Kevin-Lee/extras/workflows/Release/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Release)
@@ -20,6 +20,8 @@ slug: '/'
 |       extras-hedgehog-ce3 | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-hedgehog-ce3_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-hedgehog-ce3_2.13)             |
 |     extras-hedgehog-circe | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-hedgehog-circe_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-hedgehog-circe_2.13)         |
 |          extras-type-info | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-type-info_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-type-info_2.13)                   |
+|      extras-testing-tools | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-testing-tools_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-testing-tools_2.13)           |
+|        extras-fs2-v*-text | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-fs2-v3-text_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-fs2-v3-text_2.13)               |
 |         extras-refinement | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-refinement_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-refinement_2.13)                 |
 |         extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13)                 |
 | extras-concurrent-testing | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent-testing_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent-testing_2.13) |
@@ -31,61 +33,100 @@ Show [**all `extras` versions
 **](https://index.scala-lang.org/kevin-lee/extras/artifacts)
 :::
 
-* [extras-render](extras-render)
-  ```scala
-  "io.kevinlee" %% "extras-render" % "@VERSION@"
-  ```
-* [extras-cats](extras-cats)
-  ```scala
-  "io.kevinlee" %% "extras-cats" % "@VERSION@"
-  ```
-* [extras-circe](extras-circe)
-  ```scala
-  "io.kevinlee" %% "extras-circe" % "@VERSION@"
-  ```
-* [extras-scala-io](extras-scala-io)
-  ```scala
-  "io.kevinlee" %% "extras-scala-io" % "@VERSION@"
-  ```
-* [extras-hedgehog-ce3](extras-hedgehog/extras-hedgehog-ce3)
-  ```scala
-  "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
-  ```
-* [extras-hedgehog-circe](extras-hedgehog/extras-hedgehog-circe)
-  ```scala
-  "io.kevinlee" %% "extras-hedgehog-circe" % "@VERSION@" % Test
-  ```
-* [extras-refinement](extras-refinement) (n/a to Scala 3)
-  ```scala
-  "io.kevinlee" %% "extras-refinement" % "@VERSION@"
-  ```
-* [extras-type-info](extras-type-info)
-  ```scala
-  "io.kevinlee" %% "extras-type-info" % "@VERSION@"
-  ```
-* [extras-doobie-tools](extras-doobie-tools)
-  ```scala
-  "io.kevinlee" %% "extras-doobie-tools-ce2" % "@VERSION@"
-  ```
-  ```scala
-  "io.kevinlee" %% "extras-doobie-tools-ce3" % "@VERSION@"
-  ```
-* extras-testing-tools
-  ```scala
-  "io.kevinlee" %% "extras-testing-tools" % "@VERSION@"
-  ```
-  ```scala
-  "io.kevinlee" %% "extras-testing-tools-cats" % "@VERSION@"
-  ```
-* [extras-concurrent](extras-concurrent)
-  ```scala
-  "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
-  ```
-  ```scala
-  "io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
-  ```
+## extras-render
 
-* ~~[extras-reflects](extras-reflects) (n/a to Scala 3)~~ - **Deprecated**
-  ```scala
-  "io.kevinlee" %% "extras-reflects" % "@VERSION@"
-  ```
+Go to [<u>**extras-render**</u>](extras-render)
+
+```scala
+"io.kevinlee" %% "extras-render" % "@VERSION@"
+```
+
+## extras-cats
+Go to [<u>**extras-cats**</u>](extras-cats)
+```scala
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
+```
+
+## extras-circe
+Go to [<u>**extras-circe**</u>](extras-circe)
+```scala
+"io.kevinlee" %% "extras-circe" % "@VERSION@"
+```
+
+## extras-scala-io
+Go to [<u>**extras-scala-io**</u>](extras-scala-io)
+```scala
+"io.kevinlee" %% "extras-scala-io" % "@VERSION@"
+```
+
+## extras-hedgehog-ce3
+Go to [<u>**extras-hedgehog-ce3**</u>](extras-hedgehog/extras-hedgehog-ce3)
+```scala
+"io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
+
+## extras-hedgehog-circe
+Go to [<u>**extras-hedgehog-circe**</u>](extras-hedgehog/extras-hedgehog-circe)
+```scala
+"io.kevinlee" %% "extras-hedgehog-circe" % "@VERSION@" % Test
+```
+
+## extras-refinement
+Go to [<u>**extras-refinement**</u>](extras-refinement) (n/a to Scala 3)
+```scala
+"io.kevinlee" %% "extras-refinement" % "@VERSION@"
+```
+
+## extras-type-info
+Go to [<u>**extras-type-info**</u>](extras-type-info)
+```scala
+"io.kevinlee" %% "extras-type-info" % "@VERSION@"
+```
+
+## extras-fs2
+Go to [<u>**extras-fs2**</u>](extras-fs2)
+
+For Fs2 v2
+```scala
+"io.kevinlee" %% "extras-fs2-v2-text" % "@VERSION@"
+```
+For Fs2 v3
+```scala
+"io.kevinlee" %% "extras-fs2-v3-text" % "@VERSION@"
+```
+
+## extras-testing-tools
+Go to [<u>**extras-testing-tools**</u>](extras-testing-tools)
+```scala
+"io.kevinlee" %% "extras-testing-tools" % "@VERSION@"
+```
+```scala
+"io.kevinlee" %% "extras-testing-tools-cats" % "@VERSION@"
+```
+```scala
+"io.kevinlee" %% "extras-testing-tools-effectie" % "@VERSION@"
+```
+
+## extras-doobie-tools
+Go to [<u>**extras-doobie-tools**</u>](extras-doobie-tools)
+```scala
+"io.kevinlee" %% "extras-doobie-tools-ce2" % "@VERSION@"
+```
+```scala
+"io.kevinlee" %% "extras-doobie-tools-ce3" % "@VERSION@"
+```
+
+## extras-concurrent
+Go to [<u>**extras-concurrent**</u>](extras-concurrent)
+```scala
+"io.kevinlee" %% "extras-concurrent" % "@VERSION@"
+```
+```scala
+"io.kevinlee" %% "extras-concurrent-testing" % "@VERSION@" % Test
+```
+
+## ~~extras-reflects~~
+~~extras-reflects (n/a to Scala 3)~~ - **Deprecated**
+```scala
+"io.kevinlee" %% "extras-reflects" % "@VERSION@"
+```
