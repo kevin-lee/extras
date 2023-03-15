@@ -43,7 +43,7 @@ something.asJson.spaces2
 ```
 
 ### Comparison
-Let's compare it with the `Encoder` without `withFields` syntax.
+Let's compare it with the `Encoder` without `renameFields` syntax.
 ```scala mdoc:reset-object
 import io.circe._
 import io.circe.syntax._
@@ -115,7 +115,7 @@ decode[Something](jsonString)
 ```
 
 ### Comparison
-Let's compare it with the `Encoder` without `withFields` syntax.
+Let's compare it with the `Encoder` without `renameFields` syntax.
 ```scala mdoc:reset-object
 import io.circe._
 import io.circe.syntax._
@@ -188,7 +188,7 @@ decode[Something](jsonString)
 ```
 
 ### Comparison
-Let's compare it with the `Encoder` without `withFields` syntax.
+Let's compare it with the `Encoder` without `renameFields` syntax.
 ```scala mdoc:reset-object
 import io.circe._
 import io.circe.syntax._
