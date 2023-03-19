@@ -8,9 +8,9 @@ import doobie.util.{Read, Write}
   * @since 2022-11-27
   */
 object data {
-  final case class Example(id: Example.Id, name: Example.Name, note: Example.Note)
+  final private[ce3] case class Example(id: Example.Id, name: Example.Name, note: Example.Note)
 
-  object Example {
+  private[ce3] object Example {
 
     type Id = Id.Id
     object Id {

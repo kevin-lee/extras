@@ -11,9 +11,9 @@ import scala.annotation.nowarn
   * @since 2022-11-27
   */
 object data {
-  final case class Example(id: Example.Id, name: Example.Name, note: Example.Note)
+  final private[ce2] case class Example(id: Example.Id, name: Example.Name, note: Example.Note)
 
-  object Example {
+  private[ce2] object Example {
 
     @newtype case class Id(value: Int)
 
