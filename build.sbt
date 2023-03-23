@@ -140,7 +140,7 @@ lazy val extrasDoobieNewtypeCe2    = crossSubProject("doobie-newtype-ce2", cross
     crossScalaVersions := props.Scala2Versions.distinct,
     libraryDependencies ++=
       List(
-        libs.doobieCe2Core,
+        libs.doobieCe2Core
       ) ++
         (if (isScala3(scalaVersion.value))
            List.empty
@@ -1095,7 +1095,7 @@ lazy val props = new {
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
       m.name == "wartremover" ||
-        m.name == "ammonite" ||
+      m.name == "ammonite" ||
         m.name == "kind-projector" ||
         m.name == "better-monadic-for"
 

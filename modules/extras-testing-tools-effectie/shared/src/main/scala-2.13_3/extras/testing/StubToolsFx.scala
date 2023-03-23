@@ -10,6 +10,7 @@ import extras.testing.StubToolsFx.{stubToolsFxPartiallyApplied, StubToolsFxParti
   * @since 2023-02-09
   */
 trait StubToolsFx {
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   final def stub[F[*]]: StubToolsFx.StubToolsFxPartiallyApplied[F] =
     stubToolsFxPartiallyApplied.asInstanceOf[StubToolsFxPartiallyApplied[F]] // scalafix:ok DisableSyntax.asInstanceOf
 }
