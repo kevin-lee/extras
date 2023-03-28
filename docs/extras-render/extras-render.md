@@ -11,4 +11,8 @@ import DocCardList from '@theme/DocCardList';
 "io.kevinlee" %% "extras-render" % "@VERSION@"
 ```
 
+```scala
+"io.kevinlee" %% "extras-render-refined" % "@VERSION@"
+```
+
 <DocCardList />
