@@ -94,6 +94,14 @@ object OptionSyntaxSpec extends Properties {
       "test F[Option[A]].innerFoldF[B >: A](=> F[B])(A => F[B]): F[B]",
       FOfOptionInnerOpsSpec.testInnerFoldF,
     ),
+    property(
+      "test F[Option[A]].innerForeach(A => Unit): F[Unit]",
+      FOfOptionInnerOpsSpec.testInnerForeach,
+    ),
+    property(
+      "test F[Option[A]].innerForeachF(A => F[Unit]): F[Unit]",
+      FOfOptionInnerOpsSpec.testInnerForeachF,
+    ),
   )
 
   object OptionTFOptionOpsSpec {
@@ -588,6 +596,70 @@ object OptionSyntaxSpec extends Properties {
         input
           .innerFoldF(IO.pure(defaultValue))(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerForeach: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        @SuppressWarnings(Array("org.wartremover.warts.Var"))
+        var result = none[Int] // scalafix:ok DisableSyntax.var
+
+        val f: Int => Unit = { n =>
+          result = n.some
+          ()
+        }
+
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN
+
+        input
+          .innerForeach(f)
+          .map(actual =>
+            Result.all(
+              List(
+                actual ==== (()),
+                result ==== expected,
+              )
+            )
+          )
+      }.unsafeRunSync()
+
+    def testInnerForeachF: Property =
+      for {
+        defaultValue <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("defaultValue")
+        optionN      <- Gen
+                          .int(Range.linear(Int.MinValue, Int.MaxValue))
+                          .map { n => if (n === defaultValue) n + 1 else n }
+                          .option
+                          .log("optionN")
+      } yield {
+        @SuppressWarnings(Array("org.wartremover.warts.Var"))
+        var result = none[Int] // scalafix:ok DisableSyntax.var
+
+        val f: Int => Unit = { n =>
+          result = n.some
+          ()
+        }
+
+        val input    = fab[IO, Int](optionN)
+        val expected = optionN
+
+        input
+          .innerForeachF(a => IO.pure(f(a)))
+          .map(actual =>
+            Result.all(
+              List(
+                actual ==== (()),
+                result ==== expected,
+              )
+            )
+          )
       }.unsafeRunSync()
 
   }
