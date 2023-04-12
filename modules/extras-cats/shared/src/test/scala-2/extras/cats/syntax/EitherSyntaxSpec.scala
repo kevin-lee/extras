@@ -119,6 +119,14 @@ object EitherSyntaxSpec extends Properties {
       "test F[Either[A, B]].innerFoldF[D](=> F[D])(B => F[D]): F[D]",
       FOfEitherInnerOpsSpec.testInnerFoldF,
     ),
+    property(
+      "test F[Either[A, B]].innerForeach(B => Unit): F[Unit]",
+      FOfEitherInnerOpsSpec.testInnerForeach,
+    ),
+    property(
+      "test F[Either[A, B]].innerForeachF(B => F[Unit]): F[Unit]",
+      FOfEitherInnerOpsSpec.testInnerForeachF,
+    ),
   )
 
   object EitherSyntaxSpec {
@@ -777,6 +785,64 @@ object EitherSyntaxSpec extends Properties {
         input
           .innerFoldF(l => IO.pure(lf(l)))(a => IO.pure(f(a)))
           .map(actual => actual ==== expected)
+      }.unsafeRunSync()
+
+    def testInnerForeach: Property =
+      for {
+        n        <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+        s        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+        eitherSI <- Gen.element1(n.asRight[String], s.asLeft[Int]).log("eitherSI")
+      } yield {
+        @SuppressWarnings(Array("org.wartremover.warts.Var"))
+        var result = none[Either[String, Int]] // scalafix:ok DisableSyntax.var
+
+        val f: Int => Unit = { n =>
+          result = n.asRight[String].some
+          ()
+        }
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = if (eitherSI.isRight) eitherSI.some else none
+
+        input
+          .innerForeach(f)
+          .map(actual =>
+            Result.all(
+              List(
+                actual ==== (()),
+                result ==== expected,
+              )
+            )
+          )
+      }.unsafeRunSync()
+
+    def testInnerForeachF: Property =
+      for {
+        n        <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+        s        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("s")
+        eitherSI <- Gen.element1(n.asRight[String], s.asLeft[Int]).log("eitherSI")
+      } yield {
+        @SuppressWarnings(Array("org.wartremover.warts.Var"))
+        var result = none[Either[String, Int]] // scalafix:ok DisableSyntax.var
+
+        val f: Int => Unit = { n =>
+          result = n.asRight[String].some
+          ()
+        }
+
+        val input    = fab[IO, String, Int](eitherSI)
+        val expected = if (eitherSI.isRight) eitherSI.some else none
+
+        input
+          .innerForeachF(a => IO.pure(f(a)))
+          .map(actual =>
+            Result.all(
+              List(
+                actual ==== (()),
+                result ==== expected,
+              )
+            )
+          )
       }.unsafeRunSync()
 
   }
