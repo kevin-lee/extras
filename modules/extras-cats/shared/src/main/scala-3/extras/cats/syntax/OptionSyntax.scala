@@ -74,10 +74,10 @@ trait OptionSyntax {
     inline def innerFoldF[B](ifEmpty: => F[B])(f: A => F[B])(using F: FlatMap[F]): F[B] =
       F.flatMap(fOfOption)(_.fold(ifEmpty)(f))
 
-    inline def innerForeach(f: A => Unit)(implicit F: Functor[F]): F[Unit] =
+    inline def innerForeach(f: A => Unit)(using F: Functor[F]): F[Unit] =
       F.map(fOfOption)(_.foreach(f))
 
-    inline def innerForeachF(f: A => F[Unit])(implicit F: FlatMap[F], AP: Applicative[F]): F[Unit] =
+    inline def innerForeachF(f: A => F[Unit])(using F: FlatMap[F], AP: Applicative[F]): F[Unit] =
       F.flatMap(fOfOption)(_.fold(Applicative[F].unit)(f))
 
   }
