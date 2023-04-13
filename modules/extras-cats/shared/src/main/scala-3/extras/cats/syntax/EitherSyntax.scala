@@ -94,6 +94,13 @@ trait EitherSyntax {
 
     inline def innerFoldF[D](forLeft: A => F[D])(forRight: B => F[D])(using F: FlatMap[F]): F[D] =
       F.flatMap(fOfEither)(_.fold(forLeft, forRight))
+
+    inline def innerForeach(f: B => Unit)(using F: Functor[F]): F[Unit] =
+      F.map(fOfEither)(_.foreach(f))
+
+    inline def innerForeachF(f: B => F[Unit])(using F: FlatMap[F], AP: Applicative[F]): F[Unit] =
+      F.flatMap(fOfEither)(_.fold(_ => Applicative[F].unit, f))
+
   }
 
 }
