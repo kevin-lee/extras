@@ -115,7 +115,7 @@ foa2.innerGetOrElseF(IO.pure(0))
 ### `innerFold`
 ```scala
 val foa: F[Option[A]] = ...
-foa.innerFold[B](=> B)(A => B) // F[Option[B]]
+foa.innerFold[B](=> B)(A => B) // F[B]
 ```
 
 #### Example
@@ -137,7 +137,7 @@ foa2.innerFold(0)(_ + 999)
 ### `innerFoldF`
 ```scala
 val foa: F[Option[A]] = ...
-foa.innerFoldF[B >: A](=> F[B])(A => F[B]) // F[Option[B]]
+foa.innerFoldF[B >: A](=> F[B])(A => F[B]) // F[B]
 ```
 
 #### Example
@@ -204,6 +204,56 @@ val foa2 = IO.pure(none[Int])
 foa2.innerOrElseF(IO.pure(0.some))
   .unsafeRunSync()
 ```
+
+
+## Do
+
+### `innerForeach`
+```scala
+val foa: F[Option[A]] = ...
+foa.innerForeach(A => Unit) // F[Unit]
+```
+
+#### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val foa = IO.pure(1.some)
+foa.innerForeach(println)
+  .unsafeRunSync()
+
+val foa2 = IO.pure(none[Int])
+foa2.innerForeach(println)
+  .unsafeRunSync()
+```
+
+### `innerForeachF`
+```scala
+val foa: F[Option[A]] = ...
+foa.innerForeachF(A => F[Unit]) // F[Unit]
+```
+
+#### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val foa = IO.pure(1.some)
+
+foa.innerForeachF(a => IO.delay(println(a)))
+  .unsafeRunSync()
+
+val foa2 = IO.pure(none[Int])
+
+foa2.innerForeachF(a => IO.delay(println(a)))
+  .unsafeRunSync()
+```
+
 
 ## Check and Search
 
