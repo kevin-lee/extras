@@ -269,6 +269,57 @@ feab2.innerOrElseF(IO.pure(0.asRight[String]))
   .unsafeRunSync()
 ```
 
+## Do
+
+### `innerForeach`
+```scala
+val feab: F[Either[A, B]] = ...
+feab.innerForeach(B => Unit) // F[Unit]
+```
+
+#### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val feab = IO.pure(1.asRight[String])
+
+feab.innerForeach(println)
+  .unsafeRunSync()
+
+val feab2 = IO.pure("Error".asLeft[Int])
+
+feab2.innerForeach(println)
+  .unsafeRunSync()
+```
+
+### `innerForeachF`
+```scala
+val feab: F[Either[A, B]] = ...
+feab.innerForeachF(B => F[Unit]) // F[Unit]
+```
+
+#### Example
+```scala mdoc:reset-object:height=4
+import cats.syntax.all._
+import cats.effect._
+
+import extras.cats.syntax.all._
+
+val feab = IO.pure(1.asRight[String])
+
+feab.innerForeachF(b => IO.delay(println(b)))
+  .unsafeRunSync()
+
+val feab2 = IO.pure("Error".asLeft[Int])
+
+feab2.innerForeachF(b => IO.delay(println(b)))
+  .unsafeRunSync()
+```
+
+
 ## Check and Search
 
 ### `innerFind`
