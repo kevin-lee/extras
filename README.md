@@ -20,3 +20,9 @@
 |         extras-refinement | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-refinement_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-refinement_2.13)                 |
 |         extras-concurrent | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent_2.13)                 |
 | extras-concurrent-testing | [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kevinlee/extras-concurrent-testing_2.13/badge.svg)](https://search.maven.org/artifact/io.kevinlee/extras-concurrent-testing_2.13) |
+
+# Test Coverage
+
+[![codecov](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graph/badge.svg?token=1U95FXZWUL)](https://codecov.io/gh/Kevin-Lee/extras)
+
+[![Codecov Graph](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/tree.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
