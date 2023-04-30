@@ -4,3 +4,7 @@ ignore:
   - "generated-docs-scala2"
   - "generated-docs-scala3"
   - "website"
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
