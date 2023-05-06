@@ -25,4 +25,8 @@
 
 [![codecov](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graph/badge.svg?token=1U95FXZWUL)](https://codecov.io/gh/Kevin-Lee/extras)
 
-[![Codecov Graph](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/tree.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+[![Grid](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/tree.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+
+[![Sunburst](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/sunburst.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+
+[![Icicle](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/icicle.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
