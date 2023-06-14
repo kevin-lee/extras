@@ -22,7 +22,7 @@ const websiteConfig = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.png',
-  organizationName: 'Kevin-Lee', // Usually your GitHub org/user name.
+  organizationName: 'kevin-lee', // Usually your GitHub org/user name.
   projectName: 'extras', // Usually your repo name.
 
   presets: [
@@ -60,7 +60,7 @@ const websiteConfig = {
             label: 'Docs',
           },
           {
-            href: 'https://github.com/Kevin-Lee/extras',
+            href: 'https://github.com/kevin-lee/extras',
             label: 'GitHub',
             position: 'right',
           },
@@ -83,12 +83,12 @@ const websiteConfig = {
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/Kevin-Lee/extras',
+                href: 'https://github.com/kevin-lee/extras',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Extras written by <a href="https://github.com/Kevin-Lee" target="_blank"><b>Kevin Lee</b></a>, The website built with Docusaurus.
+        copyright: `Copyright © ${new Date().getFullYear()} Extras written by <a href="https://github.com/kevin-lee" target="_blank"><b>Kevin Lee</b></a>, The website built with Docusaurus.
         <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
         `,
       },

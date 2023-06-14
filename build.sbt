@@ -1036,7 +1036,7 @@ lazy val props = new {
   private val GitHubRepo = findRepoOrgAndName
 
   val Org        = "io.kevinlee"
-  val GitHubUser = GitHubRepo.fold("Kevin-Lee")(_.orgToString)
+  val GitHubUser = GitHubRepo.fold("kevin-lee")(_.orgToString)
   val RepoName   = GitHubRepo.fold("extras")(_.nameToString)
 
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))

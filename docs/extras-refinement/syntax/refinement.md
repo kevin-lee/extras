@@ -129,7 +129,7 @@ The syntax is not exactly the same, but the most important core logic of using `
 
 If you are interested in the difference,
 * [the source code from `Practical FP in Scala` is here](https://github.com/gvolpe/pfps-examples/blob/e49adf61fe5cdc84b0ca50995f20fb5a79f91cea/src/main/scala/examples/validation/RuntimeValidation.scala#L268-L294) and
-* [the source code of `extras-refinement` is here](https://github.com/Kevin-Lee/extras/blob/3aaf342368665ba622f41874639e37b4f130a046/modules/extras-refinement/shared/src/main/scala/extras/refinement/syntax/refinement.scala#L11-L42)
+* [the source code of `extras-refinement` is here](https://github.com/kevin-lee/extras/blob/3aaf342368665ba622f41874639e37b4f130a046/modules/extras-refinement/shared/src/main/scala/extras/refinement/syntax/refinement.scala#L11-L42)
 :::
 
 ### Example: Valid Case
