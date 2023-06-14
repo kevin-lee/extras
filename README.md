@@ -2,8 +2,8 @@
 
 ## Please visit [https://extras.kevinly.dev](https://extras.kevinly.dev)
 
-[![Build Status](https://github.com/Kevin-Lee/extras/workflows/Build-All/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Build-All)
-[![Release Status](https://github.com/Kevin-Lee/extras/workflows/Release/badge.svg)](https://github.com/Kevin-Lee/extras/actions?workflow=Release)
+[![Build Status](https://github.com/kevin-lee/extras/workflows/Build-All/badge.svg)](https://github.com/kevin-lee/extras/actions?workflow=Build-All)
+[![Release Status](https://github.com/kevin-lee/extras/workflows/Release/badge.svg)](https://github.com/kevin-lee/extras/actions?workflow=Release)
 [![Latest version](https://index.scala-lang.org/kevin-lee/extras/latest.svg)](https://index.scala-lang.org/kevin-lee/extras)
 
 |                   Project | Maven Central                                                                                                                                                                                           |
@@ -23,10 +23,10 @@
 
 # Test Coverage
 
-[![codecov](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graph/badge.svg?token=1U95FXZWUL)](https://codecov.io/gh/Kevin-Lee/extras)
+[![codecov](https://codecov.io/gh/kevin-lee/extras/branch/main/graph/badge.svg?token=1U95FXZWUL)](https://codecov.io/gh/kevin-lee/extras)
 
-[![Grid](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/tree.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+[![Grid](https://codecov.io/gh/kevin-lee/extras/branch/main/graphs/tree.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/kevin-lee/extras)
 
-[![Sunburst](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/sunburst.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+[![Sunburst](https://codecov.io/gh/kevin-lee/extras/branch/main/graphs/sunburst.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/kevin-lee/extras)
 
-[![Icicle](https://codecov.io/gh/Kevin-Lee/extras/branch/main/graphs/icicle.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/Kevin-Lee/extras)
+[![Icicle](https://codecov.io/gh/kevin-lee/extras/branch/main/graphs/icicle.svg?token=1U95FXZWUL)](https://app.codecov.io/gh/kevin-lee/extras)
