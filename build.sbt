@@ -4,9 +4,6 @@ ThisBuild / scalaVersion := props.ProjectScalaVersion
 ThisBuild / organization := props.Org
 ThisBuild / organizationName := "Kevin's Code"
 
-ThisBuild / testFrameworks ~=
-  (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct)
-
 ThisBuild / developers := List(
   Developer(
     props.GitHubUser,
