@@ -12,6 +12,10 @@ title: 'Color'
 
 ```scala mdoc:reset-object
 import extras.scala.io.syntax.color._
+```
+
+```scala mdoc:reset-object
+import extras.scala.io.syntax.color._
 
 "Hello".blue
 
