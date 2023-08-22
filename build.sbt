@@ -109,6 +109,14 @@ lazy val extrasCore    = crossSubProject("core", crossProject(JVMPlatform, JSPla
 lazy val extrasCoreJvm = extrasCore.jvm
 lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 
+lazy val extrasString    = crossSubProject("string", crossProject(JVMPlatform, JSPlatform))
+  .settings(
+    crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+  )
+lazy val extrasStringJvm = extrasString.jvm
+lazy val extrasStringJs  = extrasString.js.settings(Test / fork := false)
+
 lazy val extrasCirce    = crossSubProject("circe", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
