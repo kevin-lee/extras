@@ -39,5 +39,37 @@ object strings extends strings {
       case Seq(s1, s2) => s"$s1 and $s2"
       case _ => s"${ss.dropRight(1).mkString(", ")} and ${ss.last}"
     }
+
+    /** join a Seq[String] with , (comma) and the last and the second last elements should be also connected with and (Oxford comma / Harvard comma).
+      *
+      * @example
+      * {{{
+      *   List.empty
+      *   // String = ""
+      *
+      *   List("")
+      *   // String = ""
+      *
+      *   List("aaa")
+      *   // String = "aaa"
+      *
+      *   List("aaa", "bbb")
+      *   // String = "aaa and bbb"
+      *
+      *   List("aaa", "bbb", "ccc")
+      *   // String = "aaa, bbb, and ccc"
+      *
+      *   List("aaa", "bbb", "ccc", "ddd")
+      *   // String = "aaa, bbb, ccc, and ddd"
+      *
+      * }}}
+      */
+    @SuppressWarnings(Array("org.wartremover.warts.IterableOps"))
+    def serialCommaAnd: String = ss match {
+      case Seq() => ""
+      case Seq(s) => s
+      case Seq(s1, s2) => s"$s1 and $s2"
+      case _ => s"${ss.dropRight(1).mkString(", ")}, and ${ss.last}"
+    }
   }
 }
