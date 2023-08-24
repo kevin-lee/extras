@@ -13,22 +13,22 @@ object strings extends strings {
     /** join Seq[String] with , (comma) expect for the last and the second last one which are connected with `and`.
       * @example
       * {{{
-      *   List.empty
+      *   List.empty[String].commaAnd
       *   // String = ""
       *
-      *   List("")
+      *   List("").commaAnd
       *   // String = ""
       *
-      *   List("aaa")
+      *   List("aaa").commaAnd
       *   // String = "aaa"
       *
-      *   List("aaa", "bbb")
+      *   List("aaa", "bbb").commaAnd
       *   // String = "aaa and bbb"
       *
-      *   List("aaa", "bbb", "ccc")
+      *   List("aaa", "bbb", "ccc").commaAnd
       *   // String = "aaa, bbb and ccc"
       *
-      *   List("aaa", "bbb", "ccc", "ddd")
+      *   List("aaa", "bbb", "ccc", "ddd").commaAnd
       *   // String = "aaa, bbb, ccc and ddd"
       *
       * }}}
@@ -44,22 +44,22 @@ object strings extends strings {
       *
       * @example
       * {{{
-      *   List.empty
+      *   List.empty[String].serialCommaAnd
       *   // String = ""
       *
-      *   List("")
+      *   List("").serialCommaAnd
       *   // String = ""
       *
-      *   List("aaa")
+      *   List("aaa").serialCommaAnd
       *   // String = "aaa"
       *
-      *   List("aaa", "bbb")
+      *   List("aaa", "bbb").serialCommaAnd
       *   // String = "aaa and bbb"
       *
-      *   List("aaa", "bbb", "ccc")
+      *   List("aaa", "bbb", "ccc").serialCommaAnd
       *   // String = "aaa, bbb, and ccc"
       *
-      *   List("aaa", "bbb", "ccc", "ddd")
+      *   List("aaa", "bbb", "ccc", "ddd").serialCommaAnd
       *   // String = "aaa, bbb, ccc, and ddd"
       *
       * }}}
