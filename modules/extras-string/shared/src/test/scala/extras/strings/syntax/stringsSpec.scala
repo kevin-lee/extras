@@ -8,13 +8,59 @@ import hedgehog.runner._
   */
 object stringsSpec extends Properties {
   override def tests: List[Test] = List(
-    example("test List[String].empty.commaAnd", testEmptyListCommaAnd),
+    property("test List.empty[String].commaWith", testEmptyListCommaWith),
+    property("test List(\"\").commaWith", testListWithSingleEmptyStringCommaWith),
+    property("test List[String].commaWith", testCommaWith),
+    example("test List.empty[String].commaAnd", testEmptyListCommaAnd),
     example("test List(\"\").commaAnd", testListWithSingleEmptyStringCommaAnd),
     property("test List[String].commaAnd", testCommaAnd),
-    example("test List[String].empty.serialCommaAnd", testEmptyListSerialCommaAnd),
+    example("test List.empty[String].serialCommaAnd", testEmptyListSerialCommaAnd),
     example("test List(\"\").serialCommaAnd", testListWithSingleEmptyStringSerialCommaAnd),
     property("test List[String].serialCommaAnd", testSerialCommaAnd),
   )
+
+  def testEmptyListCommaWith: Property = for {
+    conjunction <- Gen.string(Gen.alphaNum, Range.linear(1, 5)).log("conjunction")
+  } yield {
+    import extras.strings.syntax.strings._
+
+    val expected = ""
+    val actual   = List.empty[String].commaWith(conjunction)
+    actual ==== expected
+  }
+
+  def testListWithSingleEmptyStringCommaWith: Property = for {
+    conjunction <- Gen.string(Gen.alphaNum, Range.linear(1, 5)).log("conjunction")
+  } yield {
+    import extras.strings.syntax.strings._
+
+    val expected = ""
+    val actual   = List("").commaWith(conjunction)
+    actual ==== expected
+  }
+
+  def testCommaWith: Property =
+    for {
+      conjunction <- Gen.string(Gen.alphaNum, Range.linear(1, 5)).log("conjunction")
+      ss          <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
+      last        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
+
+      (list, expected) <- Gen
+                            .constant(ss match {
+                              case Nil =>
+                                (List(last), last)
+                              case _ =>
+                                (ss ++ List(last), s"${ss.mkString(", ")} $conjunction $last")
+                            })
+                            .log("(list, expected)")
+    } yield {
+      import extras.strings.syntax.strings._
+
+      val actual = list.commaWith(conjunction)
+      actual ==== expected
+    }
+
+  ///
 
   def testEmptyListCommaAnd: Result = {
     import extras.strings.syntax.strings._
@@ -51,6 +97,8 @@ object stringsSpec extends Properties {
       val actual = list.commaAnd
       actual ==== expected
     }
+
+  ///
 
   def testEmptyListSerialCommaAnd: Result = {
     import extras.strings.syntax.strings._
