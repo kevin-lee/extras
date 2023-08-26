@@ -150,6 +150,33 @@ object strings extends strings {
       */
     def commaOr: String = commaWith("or")
 
+    /** Format Seq[String] into a human-readable list using comma and the conjunction `or`.
+      * It separates elements by commas and uses the term `or` before the last element following the "Oxford comma" style. e.g.) "aaa, bbb, or ccc".
+      *
+      * @example
+      * {{{
+      *   List.empty[String].serialCommaOr
+      *   // String = ""
+      *
+      *   List("").serialCommaOr
+      *   // String = ""
+      *
+      *   List("aaa").serialCommaOr
+      *   // String = "aaa"
+      *
+      *   List("aaa", "bbb").serialCommaOr
+      *   // String = "aaa or bbb"
+      *
+      *   List("aaa", "bbb", "ccc").serialCommaOr
+      *   // String = "aaa, bbb, or ccc"
+      *
+      *   List("aaa", "bbb", "ccc", "ddd").serialCommaOr
+      *   // String = "aaa, bbb, ccc, or ddd"
+      *
+      * }}}
+      */
+    def serialCommaOr: String = serialCommaWith("or")
+
   }
 
 }
