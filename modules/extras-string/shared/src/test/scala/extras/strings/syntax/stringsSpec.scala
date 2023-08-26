@@ -23,6 +23,10 @@ object stringsSpec extends Properties {
     example("test List.empty[String].serialCommaAnd", testEmptyListSerialCommaAnd),
     example("test List(\"\").serialCommaAnd", testListWithSingleEmptyStringSerialCommaAnd),
     property("test List[String].serialCommaAnd", testSerialCommaAnd),
+    //
+    example("test List.empty[String].commaOr", testEmptyListCommaOr),
+    example("test List(\"\").commaOr", testListWithSingleEmptyStringCommaOr),
+    property("test List[String].commaOr", testCommaOr),
   )
 
   def testEmptyListCommaWith: Property = for {
@@ -190,5 +194,45 @@ object stringsSpec extends Properties {
       val actual = list.serialCommaAnd
       actual ==== expected
     }
+
+
+  ///
+
+  def testEmptyListCommaOr: Result = {
+    import extras.strings.syntax.strings._
+
+    val expected = ""
+    val actual = List.empty[String].commaOr
+    actual ==== expected
+  }
+
+  def testListWithSingleEmptyStringCommaOr: Result = {
+    import extras.strings.syntax.strings._
+
+    val expected = ""
+    val actual = List("").commaOr
+    actual ==== expected
+  }
+
+  def testCommaOr: Property =
+    for {
+      ss <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
+      last <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
+
+      (list, expected) <- Gen
+        .constant(ss match {
+          case Nil =>
+            (List(last), last)
+          case _ =>
+            (ss ++ List(last), s"${ss.mkString(", ")} or $last")
+        })
+        .log("(list, expected)")
+    } yield {
+      import extras.strings.syntax.strings._
+
+      val actual = list.commaOr
+      actual ==== expected
+    }
+
 
 }
