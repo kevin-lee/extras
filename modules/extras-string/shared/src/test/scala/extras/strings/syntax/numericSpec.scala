@@ -16,10 +16,11 @@ object numericSpec extends Properties {
 
     def testToOrdinal: Property =
       for {
-        (n, expected) <- Gen
-                           .int(Range.linear(0, Int.MaxValue))
-                           .map(num => num -> ordinal(num.toLong))
-                           .log("(n, expected)")
+        nAndExpected <- Gen
+                          .int(Range.linear(0, Int.MaxValue))
+                          .map(num => num -> ordinal(num.toLong))
+                          .log("(n, expected)")
+        (n, expected) = nAndExpected
       } yield {
         import extras.strings.syntax.numeric._
 
@@ -36,10 +37,11 @@ object numericSpec extends Properties {
 
     def testToOrdinal: Property =
       for {
-        (n, expected) <- Gen
-                           .long(Range.linear(0L, Long.MaxValue))
-                           .map(num => num -> ordinal(num))
-                           .log("(n, expected)")
+        nAndExpected <- Gen
+                          .long(Range.linear(0L, Long.MaxValue))
+                          .map(num => num -> ordinal(num))
+                          .log("(n, expected)")
+        (n, expected) = nAndExpected
       } yield {
         import extras.strings.syntax.numeric._
 

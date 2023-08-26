@@ -59,14 +59,15 @@ object stringsSpec extends Properties {
       ss          <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")} $conjunction $last")
-                            })
-                            .log("(list, expected)")
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")} $conjunction $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
@@ -102,18 +103,19 @@ object stringsSpec extends Properties {
       ss          <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last        <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
 
-                              case s :: Nil =>
-                                (ss ++ List(last), s"$s $conjunction $last")
+                             case s :: Nil =>
+                               (ss ++ List(last), s"$s $conjunction $last")
 
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")}, $conjunction $last")
-                            })
-                            .log("(list, expected)")
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")}, $conjunction $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
@@ -144,14 +146,15 @@ object stringsSpec extends Properties {
       ss   <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")} and $last")
-                            })
-                            .log("(list, expected)")
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")} and $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
@@ -182,16 +185,17 @@ object stringsSpec extends Properties {
       ss   <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
-                              case s :: Nil =>
-                                (ss ++ List(last), s"$s and $last")
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")}, and $last")
-                            })
-                            .log("(list, expected)")
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
+                             case s :: Nil =>
+                               (ss ++ List(last), s"$s and $last")
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")}, and $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
@@ -222,14 +226,15 @@ object stringsSpec extends Properties {
       ss   <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")} or $last")
-                            })
-                            .log("(list, expected)")
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")} or $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
@@ -260,16 +265,17 @@ object stringsSpec extends Properties {
       ss   <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).list(Range.linear(0, 5)).log("ss")
       last <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("last")
 
-      (list, expected) <- Gen
-                            .constant(ss match {
-                              case Nil =>
-                                (List(last), last)
-                              case s :: Nil =>
-                                (ss ++ List(last), s"$s or $last")
-                              case _ =>
-                                (ss ++ List(last), s"${ss.mkString(", ")}, or $last")
-                            })
-                            .log("(list, expected)")
+      listAndExpected <- Gen
+                           .constant(ss match {
+                             case Nil =>
+                               (List(last), last)
+                             case s :: Nil =>
+                               (ss ++ List(last), s"$s or $last")
+                             case _ =>
+                               (ss ++ List(last), s"${ss.mkString(", ")}, or $last")
+                           })
+                           .log("(list, expected)")
+      (list, expected) = listAndExpected
     } yield {
       import extras.strings.syntax.strings._
 
