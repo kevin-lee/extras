@@ -10,27 +10,27 @@ object strings extends strings {
   @SuppressWarnings(Array("org.wartremover.warts.IterableOps"))
   final class StringSeqOps(private val ss: Seq[String]) extends AnyVal {
 
-    /** Join Seq[String] with , (comma) expect for the last and the second last one which are connected with the given conjunction.
-      *
+    /** Extension method for a Seq[String], providing a way to join the elements with a comma and a given conjunction.
+      * It joins String values with commas and uses the given conjunction before the last element.
       * @example
       * {{{
-      *   List.empty[String].commaWith("blah")
+      *   List.empty[String].commaWith("BLAH")
       *   // String = ""
       *
-      *   List("").commaWith("blah")
+      *   List("").commaWith("BLAH")
       *   // String = ""
       *
-      *   List("aaa").commaWith("blah")
+      *   List("aaa").commaWith("BLAH")
       *   // String = "aaa"
       *
-      *   List("aaa", "bbb").commaWith("blah")
-      *   // String = "aaa blah bbb"
+      *   List("aaa", "bbb").commaWith("BLAH")
+      *   // String = "aaa BLAH bbb"
       *
-      *   List("aaa", "bbb", "ccc").commaWith("blah")
-      *   // String = "aaa, bbb blah ccc"
+      *   List("aaa", "bbb", "ccc").commaWith("BLAH")
+      *   // String = "aaa, bbb BLAH ccc"
       *
-      *   List("aaa", "bbb", "ccc", "ddd").commaWith("blah")
-      *   // String = "aaa, bbb, ccc blah ddd"
+      *   List("aaa", "bbb", "ccc", "ddd").commaWith("BLAH")
+      *   // String = "aaa, bbb, ccc BLAH ddd"
       *
       * }}}
       */
@@ -41,27 +41,32 @@ object strings extends strings {
       case _ => s"${ss.dropRight(1).mkString(", ")} $conjunction ${ss.last}"
     }
 
-    /** Join Seq[String] with , (Oxford comma / Harvard comma) and the last and the second last elements should be also connected with the given conjunction.
+    /** Extension method for a Seq[String], providing a way to join the elements with a serial comma and a given conjunction.
+      *
+      * It joins String values with commas and uses the given conjunction before the last element.
+      *
+      * This method employs the serial comma (also known as the Oxford comma),
+      * which means it always inserts a comma before the conjunction unless there are only two elements.
       *
       * @example
       * {{{
-      *   List.empty[String].serialCommaWith("blah")
+      *   List.empty[String].serialCommaWith("BLAH")
       *   // String = ""
       *
-      *   List("").serialCommaWith("blah")
+      *   List("").serialCommaWith("BLAH")
       *   // String = ""
       *
-      *   List("aaa").serialCommaWith("blah")
+      *   List("aaa").serialCommaWith("BLAH")
       *   // String = "aaa"
       *
-      *   List("aaa", "bbb").serialCommaWith("blah")
-      *   // String = "aaa blah bbb"
+      *   List("aaa", "bbb").serialCommaWith("BLAH")
+      *   // String = "aaa BLAH bbb"
       *
-      *   List("aaa", "bbb", "ccc").serialCommaWith("blah")
-      *   // String = "aaa, bbb, blah ccc"
+      *   List("aaa", "bbb", "ccc").serialCommaWith("BLAH")
+      *   // String = "aaa, bbb, BLAH ccc"
       *
-      *   List("aaa", "bbb", "ccc", "ddd").serialCommaWith("blah")
-      *   // String = "aaa, bbb, ccc, blah ddd"
+      *   List("aaa", "bbb", "ccc", "ddd").serialCommaWith("BLAH")
+      *   // String = "aaa, bbb, ccc, BLAH ddd"
       *
       * }}}
       */
@@ -73,7 +78,9 @@ object strings extends strings {
       case _ => s"${ss.dropRight(1).mkString(", ")}, $conjunction ${ss.last}"
     }
 
-    /** join Seq[String] with , (comma) expect for the last and the second last one which are connected with `and`.
+    /** Format Seq[String] into a human-readable list using comma and the conjunction `and`.
+      * It separates elements by commas and uses the term `and` before the last element.
+      *
       * @example
       * {{{
       *   List.empty[String].commaAnd
@@ -98,7 +105,9 @@ object strings extends strings {
       */
     def commaAnd: String = commaWith("and")
 
-    /** join a Seq[String] with , (comma) and the last and the second last elements should be also connected with and (Oxford comma / Harvard comma).
+    /** Format Seq[String] into a human-readable list using comma and the conjunction `and`.
+      * It separates elements by commas and uses the term `and` before the last element following the "Oxford comma" style.
+      * e.g.) "aaa, bbb, and ccc".
       *
       * @example
       * {{{
@@ -151,7 +160,8 @@ object strings extends strings {
     def commaOr: String = commaWith("or")
 
     /** Format Seq[String] into a human-readable list using comma and the conjunction `or`.
-      * It separates elements by commas and uses the term `or` before the last element following the "Oxford comma" style. e.g.) "aaa, bbb, or ccc".
+      * It separates elements by commas and uses the term `or` before the last element following the "Oxford comma" style.
+      * e.g.) "aaa, bbb, or ccc".
       *
       * @example
       * {{{
