@@ -41,6 +41,38 @@ object strings extends strings {
       case _ => s"${ss.dropRight(1).mkString(", ")} $conjunction ${ss.last}"
     }
 
+    /** Join Seq[String] with , (Oxford comma / Harvard comma) and the last and the second last elements should be also connected with the given conjunction.
+      *
+      * @example
+      * {{{
+      *   List.empty[String].serialCommaWith("blah")
+      *   // String = ""
+      *
+      *   List("").serialCommaWith("blah")
+      *   // String = ""
+      *
+      *   List("aaa").serialCommaWith("blah")
+      *   // String = "aaa"
+      *
+      *   List("aaa", "bbb").serialCommaWith("blah")
+      *   // String = "aaa blah bbb"
+      *
+      *   List("aaa", "bbb", "ccc").serialCommaWith("blah")
+      *   // String = "aaa, bbb, blah ccc"
+      *
+      *   List("aaa", "bbb", "ccc", "ddd").serialCommaWith("blah")
+      *   // String = "aaa, bbb, ccc, blah ddd"
+      *
+      * }}}
+      */
+    @SuppressWarnings(Array("org.wartremover.warts.IterableOps"))
+    def serialCommaWith(conjunction: String): String = ss match {
+      case Seq() => ""
+      case Seq(s) => s
+      case Seq(s1, s2) => s"$s1 $conjunction $s2"
+      case _ => s"${ss.dropRight(1).mkString(", ")}, $conjunction ${ss.last}"
+    }
+
     /** join Seq[String] with , (comma) expect for the last and the second last one which are connected with `and`.
       * @example
       * {{{
@@ -90,12 +122,8 @@ object strings extends strings {
       *
       * }}}
       */
-    @SuppressWarnings(Array("org.wartremover.warts.IterableOps"))
-    def serialCommaAnd: String = ss match {
-      case Seq() => ""
-      case Seq(s) => s
-      case Seq(s1, s2) => s"$s1 and $s2"
-      case _ => s"${ss.dropRight(1).mkString(", ")}, and ${ss.last}"
-    }
+    def serialCommaAnd: String = serialCommaWith("and")
+
   }
+
 }
