@@ -44,6 +44,12 @@ Go to [<u>**extras-render**</u>](extras-render)
 "io.kevinlee" %% "extras-render-refined" % "@VERSION@"
 ```
 
+## extras-string
+Go to [<u>**extras-string**</u>](extras-string)
+```scala
+"io.kevinlee" %% "extras-string" % "@VERSION@"
+```
+
 ## extras-cats
 Go to [<u>**extras-cats**</u>](extras-cats)
 ```scala
