@@ -80,9 +80,7 @@ List("aaa", "bbb", "ccc", "ddd").commaAnd
 
 Format `Seq[String]` into a human-readable list using comma and the conjunction `and`.
 
-It separates elements by commas and uses the term `and` before the last element following the "Oxford comma" style.
-
-e.g.) "aaa, bbb, and ccc".
+It separates elements by commas and uses the term `and` before the last element following the "Oxford comma" style.  e.g.) `"aaa, bbb, and ccc"`
 
 ```scala mdoc
 List.empty[String].serialCommaAnd
@@ -98,3 +96,44 @@ List("aaa", "bbb", "ccc").serialCommaAnd
 List("aaa", "bbb", "ccc", "ddd").serialCommaAnd
 
 ```
+
+## `commaOr`
+
+Format `Seq[String]` into a human-readable list using comma and the conjunction `or`.
+
+It separates elements by commas and uses the term `or` before the last element.
+
+```scala mdoc
+List.empty[String].commaOr
+
+List("").commaOr
+
+List("aaa").commaOr
+
+List("aaa", "bbb").commaOr
+
+List("aaa", "bbb", "ccc").commaOr
+
+List("aaa", "bbb", "ccc", "ddd").commaOr
+```
+
+## `serialCommaOr`
+
+Format `Seq[String]` into a human-readable list using comma and the conjunction `or`.
+
+It separates elements by commas and uses the term `or` before the last element following the "Oxford comma" style.  e.g.) `"aaa, bbb, or ccc"`
+
+```scala mdoc
+List.empty[String].serialCommaOr
+
+List("").serialCommaOr
+
+List("aaa").serialCommaOr
+
+List("aaa", "bbb").serialCommaOr
+
+List("aaa", "bbb", "ccc").serialCommaOr
+
+List("aaa", "bbb", "ccc", "ddd").serialCommaOr
+```
+
