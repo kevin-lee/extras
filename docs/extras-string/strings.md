@@ -12,7 +12,8 @@ import extras.strings.syntax.strings._
 
 ## `commaWith(String)`
 
-An extension method for a `Seq[String]`, providing a way to join the `String` elements with a comma and a given conjunction.
+An extension method for a `Seq[String]`, providing a way to join the `String` elements with a comma and a given
+conjunction.
 
 It joins `String` values with commas and uses the given conjunction before the last element.
 
@@ -33,7 +34,8 @@ List("aaa", "bbb", "ccc", "ddd").commaWith("BLAH")
 
 ## `serialCommaWith(String)`
 
-An extension method for a `Seq[String]`, providing a way to join the `String` elements with a serial comma and a given conjunction.
+An extension method for a `Seq[String]`, providing a way to join the `String` elements with a serial comma and a given
+conjunction.
 
 It joins String values with commas and uses the given conjunction before the last element.
 
@@ -54,3 +56,45 @@ List("aaa", "bbb", "ccc").serialCommaWith("BLAH")
 List("aaa", "bbb", "ccc", "ddd").serialCommaWith("BLAH")
 ```
 
+## `commaAnd`
+
+Format `Seq[String]` into a human-readable list using comma and the conjunction `and`.
+
+It separates elements by commas and uses the term `and` before the last element.
+
+```scala mdoc
+List.empty[String].commaAnd
+
+List("").commaAnd
+
+List("aaa").commaAnd
+
+List("aaa", "bbb").commaAnd
+
+List("aaa", "bbb", "ccc").commaAnd
+
+List("aaa", "bbb", "ccc", "ddd").commaAnd
+```
+
+## `serialCommaAnd`
+
+Format `Seq[String]` into a human-readable list using comma and the conjunction `and`.
+
+It separates elements by commas and uses the term `and` before the last element following the "Oxford comma" style.
+
+e.g.) "aaa, bbb, and ccc".
+
+```scala mdoc
+List.empty[String].serialCommaAnd
+
+List("").serialCommaAnd
+
+List("aaa").serialCommaAnd
+
+List("aaa", "bbb").serialCommaAnd
+
+List("aaa", "bbb", "ccc").serialCommaAnd
+
+List("aaa", "bbb", "ccc", "ddd").serialCommaAnd
+
+```
