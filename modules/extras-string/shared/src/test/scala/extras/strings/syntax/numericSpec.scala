@@ -7,9 +7,19 @@ import hedgehog.runner._
   * @since 2023-08-21
   */
 object numericSpec extends Properties {
-  override def tests: List[Test] = intsSpec.tests ++ longsSpec.tests
+  override def tests: List[Test] = new allNumericSpec(extras.strings.syntax.numeric).tests
 
-  object intsSpec {
+  final class allNumericSpec(numeric: extras.strings.syntax.numeric) {
+    def tests: List[Test] =
+      intsSpec(numeric).tests ++ longsSpec(numeric).tests
+  }
+  object allNumericSpec {
+    def apply(numeric: extras.strings.syntax.numeric): allNumericSpec = new allNumericSpec(numeric)
+  }
+
+  final class intsSpec(numeric: extras.strings.syntax.numeric) {
+    import numeric._
+
     def tests: List[Test] = List(
       property("test Int.toOrdinal", testToOrdinal)
     )
@@ -22,15 +32,19 @@ object numericSpec extends Properties {
                           .log("(n, expected)")
         (n, expected) = nAndExpected
       } yield {
-        import extras.strings.syntax.numeric._
 
         val actual = n.toOrdinal
         actual ==== expected
       }
 
   }
+  object intsSpec {
+    def apply(numeric: extras.strings.syntax.numeric): intsSpec = new intsSpec(numeric)
+  }
 
-  object longsSpec {
+  final class longsSpec(numeric: extras.strings.syntax.numeric) {
+    import numeric._
+
     def tests: List[Test] = List(
       property("test Long.toOrdinal", testToOrdinal)
     )
@@ -43,12 +57,14 @@ object numericSpec extends Properties {
                           .log("(n, expected)")
         (n, expected) = nAndExpected
       } yield {
-        import extras.strings.syntax.numeric._
 
         val actual = n.toOrdinal
         actual ==== expected
       }
 
+  }
+  object longsSpec {
+    def apply(numeric: extras.strings.syntax.numeric): longsSpec = new longsSpec(numeric)
   }
 
   def ordinal(n: Long): String = {
