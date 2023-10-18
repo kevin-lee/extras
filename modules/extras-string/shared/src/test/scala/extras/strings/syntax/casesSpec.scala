@@ -15,11 +15,19 @@ object casesSpec extends Properties {
   object StringCaseOpsSpec {
     private val name      = this.getClass.getSimpleName.stripSuffix("$")
     def tests: List[Test] = List(
+      // String.toPascalCase
       property(s"$name: test String.toPascalCase with already PascalCase", testToPascalCaseWithAlreadyPascalCase),
       property(s"$name: test String.toPascalCase with PascalCases", testToPascalCaseWithPascalCases),
       property(s"$name: test String.toPascalCase with camelCases", testToPascalCaseWithCamelCases),
       property(s"$name: test String.toPascalCase with all UPPERCASE", testToPascalCaseWithUpperCase),
       property(s"$name: test String.toPascalCase with all lowercase", testToPascalCaseWithLowerCase),
+
+      // String.SplitByCase
+      property(s"$name: test String.SplitByCase with PascalCase", testSplitByCaseWithPascalCase),
+      property(s"$name: test String.SplitByCase with PascalCases", testSplitByCaseWithPascalCases),
+      property(s"$name: test String.SplitByCase with camelCases", testSplitByCaseWithCamelCases),
+      property(s"$name: test String.SplitByCase with all UPPERCASE", testSplitByCaseWithUpperCase),
+      property(s"$name: test String.SplitByCase with all lowercase", testSplitByCaseWithLowerCase),
     )
 
     def testToPascalCaseWithAlreadyPascalCase: Property = for {
@@ -75,6 +83,83 @@ object casesSpec extends Properties {
       input    <- Gen.constant(expected.toLowerCase(Locale.ENGLISH)).log("input")
     } yield {
       val actual = input.toPascalCase
+      actual ==== expected
+    }
+
+    def testSplitByCaseWithPascalCase: Property = for {
+      s     <- genPascalCase(1, 10).log("s")
+      input <- Gen.constant(s).log("input")
+    } yield {
+      val expected = Vector(s)
+      val actual   = input.splitByCase
+      println(
+        s"""   input: $input
+           |  actual: ${actual.toString}
+           |expected: ${expected.toString}
+           |""".stripMargin
+      )
+      actual ==== expected
+    }
+
+    def testSplitByCaseWithPascalCases: Property = for {
+      s1    <- genPascalCase(1, 10).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + s2.mkString).log("input")
+    } yield {
+      val expected = (s1 :: s2).toVector
+      val actual   = input.splitByCase
+      println(
+        s"""   input: $input
+           |  actual: ${actual.toString}
+           |expected: ${expected.toString}
+           |""".stripMargin
+      )
+      actual ==== expected
+    }
+
+    def testSplitByCaseWithCamelCases: Property = for {
+      s1    <- genPascalCase(1, 10).map(s => s.updated(0, s.charAt(0).toLower)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + s2.mkString).log("input")
+    } yield {
+      val expected = (s1 :: s2).toVector
+      val actual   = input.splitByCase
+      println(
+        s"""   input: $input
+           |  actual: ${actual.toString}
+           |expected: ${expected.toString}
+           |""".stripMargin
+      )
+      actual ==== expected
+    }
+
+    def testSplitByCaseWithUpperCase: Property = for {
+      s     <- genPascalCase(1, 10).log("s")
+      input <- Gen.constant(s.toUpperCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val expected = Vector(input)
+      val actual   = input.splitByCase
+      println(
+        s"""   input: $input
+           |  actual: ${actual.toString}
+           |expected: ${expected.toString}
+           |""".stripMargin
+      )
+      actual ==== expected
+    }
+
+    def testSplitByCaseWithLowerCase: Property = for {
+      s     <- genPascalCase(1, 10).log("s")
+      input <- Gen.constant(s.toLowerCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val expected = Vector(input)
+      val actual   = input.splitByCase
+      println(
+        s"""   input: $input
+           |  actual: ${actual.toString}
+           |expected: ${expected.toString}
+           |""".stripMargin
+      )
       actual ==== expected
     }
 
