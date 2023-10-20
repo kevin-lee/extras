@@ -45,13 +45,15 @@ object casesSpec extends Properties {
     } yield {
       val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
       val actual   = input.toPascalCase
-      println(
-        s"""   input: $input
-           |  actual: $actual
-           |expected: $expected
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testToPascalCaseWithCamelCases: Property = for {
@@ -61,13 +63,15 @@ object casesSpec extends Properties {
     } yield {
       val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
       val actual   = input.toPascalCase
-      println(
-        s"""   input: $input
-           |  actual: $actual
-           |expected: $expected
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testToPascalCaseWithUpperCase: Property = for {
@@ -75,7 +79,15 @@ object casesSpec extends Properties {
       input    <- Gen.constant(expected.toUpperCase(Locale.ENGLISH)).log("input")
     } yield {
       val actual = input.toPascalCase
-      actual ==== expected
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
     }
 
     def testToPascalCaseWithLowerCase: Property = for {
@@ -83,7 +95,15 @@ object casesSpec extends Properties {
       input    <- Gen.constant(expected.toLowerCase(Locale.ENGLISH)).log("input")
     } yield {
       val actual = input.toPascalCase
-      actual ==== expected
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
     }
 
     def testSplitByCaseWithPascalCase: Property = for {
@@ -92,13 +112,15 @@ object casesSpec extends Properties {
     } yield {
       val expected = Vector(s)
       val actual   = input.splitByCase
-      println(
-        s"""   input: $input
-           |  actual: ${actual.toString}
-           |expected: ${expected.toString}
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: ${actual.toString}
+           |> expected: ${expected.toString}
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testSplitByCaseWithPascalCases: Property = for {
@@ -108,13 +130,15 @@ object casesSpec extends Properties {
     } yield {
       val expected = (s1 :: s2).toVector
       val actual   = input.splitByCase
-      println(
-        s"""   input: $input
-           |  actual: ${actual.toString}
-           |expected: ${expected.toString}
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: ${actual.toString}
+           |> expected: ${expected.toString}
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testSplitByCaseWithCamelCases: Property = for {
@@ -124,13 +148,14 @@ object casesSpec extends Properties {
     } yield {
       val expected = (s1 :: s2).toVector
       val actual   = input.splitByCase
-      println(
+
+      val info =
         s"""   input: $input
            |  actual: ${actual.toString}
            |expected: ${expected.toString}
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testSplitByCaseWithUpperCase: Property = for {
@@ -139,13 +164,15 @@ object casesSpec extends Properties {
     } yield {
       val expected = Vector(input)
       val actual   = input.splitByCase
-      println(
-        s"""   input: $input
-           |  actual: ${actual.toString}
-           |expected: ${expected.toString}
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: ${actual.toString}
+           |> expected: ${expected.toString}
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
     def testSplitByCaseWithLowerCase: Property = for {
@@ -154,13 +181,14 @@ object casesSpec extends Properties {
     } yield {
       val expected = Vector(input)
       val actual   = input.splitByCase
-      println(
-        s"""   input: $input
-           |  actual: ${actual.toString}
-           |expected: ${expected.toString}
+      val info     =
+        s"""
+           |>    input: $input
+           |>   actual: ${actual.toString}
+           |> expected: ${expected.toString}
            |""".stripMargin
-      )
-      actual ==== expected
+
+      (actual ==== expected).log(info)
     }
 
   }
