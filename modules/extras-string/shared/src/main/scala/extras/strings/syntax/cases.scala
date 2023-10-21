@@ -7,6 +7,8 @@ import java.util.Locale
   */
 trait cases {
   implicit def stringCaseOps(s: String): cases.StringCaseOps = new cases.StringCaseOps(s)
+
+  implicit def stringSeqCaseOps(ss: Seq[String]): cases.StringSeqCaseOps = new cases.StringSeqCaseOps(ss)
 }
 object cases extends cases {
 
@@ -59,6 +61,16 @@ object cases extends cases {
           case head :: tail => splitEach(tail, head, new StringBuilder(), Vector.empty)
         }
     }
+
+  }
+
+  final class StringSeqCaseOps(private val ss: Seq[String]) extends AnyVal {
+    def mkPascalCaseString: String =
+      ss.headOption
+        .fold("")(_.toPascalCase) + ss
+        .drop(1)
+        .map(s => s.split("[\\s_-]+").flatMap(_.splitByCase).map(_.toPascalCase).mkString)
+        .mkString
 
   }
 
