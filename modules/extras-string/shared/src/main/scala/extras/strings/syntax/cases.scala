@@ -17,6 +17,9 @@ object cases extends cases {
     def toPascalCase: String =
       s.headOption.fold("")(_.toUpper.toString) + s.drop(1).toLowerCase(Locale.ENGLISH)
 
+    def toOnePascalCase: String =
+      s.headOption.fold("")(_.toUpper.toString) + s.drop(1).toLowerCase(Locale.ENGLISH)
+
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
       @scala.annotation.tailrec

@@ -22,6 +22,13 @@ object casesSpec extends Properties {
       property(s"$name: test String.toPascalCase with all UPPERCASE", testToPascalCaseWithUpperCase),
       property(s"$name: test String.toPascalCase with all lowercase", testToPascalCaseWithLowerCase),
 
+      // String.toOnePascalCase
+      property(s"$name: test String.toOnePascalCase with already PascalCase", testToOnePascalCaseWithAlreadyPascalCase),
+      property(s"$name: test String.toOnePascalCase with PascalCases", testToOnePascalCaseWithPascalCases),
+      property(s"$name: test String.toOnePascalCase with camelCases", testToOnePascalCaseWithCamelCases),
+      property(s"$name: test String.toOnePascalCase with all UPPERCASE", testToOnePascalCaseWithUpperCase),
+      property(s"$name: test String.toOnePascalCase with all lowercase", testToOnePascalCaseWithLowerCase),
+
       // String.SplitByCase
       property(s"$name: test String.SplitByCase with PascalCase", testSplitByCaseWithPascalCase),
       property(s"$name: test String.SplitByCase with PascalCases", testSplitByCaseWithPascalCases),
@@ -106,6 +113,85 @@ object casesSpec extends Properties {
       (actual ==== expected).log(info)
     }
 
+    ///
+
+    def testToOnePascalCaseWithAlreadyPascalCase: Property = for {
+      expected <- genPascalCase(1, 10).log("expected")
+      input    <- Gen.constant(expected).log("input")
+    } yield {
+      val actual = input.toOnePascalCase
+      actual ==== expected
+    }
+
+    def testToOnePascalCaseWithPascalCases: Property = for {
+      s1    <- genPascalCase(1, 10).log("s1")
+      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + s2.mkString).log("input")
+    } yield {
+      val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
+      val actual   = input.toOnePascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToOnePascalCaseWithCamelCases: Property = for {
+      s1    <- genPascalCase(1, 10).log("s1")
+      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1.updated(0, s1.charAt(0).toLower) + s2.mkString).log("input")
+    } yield {
+      val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
+      val actual   = input.toOnePascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToOnePascalCaseWithUpperCase: Property = for {
+      expected <- genPascalCase(1, 10).log("expected")
+      input    <- Gen.constant(expected.toUpperCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val actual = input.toOnePascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToOnePascalCaseWithLowerCase: Property = for {
+      expected <- genPascalCase(1, 10).log("expected")
+      input    <- Gen.constant(expected.toLowerCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val actual = input.toOnePascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    ///
     def testSplitByCaseWithPascalCase: Property = for {
       s     <- genPascalCase(1, 10).log("s")
       input <- Gen.constant(s).log("input")
