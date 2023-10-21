@@ -15,7 +15,7 @@ object cases extends cases {
   final class StringCaseOps(private val s: String) extends AnyVal {
 
     def toPascalCase: String =
-      s.headOption.fold("")(_.toUpper.toString) + s.drop(1).toLowerCase(Locale.ENGLISH)
+      s.split("[\\s_-]+").flatMap(_.splitByCase).map(_.toOnePascalCase).mkString
 
     def toOnePascalCase: String =
       s.headOption.fold("")(_.toUpper.toString) + s.drop(1).toLowerCase(Locale.ENGLISH)
@@ -72,7 +72,7 @@ object cases extends cases {
       ss.headOption
         .fold("")(_.toPascalCase) + ss
         .drop(1)
-        .map(s => s.split("[\\s_-]+").flatMap(_.splitByCase).map(_.toPascalCase).mkString)
+        .map(s => s.split("[\\s_-]+").flatMap(_.splitByCase).map(_.toOnePascalCase).mkString)
         .mkString
 
   }

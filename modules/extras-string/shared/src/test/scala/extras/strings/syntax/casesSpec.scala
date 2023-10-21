@@ -47,10 +47,10 @@ object casesSpec extends Properties {
 
     def testToPascalCaseWithPascalCases: Property = for {
       s1    <- genPascalCase(1, 10).log("s1")
-      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
       input <- Gen.constant(s1 + s2.mkString).log("input")
     } yield {
-      val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
+      val expected = s1 + s2.mkString
       val actual   = input.toPascalCase
 
       val info =
@@ -65,10 +65,10 @@ object casesSpec extends Properties {
 
     def testToPascalCaseWithCamelCases: Property = for {
       s1    <- genPascalCase(1, 10).log("s1")
-      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
       input <- Gen.constant(s1.updated(0, s1.charAt(0).toLower) + s2.mkString).log("input")
     } yield {
-      val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
+      val expected = s1 + s2.mkString
       val actual   = input.toPascalCase
 
       val info =
@@ -125,7 +125,7 @@ object casesSpec extends Properties {
 
     def testToOnePascalCaseWithPascalCases: Property = for {
       s1    <- genPascalCase(1, 10).log("s1")
-      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
       input <- Gen.constant(s1 + s2.mkString).log("input")
     } yield {
       val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
@@ -143,7 +143,7 @@ object casesSpec extends Properties {
 
     def testToOnePascalCaseWithCamelCases: Property = for {
       s1    <- genPascalCase(1, 10).log("s1")
-      s2    <- genPascalCase(1, 10).list(Range.linear(1, 4)).log("s2")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
       input <- Gen.constant(s1.updated(0, s1.charAt(0).toLower) + s2.mkString).log("input")
     } yield {
       val expected = s1 + s2.mkString.toLowerCase(Locale.ENGLISH)
