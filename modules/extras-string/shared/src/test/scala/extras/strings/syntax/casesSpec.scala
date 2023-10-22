@@ -21,6 +21,24 @@ object casesSpec extends Properties {
       property(s"$name: test String.toPascalCase with camelCases", testToPascalCaseWithCamelCases),
       property(s"$name: test String.toPascalCase with all UPPERCASE", testToPascalCaseWithUpperCase),
       property(s"$name: test String.toPascalCase with all lowercase", testToPascalCaseWithLowerCase),
+      property(s"$name: test String.toPascalCase with all snake_cases", testToPascalCaseWithSnakeCases),
+      property(s"$name: test String.toPascalCase with all lower snake_cases", testToPascalCaseWithLowerSnakeCases),
+      property(s"$name: test String.toPascalCase with all UPPER snake_cases", testToPascalCaseWithUpperSnakeCases),
+      property(s"$name: test String.toPascalCase with all kebab-cases", testToPascalCaseWithKebabCases),
+      property(s"$name: test String.toPascalCase with all lower kebab-cases", testToPascalCaseWithLowerKebabCases),
+      property(s"$name: test String.toPascalCase with all UPPER kebab-cases", testToPascalCaseWithUpperKebabCases),
+      property(
+        s"$name: test String.toPascalCase with all space separated String values",
+        testToPascalCaseWithSpaceSeparatedStringValues,
+      ),
+      property(
+        s"$name: test String.toPascalCase with all lower space separated String values",
+        testToPascalCaseWithLowerSpaceSeparatedStringValues,
+      ),
+      property(
+        s"$name: test String.toPascalCase with all UPPER space separated String values",
+        testToPascalCaseWithUpperSpaceSeparatedStringValues,
+      ),
 
       // String.toOnePascalCase
       property(s"$name: test String.toOnePascalCase with already PascalCase", testToOnePascalCaseWithAlreadyPascalCase),
@@ -102,6 +120,160 @@ object casesSpec extends Properties {
       input    <- Gen.constant(expected.toLowerCase(Locale.ENGLISH)).log("input")
     } yield {
       val actual = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithSnakeCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.mkString("_")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithLowerSnakeCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toLowerCase(Locale.ENGLISH)).mkString("_")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithUpperSnakeCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toUpperCase(Locale.ENGLISH)).mkString("_")).log("input")
+
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithKebabCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.mkString("-")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithLowerKebabCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toLowerCase(Locale.ENGLISH)).mkString("-")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithUpperKebabCases: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toUpperCase(Locale.ENGLISH)).mkString("-")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithSpaceSeparatedStringValues: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.mkString(" ")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithLowerSpaceSeparatedStringValues: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToPascalCaseWithUpperSpaceSeparatedStringValues: Property = for {
+      s     <- genPascalCase(1, 10).list(Range.linear(1, 10)).log("s")
+      input <- Gen.constant(s.map(_.toUpperCase(Locale.ENGLISH)).mkString(" ")).log("input")
+    } yield {
+      val expected = s.mkString
+      val actual   = input.toPascalCase
 
       val info =
         s"""
