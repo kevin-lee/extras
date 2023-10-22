@@ -22,11 +22,11 @@ object casesSpec extends Properties {
       property(s"$name: test String.toPascalCase with all UPPERCASE", testToPascalCaseWithUpperCase),
       property(s"$name: test String.toPascalCase with all lowercase", testToPascalCaseWithLowerCase),
       property(s"$name: test String.toPascalCase with all snake_cases", testToPascalCaseWithSnakeCases),
-      property(s"$name: test String.toPascalCase with all lower snake_cases", testToPascalCaseWithLowerSnakeCases),
-      property(s"$name: test String.toPascalCase with all UPPER snake_cases", testToPascalCaseWithUpperSnakeCases),
+      property(s"$name: test String.toPascalCase with all lower_snake_cases", testToPascalCaseWithLowerSnakeCases),
+      property(s"$name: test String.toPascalCase with all UPPER_SNAKE_CASES", testToPascalCaseWithUpperSnakeCases),
       property(s"$name: test String.toPascalCase with all kebab-cases", testToPascalCaseWithKebabCases),
-      property(s"$name: test String.toPascalCase with all lower kebab-cases", testToPascalCaseWithLowerKebabCases),
-      property(s"$name: test String.toPascalCase with all UPPER kebab-cases", testToPascalCaseWithUpperKebabCases),
+      property(s"$name: test String.toPascalCase with all lower-kebab-cases", testToPascalCaseWithLowerKebabCases),
+      property(s"$name: test String.toPascalCase with all UPPER-KEBAB-CASES", testToPascalCaseWithUpperKebabCases),
       property(
         s"$name: test String.toPascalCase with all space separated String values",
         testToPascalCaseWithSpaceSeparatedStringValues,
@@ -36,7 +36,7 @@ object casesSpec extends Properties {
         testToPascalCaseWithLowerSpaceSeparatedStringValues,
       ),
       property(
-        s"$name: test String.toPascalCase with all UPPER space separated String values",
+        s"$name: test String.toPascalCase with all UPPER SPACE SEPARATED STRING VALUES",
         testToPascalCaseWithUpperSpaceSeparatedStringValues,
       ),
 
@@ -57,11 +57,11 @@ object casesSpec extends Properties {
       property(s"$name: test String.toCamelCase with all UPPERCASE", testToCamelCaseWithUpperCase),
       property(s"$name: test String.toCamelCase with all lowercase", testToCamelCaseWithLowerCase),
       property(s"$name: test String.toCamelCase with all snake_cases", testToCamelCaseWithSnakeCases),
-      property(s"$name: test String.toCamelCase with all lower snake_cases", testToCamelCaseWithLowerSnakeCases),
-      property(s"$name: test String.toCamelCase with all UPPER snake_cases", testToCamelCaseWithUpperSnakeCases),
+      property(s"$name: test String.toCamelCase with all lower_snake_cases", testToCamelCaseWithLowerSnakeCases),
+      property(s"$name: test String.toCamelCase with all UPPER_SNAKE_CASES", testToCamelCaseWithUpperSnakeCases),
       property(s"$name: test String.toCamelCase with all kebab-cases", testToCamelCaseWithKebabCases),
-      property(s"$name: test String.toCamelCase with all lower kebab-cases", testToCamelCaseWithLowerKebabCases),
-      property(s"$name: test String.toCamelCase with all UPPER kebab-cases", testToCamelCaseWithUpperKebabCases),
+      property(s"$name: test String.toCamelCase with all lower-kebab-cases", testToCamelCaseWithLowerKebabCases),
+      property(s"$name: test String.toCamelCase with all UPPER-KEBAB-CASES", testToCamelCaseWithUpperKebabCases),
       property(
         s"$name: test String.toCamelCase with all space separated String values",
         testToCamelCaseWithSpaceSeparatedStringValues,
@@ -71,7 +71,7 @@ object casesSpec extends Properties {
         testToCamelCaseWithLowerSpaceSeparatedStringValues,
       ),
       property(
-        s"$name: test String.toCamelCase with all UPPER space separated String values",
+        s"$name: test String.toCamelCase with all UPPER SPACE SEPARATED STRING VALUES",
         testToCamelCaseWithUpperSpaceSeparatedStringValues,
       ),
 
@@ -743,13 +743,31 @@ object casesSpec extends Properties {
         testMkPascalCaseStringWithAllLowerCasesAndCombinedCamelCases,
       ),
       property("Seq[String].mkPascalCaseString - all snake_cases", testMkPascalCaseStringWithAllSnakeCases),
+      property("Seq[String].mkPascalCaseString - all lower_snake_cases", testMkPascalCaseStringWithAllLowerSnakeCases),
+      property("Seq[String].mkPascalCaseString - all UPPER_SNAKE_CASES", testMkPascalCaseStringWithAllUpperSnakeCases),
       property(
         "Seq[String].mkPascalCaseString - all kebab-cases",
         testMkPascalCaseStringWithAllKebabCases,
       ),
       property(
+        "Seq[String].mkPascalCaseString - all lower-kebab-cases",
+        testMkPascalCaseStringWithAllLowerKebabCases,
+      ),
+      property(
+        "Seq[String].mkPascalCaseString - all UPPER-KEBAB-CASES",
+        testMkPascalCaseStringWithAllUpperKebabCases,
+      ),
+      property(
         "Seq[String].mkPascalCaseString - all space separated values",
         testMkPascalCaseStringWithAllSpaceSeparatedValues,
+      ),
+      property(
+        "Seq[String].mkPascalCaseString - all lower space separated values",
+        testMkPascalCaseStringWithAllLowerSpaceSeparatedValues,
+      ),
+      property(
+        "Seq[String].mkPascalCaseString - all UPPER SPACE SEPARATED VALUES",
+        testMkPascalCaseStringWithAllUpperSpaceSeparatedValues,
       ),
       property(
         "Seq[String].mkPascalCaseString - PascalCases, camelCases, lower cases, UPPER CASES, snake_cases, kebab-cases and space separated String values",
@@ -844,29 +862,103 @@ object casesSpec extends Properties {
 
     def testMkPascalCaseStringWithAllSnakeCases: Property =
       for {
-        ss    <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss")
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
         ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
         ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
         input <- Gen
                    .constant(
-                     ss.map(_.toLowerCase(Locale.ENGLISH)) ++ List(
-                       (
-                         ss2.map(_.toLowerCase(Locale.ENGLISH)).mkString("_")
-                       ).mkString,
-                       (
-                         ss3.mkString("_")
-                       ).mkString,
-                     )
+                     List(
+                       ss1.mkString("_").mkString,
+                       ss2.mkString("_").mkString,
+                     ) ++
+                       List(
+                         ss3.mkString("_").mkString,
+                         ss4.mkString("_").mkString,
+                       )
                    )
                    .log("input")
       } yield {
-        val expected = ss.mkString + ss2.mkString + ss3.mkString
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
         val actual   = input.mkPascalCaseString
         val info     =
           s"""
-             |>       ss: ${ss.toString}
+             |>      ss1: ${ss1.toString}
              |>      ss2: ${ss2.toString}
              |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss4.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllLowerSnakeCases: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toLowerCase(Locale.ENGLISH)).mkString("_").mkString,
+                       ss2.map(_.toLowerCase(Locale.ENGLISH)).mkString("_").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toLowerCase(Locale.ENGLISH)).mkString("_").mkString,
+                         ss4.map(_.toLowerCase(Locale.ENGLISH)).mkString("_").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss4.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllUpperSnakeCases: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toUpperCase(Locale.ENGLISH)).mkString("_").mkString,
+                       ss2.map(_.toUpperCase(Locale.ENGLISH)).mkString("_").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toUpperCase(Locale.ENGLISH)).mkString("_").mkString,
+                         ss4.map(_.toUpperCase(Locale.ENGLISH)).mkString("_").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss4.toString}
              |>    input: ${input.toString}
              |>    split: ${input.map(_.splitByCase).toString}
              |>   actual: $actual
@@ -878,29 +970,103 @@ object casesSpec extends Properties {
 
     def testMkPascalCaseStringWithAllKebabCases: Property =
       for {
-        ss    <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss")
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
         ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
         ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
         input <- Gen
                    .constant(
-                     ss.map(_.toLowerCase(Locale.ENGLISH)) ++ List(
-                       (
-                         ss2.map(_.toLowerCase(Locale.ENGLISH)).mkString("-")
-                       ).mkString,
-                       (
-                         ss3.mkString("-")
-                       ).mkString,
-                     )
+                     List(
+                       ss1.mkString("-").mkString,
+                       ss2.mkString("-").mkString,
+                     ) ++
+                       List(
+                         ss3.mkString("-").mkString,
+                         ss4.mkString("-").mkString,
+                       )
                    )
                    .log("input")
       } yield {
-        val expected = ss.mkString + ss2.mkString + ss3.mkString
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
         val actual   = input.mkPascalCaseString
         val info     =
           s"""
-             |>       ss: ${ss.toString}
+             |>      ss1: ${ss1.toString}
              |>      ss2: ${ss2.toString}
              |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllLowerKebabCases: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toLowerCase(Locale.ENGLISH)).mkString("-").mkString,
+                       ss2.map(_.toLowerCase(Locale.ENGLISH)).mkString("-").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toLowerCase(Locale.ENGLISH)).mkString("-").mkString,
+                         ss4.map(_.toLowerCase(Locale.ENGLISH)).mkString("-").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllUpperKebabCases: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toUpperCase(Locale.ENGLISH)).mkString("-").mkString,
+                       ss2.map(_.toUpperCase(Locale.ENGLISH)).mkString("-").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toUpperCase(Locale.ENGLISH)).mkString("-").mkString,
+                         ss4.map(_.toUpperCase(Locale.ENGLISH)).mkString("-").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
              |>    input: ${input.toString}
              |>    split: ${input.map(_.splitByCase).toString}
              |>   actual: $actual
@@ -912,29 +1078,103 @@ object casesSpec extends Properties {
 
     def testMkPascalCaseStringWithAllSpaceSeparatedValues: Property =
       for {
-        ss    <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss")
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
         ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
         ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
         input <- Gen
                    .constant(
-                     ss ++ List(
-                       (
-                         ss2.mkString(" ")
-                       ).mkString,
-                       (
-                         ss3.mkString(" ")
-                       ).mkString,
-                     )
+                     List(
+                       ss1.mkString(" ").mkString,
+                       ss2.mkString(" ").mkString,
+                     ) ++
+                       List(
+                         ss3.mkString(" ").mkString,
+                         ss4.mkString(" ").mkString,
+                       )
                    )
                    .log("input")
       } yield {
-        val expected = ss.mkString + ss2.mkString + ss3.mkString
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
         val actual   = input.mkPascalCaseString
         val info     =
           s"""
-             |>       ss: ${ss.toString}
+             |>      ss1: ${ss1.toString}
              |>      ss2: ${ss2.toString}
              |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllLowerSpaceSeparatedValues: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ").mkString,
+                       ss2.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ").mkString,
+                         ss4.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
+             |>    input: ${input.toString}
+             |>    split: ${input.map(_.splitByCase).toString}
+             |>   actual: $actual
+             |> expected: $expected
+             |>""".stripMargin
+
+        (actual ==== expected).log(info)
+      }
+
+    def testMkPascalCaseStringWithAllUpperSpaceSeparatedValues: Property =
+      for {
+        ss1   <- genPascalCase(1, 5).list(Range.linear(1, 10)).log("ss1")
+        ss2   <- genPascalCase(2, 5).list(Range.linear(2, 3)).log("ss2")
+        ss3   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss3")
+        ss4   <- genPascalCase(2, 5).list(Range.linear(3, 5)).log("ss4")
+        input <- Gen
+                   .constant(
+                     List(
+                       ss1.map(_.toUpperCase(Locale.ENGLISH)).mkString(" ").mkString,
+                       ss2.map(_.toUpperCase(Locale.ENGLISH)).mkString(" ").mkString,
+                     ) ++
+                       List(
+                         ss3.map(_.toUpperCase(Locale.ENGLISH)).mkString(" ").mkString,
+                         ss4.map(_.toUpperCase(Locale.ENGLISH)).mkString(" ").mkString,
+                       )
+                   )
+                   .log("input")
+      } yield {
+        val expected = ss1.mkString + ss2.mkString + ss3.mkString + ss4.mkString
+        val actual   = input.mkPascalCaseString
+        val info     =
+          s"""
+             |>      ss1: ${ss1.toString}
+             |>      ss2: ${ss2.toString}
+             |>      ss3: ${ss3.toString}
+             |>      ss4: ${ss3.toString}
              |>    input: ${input.toString}
              |>    split: ${input.map(_.splitByCase).toString}
              |>   actual: $actual
