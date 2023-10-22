@@ -20,6 +20,16 @@ object cases extends cases {
     def toOnePascalCase: String =
       s.headOption.fold("")(_.toUpper.toString) + s.drop(1).toLowerCase(Locale.ENGLISH)
 
+    def toCamelCase: String = {
+      val splitCases = s.split("[\\s_-]+").flatMap(_.splitByCase)
+
+      val head = splitCases
+        .headOption
+        .fold("")(s => s.headOption.fold("")(_.toLower.toString) + s.drop(1).toLowerCase(Locale.ENGLISH))
+      val tail = splitCases.drop(1).map(_.toOnePascalCase).mkString
+      head + tail
+    }
+
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
       @scala.annotation.tailrec

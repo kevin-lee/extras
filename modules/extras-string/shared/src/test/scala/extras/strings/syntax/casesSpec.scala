@@ -47,6 +47,34 @@ object casesSpec extends Properties {
       property(s"$name: test String.toOnePascalCase with all UPPERCASE", testToOnePascalCaseWithUpperCase),
       property(s"$name: test String.toOnePascalCase with all lowercase", testToOnePascalCaseWithLowerCase),
 
+      // String.toCamelCase
+      property(
+        s"$name: test String.toCamelCase with already CamelCase (lower case)",
+        testToCamelCaseWithAlreadyCamelCase,
+      ),
+      property(s"$name: test String.toCamelCase with PascalCases", testToCamelCaseWithPascalCases),
+      property(s"$name: test String.toCamelCase with camelCases", testToCamelCaseWithCamelCases),
+      property(s"$name: test String.toCamelCase with all UPPERCASE", testToCamelCaseWithUpperCase),
+      property(s"$name: test String.toCamelCase with all lowercase", testToCamelCaseWithLowerCase),
+      property(s"$name: test String.toCamelCase with all snake_cases", testToCamelCaseWithSnakeCases),
+      property(s"$name: test String.toCamelCase with all lower snake_cases", testToCamelCaseWithLowerSnakeCases),
+      property(s"$name: test String.toCamelCase with all UPPER snake_cases", testToCamelCaseWithUpperSnakeCases),
+      property(s"$name: test String.toCamelCase with all kebab-cases", testToCamelCaseWithKebabCases),
+      property(s"$name: test String.toCamelCase with all lower kebab-cases", testToCamelCaseWithLowerKebabCases),
+      property(s"$name: test String.toCamelCase with all UPPER kebab-cases", testToCamelCaseWithUpperKebabCases),
+      property(
+        s"$name: test String.toCamelCase with all space separated String values",
+        testToCamelCaseWithSpaceSeparatedStringValues,
+      ),
+      property(
+        s"$name: test String.toCamelCase with all lower space separated String values",
+        testToCamelCaseWithLowerSpaceSeparatedStringValues,
+      ),
+      property(
+        s"$name: test String.toCamelCase with all UPPER space separated String values",
+        testToCamelCaseWithUpperSpaceSeparatedStringValues,
+      ),
+
       // String.SplitByCase
       property(s"$name: test String.SplitByCase with PascalCase", testSplitByCaseWithPascalCase),
       property(s"$name: test String.SplitByCase with PascalCases", testSplitByCaseWithPascalCases),
@@ -448,6 +476,256 @@ object casesSpec extends Properties {
 
       (actual ==== expected).log(info)
     }
+
+    def testToCamelCaseWithAlreadyCamelCase: Property = for {
+      expected <- Gen.string(Gen.lower, Range.linear(1, 10)).log("expected")
+      input    <- Gen.constant(expected).log("input")
+    } yield {
+      val actual = input.toCamelCase
+      actual ==== expected
+    }
+
+    def testToCamelCaseWithPascalCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1.updated(0, s1.charAt(0).toUpper) + s2.mkString).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithCamelCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + s2.mkString).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithUpperCase: Property = for {
+      expected <- Gen.string(Gen.lower, Range.linear(1, 10)).log("expected")
+      input    <- Gen.constant(expected.toUpperCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val actual = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithLowerCase: Property = for {
+      expected <- Gen.string(Gen.lower, Range.linear(1, 10)).log("expected")
+      input    <- Gen.constant(expected.toLowerCase(Locale.ENGLISH)).log("input")
+    } yield {
+      val actual = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithSnakeCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + "_" + s2.mkString("_")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithLowerSnakeCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + "_" + s2.map(_.toLowerCase(Locale.ENGLISH)).mkString("_")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithUpperSnakeCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen
+                 .constant(
+                   s1.toUpperCase(Locale.ENGLISH) + "_" + s2.map(_.toUpperCase(Locale.ENGLISH)).mkString("_")
+                 )
+                 .log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithKebabCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + "-" + s2.mkString("-")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithLowerKebabCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + "-" + s2.map(_.toLowerCase(Locale.ENGLISH)).mkString("-")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithUpperKebabCases: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen
+                 .constant(
+                   s1.toUpperCase(Locale.ENGLISH) + "-" + s2.map(_.toUpperCase(Locale.ENGLISH)).mkString("-")
+                 )
+                 .log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithSpaceSeparatedStringValues: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + " " + s2.mkString(" ")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithLowerSpaceSeparatedStringValues: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen.constant(s1 + " " + s2.map(_.toLowerCase(Locale.ENGLISH)).mkString(" ")).log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    def testToCamelCaseWithUpperSpaceSeparatedStringValues: Property = for {
+      s1    <- Gen.string(Gen.lower, Range.linear(1, 10)).log("s1")
+      s2    <- genPascalCase(2, 10).list(Range.linear(1, 4)).log("s2")
+      input <- Gen
+                 .constant(s1.toUpperCase(Locale.ENGLISH) + " " + s2.map(_.toUpperCase(Locale.ENGLISH)).mkString(" "))
+                 .log("input")
+    } yield {
+      val expected = s1 + s2.mkString
+      val actual   = input.toCamelCase
+
+      val info =
+        s"""
+           |>    input: $input
+           |>   actual: $actual
+           |> expected: $expected
+           |""".stripMargin
+
+      (actual ==== expected).log(info)
+    }
+
+    ///
 
   }
 
