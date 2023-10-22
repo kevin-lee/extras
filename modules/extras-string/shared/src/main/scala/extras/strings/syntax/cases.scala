@@ -79,11 +79,13 @@ object cases extends cases {
 
   final class StringSeqCaseOps(private val ss: Seq[String]) extends AnyVal {
     def mkPascalCaseString: String =
-      ss.headOption
-        .fold("")(_.toPascalCase) + ss
-        .drop(1)
-        .map(s => s.split("[\\s_-]+").flatMap(_.splitByCase).map(_.toOnePascalCase).mkString)
-        .mkString
+      ss.map { s =>
+        (for {
+          split  <- s.split("[\\s_-]+")
+          byCase <- split.splitByCase
+          pascal = byCase.toOnePascalCase
+        } yield pascal).mkString
+      }.mkString
 
   }
 
