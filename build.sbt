@@ -114,6 +114,7 @@ lazy val extrasCoreJs  = extrasCore.js.settings(Test / fork := false)
 lazy val extrasString    = crossSubProject("string", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies += libs.cats % Test,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasStringJvm = extrasString.jvm
@@ -1119,7 +1120,7 @@ lazy val props = new {
   val isScala3Incompatible: ModuleID => Boolean =
     m =>
       m.name == "wartremover" ||
-      m.name == "ammonite" ||
+        m.name == "ammonite" ||
         m.name == "kind-projector" ||
         m.name == "better-monadic-for"
 

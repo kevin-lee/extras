@@ -87,6 +87,10 @@ object cases extends cases {
         } yield pascal).mkString
       }.mkString
 
+    def mkCamelCaseString: String =
+      ss.headOption.fold("")(_.toCamelCase) +
+        ss.drop(1).mkPascalCaseString
+
   }
 
 }
