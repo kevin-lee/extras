@@ -30,6 +30,11 @@ object cases extends cases {
       head + tail
     }
 
+    def toSnakeCase: String =
+      s.split("[\\s_-]+")
+        .flatMap(_.splitByCase)
+        .mkString("_")
+
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
       @scala.annotation.tailrec
