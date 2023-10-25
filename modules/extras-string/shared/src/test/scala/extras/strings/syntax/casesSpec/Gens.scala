@@ -14,7 +14,7 @@ object Gens {
       tail <- Gen.string(Gen.lower, Range.linear(min - 1, max - 1))
     } yield head +: tail
 
-  def genFirstLowerCasesThenAllPascalCases(maxLength: Int)(min: Int, max: Int): Gen[List[String]] = {
+  def genFirstLowerCasesThenAllPascalCases(maxLength: Int)(min: Int, max: Int): Gen[List[String]] =
     if (maxLength < 2) {
       sys.error(show"maxLength should not be less than 2. maxLength=$maxLength")
     } else if (min > max) {
@@ -31,6 +31,5 @@ object Gens {
       } yield first :: rest
 
     }
-  }
 
 }
