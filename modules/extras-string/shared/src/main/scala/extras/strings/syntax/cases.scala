@@ -35,6 +35,12 @@ object cases extends cases {
         .flatMap(_.splitByCase)
         .mkString("_")
 
+    def toSnakeUpperCase: String =
+      s.split("[\\s_-]+")
+        .flatMap(_.splitByCase)
+        .map(_.toUpperCase(Locale.ENGLISH))
+        .mkString("_")
+
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
       @scala.annotation.tailrec
