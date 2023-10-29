@@ -16,7 +16,7 @@ object ToSnakeLowerCaseSpec extends Properties {
 
   def tests: List[Test] = List(
     property(
-      "test String.toCamelCase with already snake_case",
+      "test String.toSnakeLowerCase with already snake_case",
       testToSnakeLowerCaseWithAlreadySnakeCase,
     ),
     property("test String.toSnakeLowerCase with PascalCases", testToSnakeLowerCaseWithPascalCases),
