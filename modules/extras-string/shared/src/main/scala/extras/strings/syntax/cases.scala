@@ -58,6 +58,12 @@ object cases extends cases {
         .map(_.toUpperCase(Locale.ENGLISH))
         .mkString("-")
 
+    def toKebabLowerCase: String =
+      s.split("[\\s_-]+")
+        .flatMap(_.splitByCase)
+        .map(_.toLowerCase(Locale.ENGLISH))
+        .mkString("-")
+
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
       @scala.annotation.tailrec
