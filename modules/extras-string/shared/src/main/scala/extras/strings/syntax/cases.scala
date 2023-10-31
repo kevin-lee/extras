@@ -113,13 +113,7 @@ object cases extends cases {
 
   final class StringSeqCaseOps(private val ss: Seq[String]) extends AnyVal {
     def mkPascalCaseString: String =
-      ss.map { s =>
-        (for {
-          split  <- s.split("[\\s_-]+")
-          byCase <- split.splitByCase
-          pascal = byCase.toOnePascalCase
-        } yield pascal).mkString
-      }.mkString
+      ss.map(_.toPascalCase).mkString
 
     def mkCamelCaseString: String =
       ss.headOption.fold("")(_.toCamelCase) +
