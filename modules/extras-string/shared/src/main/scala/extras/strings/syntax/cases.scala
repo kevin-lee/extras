@@ -82,7 +82,7 @@ object cases extends cases {
             acc :+ current.append(last).toString :+ head.toString
 
           case head :: Nil =>
-            acc :+ current.append(last).append(head).toString
+            splitEach(Nil, head, current.append(last), acc)
 
           case head :: tail if last.isUpper && head.isLower =>
             splitEach(

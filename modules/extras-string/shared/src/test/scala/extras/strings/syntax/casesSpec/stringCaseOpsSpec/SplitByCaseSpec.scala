@@ -15,12 +15,28 @@ object SplitByCaseSpec extends Properties {
   import extras.strings.syntax.cases._
 
   override def tests: List[Test] = List(
+    example("test String.SplitByCase with an empty String", testSplitByCaseWithEmptyString),
     property("test String.SplitByCase with PascalCase", testSplitByCaseWithPascalCase),
     property("test String.SplitByCase with PascalCases", testSplitByCaseWithPascalCases),
     property("test String.SplitByCase with camelCases", testSplitByCaseWithCamelCases),
     property("test String.SplitByCase with all UPPERCASE", testSplitByCaseWithUpperCase),
     property("test String.SplitByCase with all lowercase", testSplitByCaseWithLowerCase),
   )
+
+  def testSplitByCaseWithEmptyString: Result = {
+    val input    = ""
+    val expected = Vector.empty[String]
+    val actual   = input.splitByCase
+
+    val info =
+      s"""
+         |>    input: $input
+         |>   actual: ${actual.toString}
+         |> expected: ${expected.toString}
+         |""".stripMargin
+
+    (actual ==== expected).log(info)
+  }
 
   def testSplitByCaseWithPascalCase: Property = for {
     s     <- Gens.genPascalCase(1, 10).log("s")
