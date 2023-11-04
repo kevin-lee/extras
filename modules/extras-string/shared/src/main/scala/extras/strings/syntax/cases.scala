@@ -119,6 +119,9 @@ object cases extends cases {
       ss.headOption.fold("")(_.toCamelCase) +
         ss.drop(1).mkPascalCaseString
 
+    def mkSnakeCaseString: String =
+      ss.map(_.toSnakeCase).mkString("_")
+
   }
 
 }
