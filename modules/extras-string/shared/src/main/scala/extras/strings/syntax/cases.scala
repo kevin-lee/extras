@@ -128,6 +128,9 @@ object cases extends cases {
     def mkSnakeLowerCaseString: String =
       ss.map(_.toSnakeLowerCase).mkString("_")
 
+    def mkKebabCaseString: String =
+      ss.map(_.toKebabCase).mkString("-")
+
   }
 
 }
