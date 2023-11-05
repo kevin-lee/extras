@@ -9,6 +9,10 @@ title: 'numeric syntax'
 ```scala mdoc
 import extras.strings.syntax.numeric._
 ```
+Or
+```scala
+import extras.strings.syntax.all._
+```
 
 ## `numeric` syntax for `Int`
 
