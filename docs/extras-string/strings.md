@@ -9,6 +9,10 @@ title: 'strings syntax'
 ```scala mdoc
 import extras.strings.syntax.strings._
 ```
+Or
+```scala
+import extras.strings.syntax.all._
+```
 
 ## `commaWith(String)`
 
