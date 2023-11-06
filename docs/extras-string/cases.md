@@ -9,7 +9,9 @@ title: 'cases syntax'
 ```scala mdoc
 import extras.strings.syntax.cases._
 ```
+
 Or
+
 ```scala
 import extras.strings.syntax.all._
 ```
@@ -50,8 +52,8 @@ import extras.strings.syntax.all._
 "AbcDef__Ghi___jkl--Mno---pqr  Stu   vwx".toPascalCase
 ```
 
-
 ### `String` to one `PascalCase`
+
 ```scala mdoc
 "Abc".toOnePascalCase
 
@@ -84,8 +86,8 @@ import extras.strings.syntax.all._
 "AbcDef__Ghi___jkl--Mno---pqr  Stu   vwx".toOnePascalCase
 ```
 
-
 ### `String` to `camelCase`
+
 ```scala mdoc
 "Abc".toCamelCase
 
@@ -118,8 +120,8 @@ import extras.strings.syntax.all._
 "AbcDef__Ghi___jkl--Mno---pqr  Stu   vwx".toCamelCase
 ```
 
-
 ### `String` to `Snake_Case`
+
 ```scala mdoc
 "Abc".toSnakeCase
 
@@ -150,8 +152,8 @@ import extras.strings.syntax.all._
 "ABC DEF GHI".toSnakeCase
 ```
 
-
 ### `String` to `SNAKE_UPPER_CASE`
+
 ```scala mdoc
 "Abc".toSnakeUpperCase
 
@@ -182,8 +184,8 @@ import extras.strings.syntax.all._
 "ABC DEF GHI".toSnakeUpperCase
 ```
 
-
 ### `String` to `snake_lower_case`
+
 ```scala mdoc
 "Abc".toSnakeLowerCase
 
@@ -215,6 +217,7 @@ import extras.strings.syntax.all._
 ```
 
 ### `String` to `Kebab-Case`
+
 ```scala mdoc
 "Abc".toKebabCase
 
@@ -245,8 +248,8 @@ import extras.strings.syntax.all._
 "ABC DEF GHI".toKebabCase
 ```
 
-
 ### `String` to `KEBAB-UPPER-CASE`
+
 ```scala mdoc
 "Abc".toKebabUpperCase
 
@@ -278,6 +281,7 @@ import extras.strings.syntax.all._
 ```
 
 ### `String` to `kebab-lower-case`
+
 ```scala mdoc
 "Abc".toKebabLowerCase
 
@@ -311,6 +315,7 @@ import extras.strings.syntax.all._
 ## Case Change for `Seq[String]`
 
 ### `Seq[String]` to `PascalCaseString`
+
 ```scala mdoc
 List("Abc", "Def").mkPascalCaseString
 
@@ -340,3 +345,36 @@ List("abc def ghi", "jkl mno pqr", "st u").mkPascalCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkPascalCaseString
 ```
+
+### `Seq[String]` to `camelCaseString`
+
+```scala mdoc
+List("Abc", "Def").mkCamelCaseString
+
+List("AbcDef", "Ghi", "jkl", "MnoPqr").mkCamelCaseString
+
+List("abcDef", "Ghi", "jkl", "MnoPqr").mkCamelCaseString
+
+List("abc").mkCamelCaseString
+
+List("ABC").mkCamelCaseString
+
+List("Abc_Def_Ghi", "jkl_mno_Pqr").mkCamelCaseString
+
+List("abc_def_ghi", "jkl_mno_pqr", "st_u").mkCamelCaseString
+
+List("ABC_DEF_GHI", "JKL_MNO_PQR", "ST_U").mkCamelCaseString
+
+List("Abc-Def-Ghi", "jkl-mno-Pqr").mkCamelCaseString
+
+List("abc-def-ghi", "jkl-mno-pqr", "st-u").mkCamelCaseString
+
+List("ABC-DEF-GHI", "JKL-MNO-PQR", "ST-U").mkCamelCaseString
+
+List("Abc Def Ghi", "jkl mno Pqr").mkCamelCaseString
+
+List("abc def ghi", "jkl mno pqr", "st u").mkCamelCaseString
+
+List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkCamelCaseString
+```
+
