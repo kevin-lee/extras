@@ -441,3 +441,35 @@ List("abc def ghi", "jkl mno pqr", "st u").mkSnakeUpperCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeUpperCaseString
 ```
+
+### `Seq[String]` to `snake_lower_case_string`
+
+```scala mdoc
+List("Abc", "Def").mkSnakeLowerCaseString
+
+List("AbcDef", "Ghi", "jkl", "MnoPqr").mkSnakeLowerCaseString
+
+List("abcDef", "Ghi", "jkl", "MnoPqr").mkSnakeLowerCaseString
+
+List("abc").mkSnakeLowerCaseString
+
+List("ABC").mkSnakeLowerCaseString
+
+List("Abc_Def_Ghi", "jkl_mno_Pqr").mkSnakeLowerCaseString
+
+List("abc_def_ghi", "jkl_mno_pqr", "st_u").mkSnakeLowerCaseString
+
+List("ABC_DEF_GHI", "JKL_MNO_PQR", "ST_U").mkSnakeLowerCaseString
+
+List("Abc-Def-Ghi", "jkl-mno-Pqr").mkSnakeLowerCaseString
+
+List("abc-def-ghi", "jkl-mno-pqr", "st-u").mkSnakeLowerCaseString
+
+List("ABC-DEF-GHI", "JKL-MNO-PQR", "ST-U").mkSnakeLowerCaseString
+
+List("Abc Def Ghi", "jkl mno Pqr").mkSnakeLowerCaseString
+
+List("abc def ghi", "jkl mno pqr", "st u").mkSnakeLowerCaseString
+
+List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeLowerCaseString
+```
