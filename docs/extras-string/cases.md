@@ -308,3 +308,35 @@ import extras.strings.syntax.all._
 "ABC DEF GHI".toKebabLowerCase
 ```
 
+## Case Change for `Seq[String]`
+
+### `Seq[String]` to `PascalCaseString`
+```scala mdoc
+List("Abc", "Def").mkPascalCaseString
+
+List("AbcDef", "Ghi", "jkl", "MnoPqr").mkPascalCaseString
+
+List("abcDef", "Ghi", "jkl", "MnoPqr").mkPascalCaseString
+
+List("abc").mkPascalCaseString
+
+List("ABC").mkPascalCaseString
+
+List("Abc_Def_Ghi", "jkl_mno_Pqr").mkPascalCaseString
+
+List("abc_def_ghi", "jkl_mno_pqr", "st_u").mkPascalCaseString
+
+List("ABC_DEF_GHI", "JKL_MNO_PQR", "ST_U").mkPascalCaseString
+
+List("Abc-Def-Ghi", "jkl-mno-Pqr").mkPascalCaseString
+
+List("abc-def-ghi", "jkl-mno-pqr", "st-u").mkPascalCaseString
+
+List("ABC-DEF-GHI", "JKL-MNO-PQR", "ST-U").mkPascalCaseString
+
+List("Abc Def Ghi", "jkl mno Pqr").mkPascalCaseString
+
+List("abc def ghi", "jkl mno pqr", "st u").mkPascalCaseString
+
+List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkPascalCaseString
+```
