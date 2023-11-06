@@ -378,3 +378,35 @@ List("abc def ghi", "jkl mno pqr", "st u").mkCamelCaseString
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkCamelCaseString
 ```
 
+### `Seq[String]` to `Snake_Case_String`
+
+```scala mdoc
+List("Abc", "Def").mkSnakeCaseString
+
+List("AbcDef", "Ghi", "jkl", "MnoPqr").mkSnakeCaseString
+
+List("abcDef", "Ghi", "jkl", "MnoPqr").mkSnakeCaseString
+
+List("abc").mkSnakeCaseString
+
+List("ABC").mkSnakeCaseString
+
+List("Abc_Def_Ghi", "jkl_mno_Pqr").mkSnakeCaseString
+
+List("abc_def_ghi", "jkl_mno_pqr", "st_u").mkSnakeCaseString
+
+List("ABC_DEF_GHI", "JKL_MNO_PQR", "ST_U").mkSnakeCaseString
+
+List("Abc-Def-Ghi", "jkl-mno-Pqr").mkSnakeCaseString
+
+List("abc-def-ghi", "jkl-mno-pqr", "st-u").mkSnakeCaseString
+
+List("ABC-DEF-GHI", "JKL-MNO-PQR", "ST-U").mkSnakeCaseString
+
+List("Abc Def Ghi", "jkl mno Pqr").mkSnakeCaseString
+
+List("abc def ghi", "jkl mno pqr", "st u").mkSnakeCaseString
+
+List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeCaseString
+```
+
