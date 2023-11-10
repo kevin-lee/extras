@@ -344,6 +344,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkPascalCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkPascalCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkPascalCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkPascalCaseString
 ```
 
 ### `Seq[String]` to `camelCaseString`
@@ -376,6 +381,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkCamelCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkCamelCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkCamelCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkCamelCaseString
 ```
 
 ### `Seq[String]` to `Snake_Case_String`
@@ -408,6 +418,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkSnakeCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkSnakeCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkSnakeCaseString
 ```
 
 ### `Seq[String]` to `SNAKE_UPPER_CASE_STRING`
@@ -440,6 +455,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkSnakeUpperCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkSnakeUpperCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeUpperCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkSnakeUpperCaseString
 ```
 
 ### `Seq[String]` to `snake_lower_case_string`
@@ -472,6 +492,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkSnakeLowerCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkSnakeLowerCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkSnakeLowerCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkSnakeLowerCaseString
 ```
 
 ### `Seq[String]` to `Kebab-Case-String`
@@ -504,6 +529,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkKebabCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkKebabCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkKebabCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkKebabCaseString
 ```
 
 ### `Seq[String]` to `KEBAB-UPPER-CASE-STRING`
@@ -535,6 +565,11 @@ List("Abc Def Ghi", "jkl mno Pqr").mkKebabUpperCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkKebabUpperCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkKebabUpperCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkKebabUpperCaseString
 ```
 
 ### `Seq[String]` to `kebab-lower-case-string`
@@ -566,4 +601,9 @@ List("Abc Def Ghi", "jkl mno Pqr").mkKebabLowerCaseString
 List("abc def ghi", "jkl mno pqr", "st u").mkKebabLowerCaseString
 
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkKebabLowerCaseString
+
+List(
+  "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
+  "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
+).mkKebabLowerCaseString
 ```
