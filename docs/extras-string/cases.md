@@ -506,3 +506,34 @@ List("abc def ghi", "jkl mno pqr", "st u").mkKebabCaseString
 List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkKebabCaseString
 ```
 
+### `Seq[String]` to `KEBAB-UPPER-CASE-STRING`
+```scala mdoc
+List("Abc", "Def").mkKebabUpperCaseString
+
+List("AbcDef", "Ghi", "jkl", "MnoPqr").mkKebabUpperCaseString
+
+List("abcDef", "Ghi", "jkl", "MnoPqr").mkKebabUpperCaseString
+
+List("abc").mkKebabUpperCaseString
+
+List("ABC").mkKebabUpperCaseString
+
+List("Abc_Def_Ghi", "jkl_mno_Pqr").mkKebabUpperCaseString
+
+List("abc_def_ghi", "jkl_mno_pqr", "st_u").mkKebabUpperCaseString
+
+List("ABC_DEF_GHI", "JKL_MNO_PQR", "ST_U").mkKebabUpperCaseString
+
+List("Abc-Def-Ghi", "jkl-mno-Pqr").mkKebabUpperCaseString
+
+List("abc-def-ghi", "jkl-mno-pqr", "st-u").mkKebabUpperCaseString
+
+List("ABC-DEF-GHI", "JKL-MNO-PQR", "ST-U").mkKebabUpperCaseString
+
+List("Abc Def Ghi", "jkl mno Pqr").mkKebabUpperCaseString
+
+List("abc def ghi", "jkl mno pqr", "st u").mkKebabUpperCaseString
+
+List("ABC DEF GHI", "JKL MNO PQR", "ST U").mkKebabUpperCaseString
+```
+
