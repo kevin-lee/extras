@@ -537,6 +537,7 @@ List(
 ```
 
 ### `Seq[String]` to `KEBAB-UPPER-CASE-STRING`
+
 ```scala mdoc
 List("Abc", "Def").mkKebabUpperCaseString
 
@@ -573,6 +574,7 @@ List(
 ```
 
 ### `Seq[String]` to `kebab-lower-case-string`
+
 ```scala mdoc
 List("Abc", "Def").mkKebabLowerCaseString
 
@@ -606,4 +608,18 @@ List(
   "starBirdGlow Wave_Leaf-Book Wind-Sand_Rain Fire",
   "Snow-Moon  Hike__Play--Jump  Calm--__Kind   Warm __-- Cool"
 ).mkKebabLowerCaseString
+```
+
+## Split `String` by `PascalCase` or `cacmelCase`
+
+You can split a `String` value by PascalCase or camelCase.
+
+e.g.)
+
+```scala mdoc
+"StarBirdGlowWaveLeafBookWindSandRainFireSnowMoonHikePlayJumpCalmKindWarmSoftCool".splitByCase
+```
+
+```scala mdoc
+"starBirdGlowWaveLeafBookWindSandRainFireSnowMoonHikePlayJumpCalmKindWarmSoftCool".splitByCase
 ```
