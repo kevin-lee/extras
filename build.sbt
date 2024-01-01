@@ -144,7 +144,16 @@ lazy val extrasCirceJs  = extrasCirce.js.settings(Test / fork := false)
 
 lazy val extrasDoobieNewtypeCe2    = crossSubProject("doobie-newtype-ce2", crossProject(JVMPlatform))
   .settings(
-    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    scalacOptions := {
+      val scalaV                = scalaVersion.value
+      val existingScalacOptions = scalacOptions.value
+      if (isScala3(scalaV))
+        existingScalacOptions
+      else if (scalaV.startsWith("2.12"))
+        existingScalacOptions.filterNot(_ == "-Ywarn-unused:nowarn") ++ List("-Xsource:3")
+      else
+        existingScalacOptions ++ List("-Xsource:3")
+    },
     crossScalaVersions := props.Scala2Versions.distinct,
     libraryDependencies ++=
       List(
@@ -163,7 +172,16 @@ lazy val extrasDoobieNewtypeCe2Jvm = extrasDoobieNewtypeCe2.jvm
 
 lazy val extrasDoobieNewtypeCe3    = crossSubProject("doobie-newtype-ce3", crossProject(JVMPlatform))
   .settings(
-    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    scalacOptions := {
+      val scalaV                = scalaVersion.value
+      val existingScalacOptions = scalacOptions.value
+      if (isScala3(scalaV))
+        existingScalacOptions
+      else if (scalaV.startsWith("2.12"))
+        existingScalacOptions.filterNot(_ == "-Ywarn-unused:nowarn") ++ List("-Xsource:3")
+      else
+        existingScalacOptions ++ List("-Xsource:3")
+    },
     crossScalaVersions := props.Scala2Versions.distinct,
     libraryDependencies ++=
       List(
@@ -182,7 +200,16 @@ lazy val extrasDoobieNewtypeCe3Jvm = extrasDoobieNewtypeCe3.jvm
 
 lazy val extrasDoobieToolsCe2    = crossSubProject("doobie-tools-ce2", crossProject(JVMPlatform))
   .settings(
-    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    scalacOptions := {
+      val scalaV                = scalaVersion.value
+      val existingScalacOptions = scalacOptions.value
+      if (isScala3(scalaV))
+        existingScalacOptions
+      else if (scalaV.startsWith("2.12"))
+        existingScalacOptions.filterNot(_ == "-Ywarn-unused:nowarn") ++ List("-Xsource:3")
+      else
+        existingScalacOptions ++ List("-Xsource:3")
+    },
     crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++=
       List(
@@ -204,7 +231,16 @@ lazy val extrasDoobieToolsCe2Jvm = extrasDoobieToolsCe2.jvm
 
 lazy val extrasDoobieToolsCe3    = crossSubProject("doobie-tools-ce3", crossProject(JVMPlatform))
   .settings(
-    scalacOptions ++= (if (isScala3(scalaVersion.value)) List.empty else List("-Xsource:3")),
+    scalacOptions := {
+      val scalaV                = scalaVersion.value
+      val existingScalacOptions = scalacOptions.value
+      if (isScala3(scalaV))
+        existingScalacOptions
+      else if (scalaV.startsWith("2.12"))
+        existingScalacOptions.filterNot(_ == "-Ywarn-unused:nowarn") ++ List("-Xsource:3")
+      else
+        existingScalacOptions ++ List("-Xsource:3")
+    },
     crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies ++=
       List(
@@ -992,6 +1028,12 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
         }
       },
       scalacOptions := scalacOptionsPostProcess(scalaVersion.value, scalacOptions.value),
+      scalacOptions := {
+        if (scalaVersion.value.startsWith("2.13"))
+          "-Ymacro-annotations" +: scalacOptions.value
+        else
+          scalacOptions.value
+      },
     )
     .settings(
       mavenCentralPublishSettings
