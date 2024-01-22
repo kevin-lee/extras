@@ -30,7 +30,7 @@ jobs:
           distribution: ${{ matrix.scala.java-distribution }}
 
       - name: Cache SBT
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.ivy2/cache
@@ -93,7 +93,7 @@ jobs:
           distribution: ${{ matrix.scala.java-distribution }}
 
       - name: Cache SBT
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.ivy2/cache
