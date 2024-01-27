@@ -691,10 +691,11 @@ lazy val docsExtrasRefinement = docsProject("docs-extras-refinement", file("docs
     libraryDependencies ++= {
       val latestVersion = getLatestExtrasVersion()
       List(
-        "io.kevinlee" %% "extras-refinement" % latestVersion
-      )
+        "io.kevinlee" %% "extras-refinement" % latestVersion,
+        libs.newtype,
+      ) ++ List(libs.cats, libs.refined)
     } ++ List(libs.hedgehogCore, libs.hedgehogRunner),
-    libraryDependencies := (if (isScala3(scalaVersion.value)) List.empty[ModuleID] else libraryDependencies.value),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     mdocVariables := createMdocVariables(),
   )
   .settings(noPublish)
@@ -1041,7 +1042,7 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
 }
 
 def removeScala3Incompatible(scalaVersion: String, libraryDependencies: Seq[ModuleID]): Seq[ModuleID] =
-  if (scalaVersion.startsWith("3")) {
+  if (isScala3(scalaVersion)) {
     libraryDependencies.filterNot(props.isScala3Incompatible)
   } else {
     libraryDependencies

@@ -10,7 +10,7 @@ addSbtPlugin("org.wartremover" % "sbt-wartremover" % "3.1.0")
 addSbtPlugin("ch.epfl.scala" % "sbt-scalafix"  % "0.11.0")
 addSbtPlugin("org.scalameta" % "sbt-scalafmt"  % "2.5.0")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.0.7")
-addSbtPlugin("org.scalameta" % "sbt-mdoc"      % "2.3.7")
+addSbtPlugin("org.scalameta" % "sbt-mdoc"      % "2.5.2")
 addSbtPlugin("io.kevinlee"   % "sbt-docusaur"  % "0.15.0")
 
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.13.0")
