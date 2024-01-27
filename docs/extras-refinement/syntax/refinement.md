@@ -21,7 +21,7 @@ There are a few issues here.
 * Finally, depending on how to validate, you probably turn the `Either[String, YourNewType]` from the validation into `EitherNec` since you may want to accumulate all the errors from multiple validations. e.g.) `.toEitherNec`
 
 In practice, it may look like
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import io.estatico.newtype.macros.newtype
 import eu.timepit.refined.types.string.NonEmptyString
@@ -29,29 +29,21 @@ import eu.timepit.refined.types.string.NonEmptyString
 @newtype case class Name(value: NonEmptyString)
 
 val validNameValue = "Kevin"
-// validNameValue: String = "Kevin"
 NonEmptyString.from(validNameValue)
   .map(Name(_))
   .leftMap(err => s"Failed to create Name: $err")
   .toEitherNec
-// res1: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
 
 val invalidNameValue = ""
-// invalidNameValue: String = ""
 NonEmptyString.from(invalidNameValue)
   .map(Name(_))
   .leftMap(err => s"Failed to create Name: $err")
   .toEitherNec
-// res2: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Name: Predicate isEmpty() did not fail."
-//   )
-// )
 ```
 
 or this
 
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import eu.timepit.refined.api._
 import eu.timepit.refined.numeric._
@@ -63,86 +55,53 @@ object Types {
   type PositiveInt = Int Refined Positive
   object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
   @newtype case class Id(value: PositiveInt)
-
+  
   @newtype case class Name(value: NonEmptyString)
-
+  
   final case class Person(id: Id, name: Name)
 }
 import Types._
 
 val idValue = 999
-// idValue: Int = 999
 
 val id = PositiveInt.from(idValue)
-  .map(Id(_))
-  .leftMap(err => s"Failed to create Types.Id: $err")
-  .toEitherNec
-// id: cats.data.package.EitherNec[String, Id] = Right(value = 999)
+          .map(Id(_))
+          .leftMap(err => s"Failed to create Types.Id: $err")
+          .toEitherNec
 println(id)
-// Right(999)
 
 val nameValue = "Kevin"
-// nameValue: String = "Kevin"
 
 val name = NonEmptyString.from(nameValue)
-  .map(Name(_))
-  .leftMap(err => s"Failed to create Types.Name: $err")
-  .toEitherNec
-// name: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
+            .map(Name(_))
+            .leftMap(err => s"Failed to create Types.Name: $err")
+            .toEitherNec
 println(name)
-// Right(Kevin)
 
 val person = (id, name).parMapN(Person.apply)
-// person: cats.data.package.EitherNec[String, Person] = Right(
-//   value = Person(id = 999, name = Kevin)
-// )
 println(person)
-// Right(Person(999,Kevin))
 
 ```
 or invalid case like
-```scala
+```scala mdoc
 val idValue2 = 0
-// idValue2: Int = 0
 
 val id2 = PositiveInt.from(idValue2)
-  .map(Id(_))
-  .leftMap(err => s"Failed to create Types.Id: $err")
-  .toEitherNec
-// id2: cats.data.package.EitherNec[String, Id] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
+          .map(Id(_))
+          .leftMap(err => s"Failed to create Types.Id: $err")
+          .toEitherNec
 println(id2)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 
 val nameValue2 = ""
-// nameValue2: String = ""
 
 val name2 = NonEmptyString.from(nameValue2)
-  .map(Name(_))
-  .leftMap(err => s"Failed to create Types.Name: $err")
-  .toEitherNec
-// name2: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
+            .map(Name(_))
+            .leftMap(err => s"Failed to create Types.Name: $err")
+            .toEitherNec
 println(name2)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 
 val person2 = (id2, name2).parMapN(Person.apply)
-// person2: cats.data.package.EitherNec[String, Person] = Left(
-//   value = Append(
-//     leftNE = Singleton(
-//       a = "Failed to create Types.Id: Predicate failed: (0 > 0)."
-//     ),
-//     rightNE = Singleton(
-//       a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//     )
-//   )
-// )
 println(person2)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0)., Failed to create Types.Name: Predicate isEmpty() did not fail.))
 
 ```
 
@@ -175,7 +134,7 @@ If you are interested in the difference,
 
 ### Example: Valid Case
 
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import eu.timepit.refined.api._
 import eu.timepit.refined.numeric._
@@ -187,50 +146,36 @@ object Types {
   type PositiveInt = Int Refined Positive
   object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
   @newtype case class Id(value: PositiveInt)
-
+  
   @newtype case class Name(value: NonEmptyString)
-
+  
   final case class Person(id: Id, name: Name)
 }
 import Types._
 
 val idValue = 999
-// idValue: Int = 999
 
 val id  = validateAs[Id](idValue)
-// id: cats.data.package.EitherNec[String, Id] = Right(value = 999)
 val id2 = idValue.validateAs[Id]
-// id2: cats.data.package.EitherNec[String, Id] = Right(value = 999)
 println(id)
-// Right(999)
 println(id2)
-// Right(999)
 
 val nameValue = "Kevin"
-// nameValue: String = "Kevin"
 
 val name  = validateAs[Name](nameValue)
-// name: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
 val name2 = nameValue.validateAs[Name]
-// name2: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
 println(name)
-// Right(Kevin)
 println(name2)
-// Right(Kevin)
 
 val person = (id, name).parMapN(Person.apply)
-// person: cats.data.package.EitherNec[String, Person] = Right(
-//   value = Person(id = 999, name = Kevin)
-// )
 println(person)
-// Right(Person(999,Kevin))
 ```
 
 ### Example: Invalid Case
 
 #### Only of them is invalid
 
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import eu.timepit.refined.api._
 import eu.timepit.refined.numeric._
@@ -242,52 +187,34 @@ object Types {
   type PositiveInt = Int Refined Positive
   object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
   @newtype case class Id(value: PositiveInt)
-
+  
   @newtype case class Name(value: NonEmptyString)
-
+  
   final case class Person(id: Id, name: Name)
 }
 import Types._
 
 val idValue = 0
-// idValue: Int = 0
 
 val id  = validateAs[Id](idValue)
-// id: cats.data.package.EitherNec[String, Id] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
 val id2 = idValue.validateAs[Id]
-// id2: cats.data.package.EitherNec[String, Id] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
 println(id)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 println(id2)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 
 val nameValue = "Kevin"
-// nameValue: String = "Kevin"
 
 val name  = validateAs[Name](nameValue)
-// name: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
 val name2 = nameValue.validateAs[Name]
-// name2: cats.data.package.EitherNec[String, Name] = Right(value = Kevin)
 println(name)
-// Right(Kevin)
 println(name2)
-// Right(Kevin)
 
 val person = (id, name).parMapN(Person.apply)
-// person: cats.data.package.EitherNec[String, Person] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
 println(person)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 ```
 
 #### The other one is invalid
 
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import eu.timepit.refined.api._
 import eu.timepit.refined.numeric._
@@ -299,57 +226,33 @@ object Types {
   type PositiveInt = Int Refined Positive
   object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
   @newtype case class Id(value: PositiveInt)
-
+  
   @newtype case class Name(value: NonEmptyString)
-
+  
   final case class Person(id: Id, name: Name)
 }
 import Types._
 
 val idValue = 999
-// idValue: Int = 999
 
 val id  = validateAs[Id](idValue)
-// id: cats.data.package.EitherNec[String, Id] = Right(value = 999)
 val id2 = idValue.validateAs[Id]
-// id2: cats.data.package.EitherNec[String, Id] = Right(value = 999)
 println(id)
-// Right(999)
 println(id2)
-// Right(999)
 
 val nameValue = ""
-// nameValue: String = ""
 
 val name  = validateAs[Name](nameValue)
-// name: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
 val name2 = nameValue.validateAs[Name]
-// name2: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
 println(name)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 println(name2)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 
 val person = (id, name).parMapN(Person.apply)
-// person: cats.data.package.EitherNec[String, Person] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
 println(person)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 ```
 
 #### More than one invalid
-```scala
+```scala mdoc:reset-object
 import cats.syntax.all._
 import eu.timepit.refined.api._
 import eu.timepit.refined.numeric._
@@ -361,62 +264,29 @@ object Types {
   type PositiveInt = Int Refined Positive
   object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
   @newtype case class Id(value: PositiveInt)
-
+  
   @newtype case class Name(value: NonEmptyString)
-
+  
   final case class Person(id: Id, name: Name)
 }
 import Types._
 
 val idValue = 0
-// idValue: Int = 0
 
 val id  = validateAs[Id](idValue)
-// id: cats.data.package.EitherNec[String, Id] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
 val id2 = idValue.validateAs[Id]
-// id2: cats.data.package.EitherNec[String, Id] = Left(
-//   value = Singleton(a = "Failed to create Types.Id: Predicate failed: (0 > 0).")
-// )
 println(id)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 println(id2)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0).))
 
 val nameValue = ""
-// nameValue: String = ""
 
 val name  = validateAs[Name](nameValue)
-// name: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
 val name2 = nameValue.validateAs[Name]
-// name2: cats.data.package.EitherNec[String, Name] = Left(
-//   value = Singleton(
-//     a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//   )
-// )
 println(name)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 println(name2)
-// Left(Chain(Failed to create Types.Name: Predicate isEmpty() did not fail.))
 
 val person = (id, name).parMapN(Person.apply)
-// person: cats.data.package.EitherNec[String, Person] = Left(
-//   value = Append(
-//     leftNE = Singleton(
-//       a = "Failed to create Types.Id: Predicate failed: (0 > 0)."
-//     ),
-//     rightNE = Singleton(
-//       a = "Failed to create Types.Name: Predicate isEmpty() did not fail."
-//     )
-//   )
-// )
 println(person)
-// Left(Chain(Failed to create Types.Id: Predicate failed: (0 > 0)., Failed to create Types.Name: Predicate isEmpty() did not fail.))
 ```
 
 ## `toValue`
@@ -430,93 +300,68 @@ name.value
 name.value.value
 // String = "Kevin"
 
-import extras.refinement.syntax.refinement._
+import eu.timepit.refined.auto._
 name.toValue
 // String = "Kevin" 
 ```
 
-```scala
+```scala mdoc:reset-object
 import eu.timepit.refined.api._
-import eu.timepit.refined.types.all._
+import eu.timepit.refined.numeric._
+import eu.timepit.refined.types.string.NonEmptyString
 import io.estatico.newtype.macros.newtype
 
 object Types {
-  @newtype case class Num(value: PosInt)
+  type PositiveInt = Int Refined Positive
+  object PositiveInt extends RefinedTypeOps[PositiveInt, Int]
+  @newtype case class Num(value: PositiveInt)
   
   @newtype case class Name(value: NonEmptyString)
   
 }
 ```
-```scala
+```scala mdoc
 import Types._
 
 def foo(n: Int): Int = n * 2
 def hello(s: String): Unit = println(s"Hello $s")
 
 val n = 1
-// n: Int = 1
 val num = Num(PositiveInt.unsafeFrom(n))
-// num: Num = 1
 
 val nameString = "Kevin"
-// nameString: String = "Kevin"
 val name = Name(NonEmptyString.unsafeFrom(nameString))
-// name: Name = Kevin
 ```
-```scala
+```scala mdoc:fail
 foo(num.value)
-// error: type mismatch;
-//  found   : repl.MdocSession.MdocApp6.Types.PositiveInt
-//     (which expands to)  eu.timepit.refined.api.Refined[Int,eu.timepit.refined.numeric.Greater[shapeless._0]]
-//  required: Int
-// foo(num.value)
-//     ^^^^^^^^^
 ```
-```scala
+```scala mdoc:fail
 hello(name.value)
-// error: type mismatch;
-//  found   : eu.timepit.refined.types.string.NonEmptyString
-//     (which expands to)  eu.timepit.refined.api.Refined[String,eu.timepit.refined.boolean.Not[eu.timepit.refined.collection.Empty]]
-//  required: String
-// hello(name.value)
-//       ^^^^^^^^^^
 ```
 You can solve with `extras-refinement`.
-```scala
+```scala mdoc
 import extras.refinement.syntax.refinement._
 
 num.value
-// res37: PositiveInt = 1
 num.value.value
-// res38: Int = 1
 num.toValue
-// res39: Int = 1
 foo(num.toValue)
-// res40: Int = 2
 
 name.value
-// res41: NonEmptyString = Kevin
 name.value.value
-// res42: String = "Kevin"
 name.toValue
-// res43: String = "Kevin"
 hello(name.toValue)
-// Hello Kevin
 ```
 
 You can also use `eu.timepit.refined.auto` like
-```scala
+```scala mdoc
 import eu.timepit.refined.auto._
 
 num.value
-// res45: PositiveInt = 1
 foo(num.value)
-// res46: Int = 2
 
 name.value
-// res47: NonEmptyString = Kevin
 hello(name.value)
-// Hello Kevin
 ```
 However, `.value` with `eu.timepit.refined.auto` does an `implicit` conversion from the `refined type` to the underlying type
 whereas the syntax from `extras-refinement` is an explicit way to get the underlying type value of the ``refined newtype``.

@@ -1096,7 +1096,7 @@ def docsProject(projectName: String, path: File): Project =
     .enablePlugins(MdocPlugin)
     .settings(
       name := projectName,
-      scalacOptions ~= (ops => easeScalacOptionsForDocs(ops)),
+      scalacOptions ~= (ops => "-Ymacro-annotations" +: easeScalacOptionsForDocs(ops)),
     )
 
 lazy val props = new {
