@@ -47,6 +47,11 @@ const websiteConfig = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       image: 'img/poster.png',
+      docs: {
+        sidebar: {
+          hideable: true,
+        },
+      },
       navbar: {
         title: 'Extras',
         logo: {
