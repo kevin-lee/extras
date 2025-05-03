@@ -31,11 +31,12 @@ local.properties
 # Locally stored "Eclipse launch configurations"
 *.launch
 
-# sbt
+# sbt and build tools
 .bsp/
 .bloop/
 .metals/
 .vscode/
+/project/**/metals.sbt
 
 # sbteclipse plugin
 .target
