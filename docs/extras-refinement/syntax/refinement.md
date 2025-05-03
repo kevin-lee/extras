@@ -335,8 +335,14 @@ val name = Name(NonEmptyString.unsafeFrom(nameString))
 ```scala mdoc:fail
 foo(num.value)
 ```
-```scala mdoc:fail
+```scala
 hello(name.value)
+// error: type mismatch;
+//  found   : eu.timepit.refined.types.string.NonEmptyString
+//      (which expands to)  eu.timepit.refined.api.Refined[String,eu.timepit.refined.boolean.Not[eu.timepit.refined.collection.Empty]]
+//  required: String
+// hello(name.value)
+//       ^^^^^^^^^^
 ```
 You can solve with `extras-refinement`.
 ```scala mdoc

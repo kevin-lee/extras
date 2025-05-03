@@ -26,6 +26,10 @@ trait StubTools {
 
   def missing: MissingStubException[Nothing] = missingStubException
 
+  @SuppressWarnings(
+    // TODO: Fine a better way to handle these warts
+    Array("org.wartremover.warts.IterableOps", "org.wartremover.warts.SeqApply", "org.wartremover.warts.SizeIs")
+  )
   def missingStubException[A]: MissingStubException[A] = {
     val stackTrace = Thread.currentThread.getStackTrace.toList
 
@@ -39,8 +43,12 @@ trait StubTools {
     }
 
     val (elem, truncatedStackTraces) =
-      if (index < 0) (stackTrace(2), stackTrace.drop(2))
-      else {
+      if (index < 0) {
+        if (stackTrace.length < 3)
+          (stackTrace.last, List.empty)
+        else
+          (stackTrace(2), stackTrace.drop(2))
+      } else {
         @tailrec
         def findMethodCalledMissing(
           stack: List[StackTraceElement]

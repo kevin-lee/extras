@@ -33,19 +33,13 @@ ThisBuild / scalafixConfig := (
   else file(".scalafix-scala2.conf").some
 )
 
-ThisBuild / scalafixScalaBinaryVersion := {
-  val log        = sLog.value
-  val newVersion = if (scalaVersion.value.startsWith("3")) {
-    (ThisBuild / scalafixScalaBinaryVersion).value
-  } else {
-    CrossVersion.binaryScalaVersion(scalaVersion.value)
-  }
-
-  log.info(
-    s">> Change ThisBuild / scalafixScalaBinaryVersion from ${(ThisBuild / scalafixScalaBinaryVersion).value} to $newVersion"
+inThisBuild(
+  List(
+    scalaVersion := scalaVersion.value,
+    semanticdbEnabled := true,
+    semanticdbVersion := "4.8.15",
   )
-  newVersion
-}
+)
 
 ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.3.0"
 
@@ -997,8 +991,6 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
     .in(file(s"modules/$prefixedName"))
     .settings(
       name := prefixedName,
-      semanticdbEnabled := true,
-      semanticdbVersion := scalafixSemanticdb.revision,
       Test / fork := true,
       libraryDependencies ++= libs.hedgehog,
       testFrameworks ~=
@@ -1110,8 +1102,8 @@ lazy val props = new {
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   val Scala2Versions = List(
-    "2.13.10",
-    "2.12.17",
+    "2.13.12",
+    "2.12.18",
   )
   val Scala2Version  = Scala2Versions.head
 

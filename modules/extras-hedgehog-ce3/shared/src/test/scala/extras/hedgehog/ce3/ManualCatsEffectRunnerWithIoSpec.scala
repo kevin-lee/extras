@@ -50,6 +50,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       actual.completeAs(expected).and(actual2.completeAs(expected2))
     }
 
+  @SuppressWarnings(Array("org.wartremover.warts.SeqApply"))
   def testCatsEffectRunnerWithCompleteAsMultiple: Property =
     for {
       ns <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).list(Range.linear(3, 10)).log("ns")
@@ -100,6 +101,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
         })
     }
 
+  @SuppressWarnings(Array("org.wartremover.warts.SeqApply"))
   def testCatsEffectRunnerWithCompleteThenMultiple: Property =
     for {
       ns <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).list(Range.linear(3, 10)).log("ns")
@@ -156,6 +158,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
       actual.expectError(expected).and(actual2.expectError(expected2))
     }
 
+  @SuppressWarnings(Array("org.wartremover.warts.SeqApply"))
   def testCatsEffectRunnerWithExpectErrorMultiple: Property =
     for {
       message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
@@ -224,6 +227,7 @@ object ManualCatsEffectRunnerWithIoSpec extends Properties with CatsEffectRunner
         })
     }
 
+  @SuppressWarnings(Array("org.wartremover.warts.SeqApply"))
   def testCatsEffectRunnerWithErrorThenMultiple: Property =
     for {
       message <- Gen.string(Gen.alphaNum, Range.linear(1, 10)).log("message")
