@@ -14,6 +14,9 @@ object Rainbow {
 
   val RainbowColor: List[Rgb] = List(Red, Orange, Yellow, Green, Blue, Indigo, Violet)
 
+  @SuppressWarnings(Array("org.wartremover.warts.SeqApply"))
+  def rainbowColor(index: Index): Rgb = RainbowColor(index.value)
+
   sealed trait Index
   object Index {
     case object Zero extends Index
@@ -107,7 +110,7 @@ object Rainbow {
       mkRainbow(
         s,
         "",
-        (each, index) => RainbowColor(index.value).toAsciiEsc + each,
+        (each, index) => rainbowColor(index).toAsciiEsc + each,
         extras.scala.io.Color.Reset.toAnsi,
       )
 
@@ -126,7 +129,7 @@ object Rainbow {
       mkRainbow(
         s,
         "",
-        (each, index) => s"""<span style="color: ${RainbowColor(index.value).toHexHtml};">$each</span>""",
+        (each, index) => s"""<span style="color: ${rainbowColor(index).toHexHtml};">$each</span>""",
         "",
       )
 
