@@ -16,7 +16,7 @@ import extras.strings.syntax.all._
 
 ## `numeric` syntax for `Int`
 
-### Int.toOrdinal
+### `Int.toOrdinal`
 
 ```scala mdoc
 1.toOrdinal
@@ -36,7 +36,7 @@ import extras.strings.syntax.all._
 
 ## `numeric` syntax for `Long`
 
-### Long.toOrdinal
+### `Long.toOrdinal`
 
 ```scala mdoc
 1L.toOrdinal
