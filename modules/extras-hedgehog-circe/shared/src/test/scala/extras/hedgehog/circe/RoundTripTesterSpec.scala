@@ -91,7 +91,7 @@ object RoundTripTesterSpec extends Properties {
 
           val err = io
             .circe
-            .DecodingFailure("Attempt to decode value on failed cursor", List(io.circe.CursorOp.DownField("blah")))
+            .DecodingFailure("Missing required field", List(io.circe.CursorOp.DownField("blah")))
 
           val json = something.asJson
 
