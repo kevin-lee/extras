@@ -24,10 +24,6 @@ ThisBuild / scmInfo :=
 
 ThisBuild / licenses := props.licenses
 
-ThisBuild / resolvers += "sonatype-snapshots".at(
-  s"https://${props.SonatypeCredentialHost}/content/repositories/snapshots"
-)
-
 ThisBuild / scalafixConfig := (
   if (scalaVersion.value.startsWith("3")) file(".scalafix-scala3.conf").some
   else file(".scalafix-scala2.conf").some
@@ -49,7 +45,6 @@ lazy val extras = (project in file("."))
     name := props.RepoName,
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
-  .settings(mavenCentralPublishSettings)
   .settings(noPublish)
   .settings(noDoc)
   .aggregate(
@@ -957,13 +952,6 @@ lazy val docsExtrasTestingToolsEffectie =
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
 // scalafmt: on
 
-lazy val mavenCentralPublishSettings: SettingsDefinition = List(
-  /* Publish to Maven Central { */
-  sonatypeCredentialHost := props.SonatypeCredentialHost,
-  sonatypeRepository := props.SonatypeRepository,
-  /* } Publish to Maven Central */
-)
-
 def subProject(projectName: String): Project = {
   val prefixedName = prefixedProjectName(projectName)
   Project(projectName, file(s"modules/$prefixedName"))
@@ -979,9 +967,6 @@ def subProject(projectName: String): Project = {
         else
           ((ThisBuild / baseDirectory).value / ".scalafix-scala2.conf").some
       ),
-    )
-    .settings(
-      mavenCentralPublishSettings
     )
 }
 
@@ -1027,9 +1012,6 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
         else
           scalacOptions.value
       },
-    )
-    .settings(
-      mavenCentralPublishSettings
     )
 }
 
@@ -1115,9 +1097,6 @@ lazy val props = new {
 
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
-
-  val SonatypeCredentialHost = "s01.oss.sonatype.org"
-  val SonatypeRepository     = s"https://$SonatypeCredentialHost/service/local"
 
   val CatsVersion      = "2.8.0"
   val Cats2_0_0Version = "2.0.0"
