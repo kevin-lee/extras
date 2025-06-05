@@ -3,7 +3,7 @@ import sbt.Defaults.sbtPluginExtra
 logLevel := sbt.Level.Warn
 scalaVersion := "2.12.18"
 
-addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.7.0")
+addSbtPlugin("com.github.sbt" % "sbt-ci-release" % "1.11.1")
 
 addSbtPlugin("org.wartremover" % "sbt-wartremover" % "3.1.7")
 
