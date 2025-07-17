@@ -125,7 +125,7 @@ hello2.hello(Id(1))
 
 :::caution NOTE
 
-Why not just use mock framework for convenience? To answer that, please read [Pitfalls of Mocking in tests](https://www.47deg.com/blog/mocking-and-how-to-avoid-it) from [Xebia Functional](https://www.47deg.com) (formerly known as 47 Degrees)
+Why not just use mock framework for convenience? To answer that, please read [Pitfalls of Mocking in tests](https://xebia.com/blog/pitfalls-mocking-tests-how-to-avoid) from [Xebia Functional](https://xebia.com) (formerly known as 47 Degrees)
 
 Besides what the blog tells you, mock frameworks often make you do bad practice like testing the implementation details with `verify`.
 
