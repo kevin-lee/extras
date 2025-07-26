@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  GH_JVM_OPTS: "-Xss64m -Xms1024m -XX:MaxMetaspaceSize=2G -Xmx4G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JVM_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
 
 jobs:
 
@@ -65,41 +65,3 @@ jobs:
           echo "JVM_OPTS=${JVM_OPTS}"
           echo "SBT_OPTS=${SBT_OPTS}"
           .github/workflows/sbt-build-all.sh ${{ matrix.scala.report }}
-
-  report:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        scala:
-          - { name: "Scala", version: "2.13.12", java-version: "11", java-distribution: "temurin", report: "report" }
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: ${{ matrix.scala.java-version }}
-          distribution: ${{ matrix.scala.java-distribution }}
-          cache: sbt
-      - uses: sbt/setup-sbt@v1
-
-      - name: "[PR] Test Report for PR-#${{ github.event.pull_request.number }} - ${{ github.run_number }}"
-        if: github.event_name == 'pull_request'
-        env:
-          CURRENT_BRANCH_NAME: ${{ github.base_ref }}
-          RUN_ID: ${{ github.run_id }}
-          RUN_NUMBER: ${{ github.run_number }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
-        run: |
-          echo "Rull request to the '${CURRENT_BRANCH_NAME}' branch"
-          echo "RUN_ID=${RUN_ID}"
-          echo "RUN_NUMBER=${RUN_NUMBER}"
-          echo "PR #${PR_NUMBER}"
-          java -version
-          echo "JVM_OPTS=${JVM_OPTS}"
-          echo "SBT_OPTS=${SBT_OPTS}"
-          .github/workflows/sbt-build-all-with-scala-version.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
-
-      - if: ${{ github.event_name == 'pull_request' && matrix.scala.report == 'report' }}
-        uses: codecov/codecov-action@v5
