@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { version: "2.13.10", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
+          - { version: "2.13.12", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
         node:
           - { version: "22.17.0" }
 
