@@ -12,7 +12,7 @@ on:
 env:
   GH_JAVA_VERSION: "11"
   GH_JAVA_DISTRIBUTION: "temurin"
-  GH_JVM_OPTS: "-Xss64m -Xms1024m -XX:MaxMetaspaceSize=2G -Xmx4G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JVM_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
 
 
 jobs:
@@ -55,40 +55,6 @@ jobs:
             -v \
             clean \
             +test
-
-  report:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        scala:
-          - { name: "Scala 2", version: "2.13.12", java-version: "11", java-distribution: "temurin", report: "report" }
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: ${{ matrix.scala.java-version }}
-          distribution: ${{ matrix.scala.java-distribution }}
-          cache: sbt
-      - uses: sbt/setup-sbt@v1
-
-      - name: "[Codecov] Test Report - ${{ matrix.scala.name }} ${{ matrix.scala.version }} - ${{ github.run_number }}"
-        if: ${{ matrix.scala.report == 'report' }}
-        env:
-          CURRENT_BRANCH_NAME: ${{ github.ref }}
-          RUN_ID: ${{ github.run_id }}
-          RUN_NUMBER: ${{ github.run_number }}
-        run: |
-          echo "[BEFORE]CURRENT_BRANCH_NAME=${CURRENT_BRANCH_NAME}"
-          export CURRENT_BRANCH_NAME="${CURRENT_BRANCH_NAME#refs/heads/}"
-          echo " [AFTER]CURRENT_BRANCH_NAME=${CURRENT_BRANCH_NAME}"
-          echo "RUN_ID=${RUN_ID}"
-          echo "RUN_NUMBER=${RUN_NUMBER}"
-          .github/workflows/sbt-build-all-with-scala-version.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
-
-      - if: ${{ matrix.scala.report == 'report' }}
-        uses: codecov/codecov-action@v5
 
   gh-release:
     needs: build
