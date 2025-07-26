@@ -3,7 +3,11 @@ name: "[Doc][A] Build Only"
 on:
   push:
     branches:
-      - "**"
+      - main
+
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build-docusaurus:
