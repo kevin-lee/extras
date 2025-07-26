@@ -29,6 +29,12 @@ object RenderSpec extends Properties {
     property("test Render[A].contramap[B] (1)", testRenderContramap1),
     property("test Render[A].contramap[B] (2)", testRenderContramap2),
     property("test Render[A].contramap[B] (3)", testRenderContramap3),
+    property("test Contravariant[Render].contramap[A, B] (1)", testContravariantRenderContramap1),
+    property("test Contravariant[Render].contramap[A, B] (2)", testContravariantRenderContramap2),
+    property("test Contravariant[Render].contramap[A, B] (3)", testContravariantRenderContramap3),
+    property("test Render[A].contramap[B] with cats.syntax (1)", testContravariantRenderContramapWithCatsSyntax1),
+    property("test Render[A].contramap[B] with cats.syntax (2)", testContravariantRenderContramapWithCatsSyntax2),
+    property("test Render[A].contramap[B] with cats.syntax (3)", testContravariantRenderContramapWithCatsSyntax3),
   )
 
   def testRenderRenderA: Property =
@@ -203,6 +209,89 @@ object RenderSpec extends Properties {
 
       val renderId: Render[Id] = Render[String].contramap(_.value)
       renderId.render(id) ==== s
+    }
+
+  def testContravariantRenderContramap1: Property =
+    for {
+      uuid <- Gen.constant(UUID.randomUUID()).log("uuid")
+    } yield {
+      final case class Id(value: UUID)
+      val id = Id(uuid)
+
+      val renderId: Render[Id] = cats.Contravariant[Render].contramap(Render[UUID])(_.value)
+
+      (renderId.render(id) ==== uuid.toString)
+        .log("Contravariant[Render].contramap[UUID, Id](Render[UUID])(Id => UUID) didn't work")
+
+    }
+
+  def testContravariantRenderContramap2: Property =
+    for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      final case class Id(value: Int)
+      val id = Id(n)
+
+      val renderId: Render[Id] = cats.Contravariant[Render].contramap(Render[Int])(_.value)
+
+      (renderId.render(id) ==== n.toString)
+        .log("Contravariant[Render].contramap[Int, Id](Render[Int])(Id => Int) didn't work")
+    }
+
+  def testContravariantRenderContramap3: Property =
+    for {
+      s <- Gen.string(Gen.unicodeAll, Range.linear(1, 100)).log("s")
+    } yield {
+      final case class Id(value: String)
+      val id = Id(s)
+
+      val renderId: Render[Id] = cats.Contravariant[Render].contramap(Render[String])(_.value)
+
+      (renderId.render(id) ==== s)
+        .log("Contravariant[Render].contramap[String, Id](Render[String])(Id => String) didn't work")
+    }
+
+  def testContravariantRenderContramapWithCatsSyntax1: Property =
+    for {
+      uuid <- Gen.constant(UUID.randomUUID()).log("uuid")
+    } yield {
+      final case class Id(value: UUID)
+      val id = Id(uuid)
+
+      import cats.syntax.all._
+
+      val renderId: Render[Id] = Render[UUID].contramap(_.value)
+
+      (renderId.render(id) ==== uuid.toString)
+        .log("Render[UUID].contramap[Id](Id => UUID) didn't work")
+    }
+
+  def testContravariantRenderContramapWithCatsSyntax2: Property =
+    for {
+      n <- Gen.int(Range.linear(Int.MinValue, Int.MaxValue)).log("n")
+    } yield {
+      final case class Id(value: Int)
+      val id = Id(n)
+
+      import cats.syntax.all._
+
+      val renderId: Render[Id] = Render[Int].contramap(_.value)
+
+      (renderId.render(id) ==== n.toString).log("Render[Int].contramap[Id](Id => Int) didn't work")
+    }
+
+  def testContravariantRenderContramapWithCatsSyntax3: Property =
+    for {
+      s <- Gen.string(Gen.unicodeAll, Range.linear(1, 100)).log("s")
+    } yield {
+      final case class Id(value: String)
+      val id = Id(s)
+
+      import cats.syntax.all._
+
+      val renderId: Render[Id] = Render[String].contramap(_.value)
+
+      (renderId.render(id) ==== s).log("Render[String].contramap[Id](Id => String) didn't work")
     }
 
 }
