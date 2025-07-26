@@ -277,6 +277,11 @@ lazy val extrasFs2V3TextJs  = extrasFs2V3Text.js.settings(Test / fork := false)
 lazy val extrasRender    = crossSubProject("render", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= List(
+      libs.cats.value % Optional
+    ) ++ (
+      if (isScala3(scalaVersion.value)) List.empty else List(libs.scalacCompatAnnotation)
+    ),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasRenderJvm = extrasRender.jvm
@@ -680,7 +685,7 @@ lazy val docsExtrasHedgehog = docsProject("docs-extras-hedgehog", file("docs-gen
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-hedgehog"),
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     libraryDependencies ++= {
-      val latestVersion = getLatestExtrasVersion()
+      val latestVersion   = getLatestExtrasVersion()
       List(
         "io.kevinlee" %% "extras-hedgehog-ce3"   % latestVersion,
         "io.kevinlee" %% "extras-hedgehog-circe" % latestVersion,
@@ -1175,6 +1180,8 @@ lazy val props = new {
 
   val ScalaJsMacrotaskExecutorVersion = "1.1.1"
 
+  val ScalacCompatAnnotationVersion = "0.1.4"
+
   val MunitVersion = "0.7.29"
 
   val isScala3Incompatible: ModuleID => Boolean =
@@ -1229,6 +1236,8 @@ lazy val libs = new {
   lazy val hedgehogCore   = Def.setting("qa.hedgehog" %%% "hedgehog-core" % props.HedgehogVersion)
   lazy val hedgehogRunner = Def.setting("qa.hedgehog" %%% "hedgehog-runner" % props.HedgehogVersion)
   lazy val hedgehogSbt    = Def.setting("qa.hedgehog" %%% "hedgehog-sbt" % props.HedgehogVersion)
+
+  lazy val scalacCompatAnnotation = "org.typelevel" %% "scalac-compat-annotation" % props.ScalacCompatAnnotationVersion
 
   lazy val hedgehogExtraCore    = Def.setting("io.kevinlee" %%% "hedgehog-extra-core" % props.HedgehogExtraVersion)
   lazy val hedgehogExtraRefined = Def.setting("io.kevinlee" %%% "hedgehog-extra-refined" % props.HedgehogExtraVersion)

@@ -1,6 +1,8 @@
 package extras.render
 
 import java.util.UUID
+import scala.annotation.implicitNotFound
+import org.typelevel.scalaccompat.annotation.nowarn213
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 /** @author Kevin Lee
@@ -55,4 +57,26 @@ object Render {
   final case class RenderInterpolator(stringContext: StringContext) extends AnyVal {
     def render(args: Rendered*): String = stringContext.s(args: _*)
   }
+
+  @implicitNotFound(msg =
+    "Missing an instance of `CatsContravariant` which means you're trying to use cats.Contravariant, " +
+      "but cats library is missing in your project config. " +
+      "If you want to have an instance of cats.Contravariant[Render] provided by extras, " +
+      """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
+  )
+  sealed private[Render] trait CatsContravariant[M[_[_]]]
+  private[Render] object CatsContravariant {
+    @SuppressWarnings(Array("org.wartremover.warts.Null"))
+    @inline implicit final def getCatsContravariant: CatsContravariant[cats.Contravariant] =
+      null // scalafix:ok DisableSyntax.null
+  }
+
+  @nowarn213(
+    "msg=evidence parameter evidence\\$.+ of type (.+\\.)+CatsContravariant\\[F\\] in method renderContravariant is never used"
+  )
+  @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
+  implicit def renderContravariant[F[_[_]]: CatsContravariant]: F[Render] =
+    new cats.Contravariant[Render] {
+      override def contramap[A, B](fa: Render[A])(f: B => A): Render[B] = b => fa.render(f(b))
+    }.asInstanceOf[F[Render]] // scalafix:ok DisableSyntax.asInstanceOf
 }
