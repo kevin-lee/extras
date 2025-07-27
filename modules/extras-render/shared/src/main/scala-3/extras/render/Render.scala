@@ -57,7 +57,7 @@ object Render {
     given toRendered[A](using R: Render[A]): Conversion[A, Rendered] = a => apply(R.render(a))
 
     extension (rendered: Rendered) {
-      inline def toString: String = rendered
+      inline def value: String = rendered
     }
   }
 

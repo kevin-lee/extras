@@ -1001,6 +1001,7 @@ def subProject(projectName: String): Project = {
     .settings(
       name := prefixedName,
       Test / fork := true,
+      scalacOptions += "-explain",
       libraryDependencies ++= libs.hedgehog.value,
       testFrameworks ~=
         (frameworks => (TestFramework("hedgehog.sbt.Framework") +: frameworks).distinct),
@@ -1133,6 +1134,7 @@ lazy val props = new {
   val Scala2Version  = Scala2Versions.head
 
   val Scala3Versions = List("3.1.3")
+//  val Scala3Versions = List("3.3.6")
   val Scala3Version  = Scala3Versions.head
 
   val ProjectScalaVersion = Scala2Version
@@ -1296,7 +1298,7 @@ def scalacOptionsPostProcess(scalaVersion: String, options: Seq[String]): Seq[St
   if (scalaVersion.startsWith("3.")) {
     scala3cLanguageOptions ++
       options.filterNot(o =>
-        o == "-language:dynamics,existentials,higherKinds,reflectiveCalls,experimental.macros,implicitConversions" || o == "UTF-8",
+        o == "-language:dynamics,existentials,higherKinds,reflectiveCalls,experimental.macros,implicitConversions" || o == "UTF-8"
       )
   } else {
     options.filterNot(_ == "UTF-8")
