@@ -9,12 +9,22 @@ import scala.collection.mutable
   * @since 2022-10-15
   */
 trait syntax {
+  import syntax.*
 
-  extension [A](a: A) {
-    def render(using R: Render[A]): String = R.render(a)
+  implicit def renderSyntaxA[A](a: A): RenderSyntaxA[A] = new RenderSyntaxA[A](a)
+
+  implicit def renderSyntaxIterable[A](as: Iterable[A]): RenderSyntaxIterable[A] = new RenderSyntaxIterable[A](as)
+
+  extension (stringContext: StringContext) {
+    def render(args: Rendered*): String = stringContext.s(args*)
+  }
+}
+object syntax extends syntax {
+  final class RenderSyntaxA[A](private val a: A) extends AnyVal {
+    def render(implicit R: Render[A]): String = R.render(a)
   }
 
-  extension [A](as: Iterable[A]) {
+  final class RenderSyntaxIterable[A](private val as: Iterable[A]) extends AnyVal {
     /* WARNING: This method uses mutable data structure internally for performance */
     @SuppressWarnings(
       Array(
@@ -62,8 +72,4 @@ trait syntax {
       renderString("")
   }
 
-  extension (stringContext: StringContext) {
-    def render(args: Rendered*): String = stringContext.s(args: _*)
-  }
 }
-object syntax extends syntax

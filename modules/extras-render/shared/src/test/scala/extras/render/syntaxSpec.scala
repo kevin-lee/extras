@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 /** @author Kevin Lee
   * @since 2022-10-15
   */
-object syntaxSpec extends Properties {
+object syntaxSpec extends Properties with ScalaVersionSpecificSyntaxSpec {
 
   import extras.render.syntax._
 
@@ -39,7 +39,7 @@ object syntaxSpec extends Properties {
 
     /* String interpolation */
     property("test render interpolation", testRenderInterpolation),
-  )
+  ) ++ scalaVersionSpecificTests
 
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))
   def testUnitRender: Result =
