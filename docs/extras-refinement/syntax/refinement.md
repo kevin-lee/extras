@@ -3,6 +3,14 @@ sidebar_position: 1
 id: 'refinement'
 title: 'refinement Syntax'
 ---
+
+## Module
+
+```scala
+"io.kevinlee" %% "extras-refinement" % "@VERSION@"
+```
+
+
 ## Why `refinement` syntax?
 When you use [newtype](https://github.com/estatico/scala-newtype) and [refined](https://github.com/fthomas/refined) together 
 to have better type-safety, you often have some boilerplate code for runtime value validation 

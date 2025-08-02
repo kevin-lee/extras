@@ -3,6 +3,13 @@ sidebar_position: 2
 id: 'string'
 title: 'string Syntax'
 ---
+
+## Module
+
+```scala
+"io.kevinlee" %% "extras-refinement" % "@VERSION@"
+```
+
 ## `EmptyString ++ EmptyString`
 ### Problem without `string` syntax
 To concatenate two or more `NonEmptyString`s, you need to do something like this.

@@ -4,8 +4,19 @@ id: 'f-either-ab'
 title: 'F[Either[A, B]]'
 ---
 
-## Extension Methods for `F[Either[A, B]]`
+## Module
+```scala
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-cats" % "@VERSION@"
+```
 
+## Extension Methods for `F[Either[A, B]]`
+```scala
+import extras.cats.syntax.all._
+```
 ## Change Value
 ### `innerMap`
 

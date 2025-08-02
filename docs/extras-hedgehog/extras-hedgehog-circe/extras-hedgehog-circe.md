@@ -9,6 +9,10 @@ import DocCardList from '@theme/DocCardList';
 ```scala
 "io.kevinlee" %% "extras-hedgehog-circe" % "@VERSION@" % Test
 ```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-circe" % "@VERSION@" % Test
+```
 
 
 ## Usage

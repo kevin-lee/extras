@@ -4,6 +4,15 @@ id: 'optiont'
 title: 'OptionT'
 ---
 
+## Module
+```scala
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-cats" % "@VERSION@"
+```
+
 ## Extension Methods for OptionT
 
 ```scala

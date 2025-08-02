@@ -6,6 +6,16 @@ title: 'Rgb'
 
 # Rgb
 
+## Module
+```scala
+"io.kevinlee" %% "extras-scala-io" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-scala-io" % "@VERSION@"
+```
+
+
 ## `Rgb`
 
 ```scala mdoc:reset-object

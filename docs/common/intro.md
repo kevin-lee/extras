@@ -10,7 +10,6 @@ slug: '/'
 [![Build Status](https://github.com/kevin-lee/extras/workflows/Build-All/badge.svg)](https://github.com/kevin-lee/extras/actions?workflow=Build-All)
 [![Release Status](https://github.com/kevin-lee/extras/workflows/Release/badge.svg)](https://github.com/kevin-lee/extras/actions?workflow=Release)
 
-![Maven Central Version](https://img.shields.io/maven-central/v/io.kevinlee/extras-core_3)
 [![Latest version](https://index.scala-lang.org/kevin-lee/extras/latest.svg)](https://index.scala-lang.org/kevin-lee/extras)
 
 |                   Project | Maven Central                                                                                               |

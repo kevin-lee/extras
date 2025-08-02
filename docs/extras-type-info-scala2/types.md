@@ -5,6 +5,13 @@ id: 'types'
 title: 'extras-type-info - Scala 2'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-type-info" % "@VERSION@"
+```
+
+
 ## types
 
 ```scala

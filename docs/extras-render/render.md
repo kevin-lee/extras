@@ -4,6 +4,31 @@ id: 'render'
 title: 'Render'
 ---
 
+## Module
+
+* The `core` module:
+  ```scala
+  "io.kevinlee" %% "extras-render" % "@VERSION@"
+  ```
+
+* For `refined` library:
+  ```scala
+  "io.kevinlee" %% "extras-render-refined" % "@VERSION@"
+  ```
+
+or for `Scala.js`:
+
+* The `core` module:
+  ```scala
+  "io.kevinlee" %%% "extras-render" % "@VERSION@"
+  ```
+
+* For `refined`:
+  ```scala
+  "io.kevinlee" %%% "extras-render-refined" % "@VERSION@"
+  ```
+
+
 ## `Render` type-class
 It is to provider `render` functionality to render a given type `A` into `String`.
 ```scala

@@ -824,7 +824,7 @@ lazy val docsExtrasTypeInfoScala3 =
     .enablePlugins(MdocPlugin)
     .settings(
       scalaVersion := props.DocsScalaVersion,
-      scalaVersion := "3.1.3",
+      scalaVersion := "3.3.6",
       mdocIn := file("docs/extras-type-info-scala3"),
       mdocOut := file("generated-docs/docs/extras-type-info/scala3"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-type-info/scala3"),

@@ -4,6 +4,16 @@ id: 'color'
 title: 'Color'
 ---
 
+## Module
+```scala
+"io.kevinlee" %% "extras-scala-io" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-scala-io" % "@VERSION@"
+```
+
+
 # Color
 
 ## `extras.scala.io.syntax`

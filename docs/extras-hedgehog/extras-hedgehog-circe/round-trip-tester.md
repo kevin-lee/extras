@@ -4,6 +4,29 @@ id: 'round-trip-tester'
 title: 'RoundTripTester'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-hedgehog-circe" % "@VERSION@" % Test
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-circe" % "@VERSION@" % Test
+```
+
+## Test JSON Encoder and Decoder
+
+`RoundTripTester` tests the available Circe JSON `Encoder` and `Decoder` by:
+* Encoding the given type `A` into a JSON `String` using `Encoder[A]`.
+* Decoding the JSON `String` back into the original type `A` using `Decoder[A]`.
+
+```scala
+RoundTripTester(sometypeA).test()
+// hedgehog.Result
+```
+
+## Examples:
+
 ```scala mdoc:reset-object
 import extras.hedgehog.circe.RoundTripTester
 
@@ -17,7 +40,7 @@ object SomethingSpec extends Properties {
   override def tests: List[Test] = List(
     property("round-trip test Something JSON Codec", roundTripTest),
     property("round-trip test Something JSON Codec - failure case", roundTripTestWithDecodeFailure),
-    property("round-trip test Something JSON Codec - failure case (indent 4)", roundTripTestWithDecodeFailureIndent4),
+    property("round-trip test Something JSON Codec - failure case (indent 8)", roundTripTestWithDecodeFailureIndent8),
   )
   
   def roundTripTest: Property =
@@ -36,7 +59,7 @@ object SomethingSpec extends Properties {
       RoundTripTester(something).test()
     }
 
-  def roundTripTestWithDecodeFailureIndent4: Property =
+  def roundTripTestWithDecodeFailureIndent8: Property =
     for {
       something <- genSomething
         .map(something => SomethingWithDecodeFailure(something.id, something.name))

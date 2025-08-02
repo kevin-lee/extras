@@ -4,6 +4,16 @@ id: 'codecs-encoder'
 title: 'Encoder'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-circe" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-circe" % "@VERSION@"
+```
+
 ## Encoder[A].withFields
 With `withFields`, you can add additional fields to the JSON encoded by an existing `Encoder`.
 

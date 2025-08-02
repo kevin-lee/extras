@@ -4,6 +4,15 @@ id: 'eithert'
 title: 'EitherT'
 ---
 
+## Module
+```scala
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-cats" % "@VERSION@"
+```
+
 ## Extension Methods for EitherT
 
 ```scala

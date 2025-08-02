@@ -3,6 +3,16 @@ sidebar_position: 1
 id: 'numeric'
 title: 'numeric syntax'
 ---
+## Module
+
+```scala
+"io.kevinlee" %% "extras-string" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-string" % "@VERSION@"
+```
+
 
 ## Import `numeric` syntax 
 

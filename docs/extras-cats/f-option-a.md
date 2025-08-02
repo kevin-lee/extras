@@ -4,7 +4,19 @@ id: 'f-option-a'
 title: 'F[Option[A]]'
 ---
 
+## Module
+```scala
+"io.kevinlee" %% "extras-cats" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-cats" % "@VERSION@"
+```
+
 ## Extension Methods for `F[Option[A]]`
+```scala
+import extras.cats.syntax.all._
+```
 
 ## Change Value
 ### `innerMap`

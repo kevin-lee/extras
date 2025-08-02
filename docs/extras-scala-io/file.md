@@ -4,6 +4,16 @@ id: 'file'
 title: 'File'
 ---
 
+## Module
+```scala
+"io.kevinlee" %% "extras-scala-io" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-scala-io" % "@VERSION@"
+```
+
+
 # File
 
 ## syntax

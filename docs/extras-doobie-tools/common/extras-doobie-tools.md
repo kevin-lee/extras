@@ -9,10 +9,18 @@ import DocCardList from '@theme/DocCardList';
   ```scala
   "io.kevinlee" %% "extras-doobie-tools-ce2" % "@VERSION@"
   ```
+  or for `Scala.js`:
+  ```scala
+  "io.kevinlee" %%% "extras-doobie-tools-ce2" % "@VERSION@"
+  ```
 
 * [extras-doobie-tools-ce3](ce3)
   ```scala
   "io.kevinlee" %% "extras-doobie-tools-ce3" % "@VERSION@"
+  ```
+  or for `Scala.js`:
+  ```scala
+  "io.kevinlee" %%% "extras-doobie-tools-ce3" % "@VERSION@"
   ```
 
 <DocCardList />

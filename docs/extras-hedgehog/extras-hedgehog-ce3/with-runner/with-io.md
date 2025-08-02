@@ -1,8 +1,18 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 id: 'with-io'
 title: 'withIO'
 ---
+
+## Module
+
+```scala
+"io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
 
 ## `withIO`
 
