@@ -6,6 +6,16 @@ title: 'Codec'
 
 There are extension methods for `Encoder`, `Decoder` and `Codec`.
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-circe" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-circe" % "@VERSION@"
+```
+
 ## Encoder[A].renameFields
 With `renameFields`, you can make the existing JSON `Encoder` to rename the existing fields.
 

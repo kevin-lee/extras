@@ -9,6 +9,10 @@ It's only for Fs2 v3 so if you use v2, please use [extras-fs2-v2-text](../v2/ext
 ```scala
 "io.kevinlee" %% "extras-fs2-v3-text" % "@VERSION@"
 ```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-fs2-v3-text" % "@VERSION@"
+```
 
 
 ## Stream[F, Byte].utf8String

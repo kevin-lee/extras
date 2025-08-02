@@ -1,8 +1,18 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 id: 'run-io'
 title: 'runIO'
 ---
+
+## Module
+
+```scala
+"io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
 
 ## `runIO`
 
@@ -26,7 +36,7 @@ def test: Result =
     // Your test
     val exected = ??? // A
     val actual = ??? // IO[A]
-    actual.completeThen(_ ==== expected)
+    actual.map(_ ==== expected) // IO[Result]
   }
 ```
 or
@@ -38,7 +48,7 @@ def test: Property =
     // Your test
     val exected = ??? // A
     val actual = ??? // IO[A]
-    actual.completeThen(_ ==== expected)
+    actual.map(_ ==== expected) // IO[Result]
   }
 ```
 

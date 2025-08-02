@@ -7,6 +7,16 @@ title: 'Extras - Doobie Tools for Cats Effect 2'
 
 ## Docs WIP
 
+## Module
+```scala
+"io.kevinlee" %% "extras-doobie-tools-ce2" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-doobie-tools-ce2" % "@VERSION@"
+```
+
+
 ## DbTools.fetchSingleRow
 
 ```scala

@@ -5,6 +5,16 @@ title: 'With Manual TestContext Creation'
 sidebar_label: 'With TestContext'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
+
 ## `TestContext`
 
 `cats.effect.kernel.testkit.TestContext` is from `cats-effect-kernel-testkit` and it is

@@ -5,6 +5,13 @@ id: 'cats'
 title: 'Extras - Testing Tools for Cats'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-testing-tools-cats" % "@VERSION@"
+```
+
+
 ## `StubToolsCats.stub`
 `StubToolsCats.stub` is a tool for a stub (a simple function for testing) so that you don't need to use mock frameworks.
 

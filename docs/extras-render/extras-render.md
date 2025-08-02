@@ -7,12 +7,26 @@ import DocCardList from '@theme/DocCardList';
 
 ## Get `extras-render`
 
-```scala
-"io.kevinlee" %% "extras-render" % "@VERSION@"
-```
+* The `core` module:
+  ```scala
+  "io.kevinlee" %% "extras-render" % "@VERSION@"
+  ```
 
-```scala
-"io.kevinlee" %% "extras-render-refined" % "@VERSION@"
-```
+* For `refined` library:
+  ```scala
+  "io.kevinlee" %% "extras-render-refined" % "@VERSION@"
+  ```
+
+or for `Scala.js`:
+
+* The `core` module:
+  ```scala
+  "io.kevinlee" %%% "extras-render" % "@VERSION@"
+  ```
+  
+* For `refined`:
+  ```scala
+  "io.kevinlee" %%% "extras-render-refined" % "@VERSION@"
+  ```
 
 <DocCardList />

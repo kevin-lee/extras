@@ -8,6 +8,10 @@ import DocCardList from '@theme/DocCardList';
 ```scala
 "io.kevinlee" %% "extras-scala-io" % "@VERSION@"
 ```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-scala-io" % "@VERSION@"
+```
 
 
 ## Usage

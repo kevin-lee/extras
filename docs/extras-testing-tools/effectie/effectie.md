@@ -5,6 +5,12 @@ id: 'effectie'
 title: 'Extras - Testing Tools for Effectie'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-testing-tools-effectie" % "@VERSION@"
+```
+
 ## `StubToolsFx.stub`
 `StubToolsFx.stub` is a tool for a stub (a simple function for testing) so that you don't need to use mock frameworks.
 

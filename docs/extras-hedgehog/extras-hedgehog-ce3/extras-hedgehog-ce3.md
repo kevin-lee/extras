@@ -11,6 +11,10 @@ import DocCardList from '@theme/DocCardList';
 ```scala
 "io.kevinlee" %% "extras-hedgehog-ce3" % "@VERSION@" % Test
 ```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-hedgehog-ce3" % "@VERSION@" % Test
+```
 
 There are two ways to use `extras-hedgehog-ce3` and both have the exactly the same result so please choose whichever you prefer.
 

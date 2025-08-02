@@ -3,6 +3,16 @@ sidebar_position: 2
 id: 'strings'
 title: 'strings syntax'
 ---
+## Module
+
+```scala
+"io.kevinlee" %% "extras-string" % "@VERSION@"
+```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-string" % "@VERSION@"
+```
+
 
 ## Import `strings` syntax
 

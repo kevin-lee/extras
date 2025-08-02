@@ -8,6 +8,10 @@ import DocCardList from '@theme/DocCardList';
 ```scala
 "io.kevinlee" %% "extras-concurrent" % "@VERSION@"
 ```
+or for `Scala.js`:
+```scala
+"io.kevinlee" %%% "extras-concurrent" % "@VERSION@"
+```
 
 ## Get `extras-concurrent-testing`
 ```scala

@@ -4,6 +4,12 @@ title: 'syntax'
 ---
 import DocCardList from '@theme/DocCardList';
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-refinement" % "@VERSION@"
+```
+
 ## `syntax`
 Additional syntax for [newtype](https://github.com/estatico/scala-newtype) and [refined](https://github.com/fthomas/refined)
 * [refinement](refinement.md) (for `newtype` and `refined`)

@@ -5,6 +5,13 @@ id: 'core'
 title: 'Extras - Testing Tools Core'
 ---
 
+## Module
+
+```scala
+"io.kevinlee" %% "extras-testing-tools" % "@VERSION@"
+```
+
+
 ## `StubTools.missing`
 `StubTools.missing` is a tool for a stub (a simple function for testing) so that you don't need to use mock frameworks.
 

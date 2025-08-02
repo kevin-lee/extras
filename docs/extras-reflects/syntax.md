@@ -4,6 +4,10 @@ id: 'syntax'
 title: 'Reflects Syntax'
 ---
 
+:::caution Warning!
+Deprecated - Please don't use this module.
+:::
+
 ## `reflects` syntax for `WeakTypeTag`
 
 ### `value.nestedTypeName`
