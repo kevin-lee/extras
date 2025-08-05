@@ -27,7 +27,7 @@ trait StubTools {
   def missing: MissingStubException[Nothing] = missingStubException
 
   @SuppressWarnings(
-    // TODO: Fine a better way to handle these warts
+    // TODO: Find a better way to handle these warts
     Array("org.wartremover.warts.IterableOps", "org.wartremover.warts.SeqApply", "org.wartremover.warts.SizeIs")
   )
   def missingStubException[A]: MissingStubException[A] = {
