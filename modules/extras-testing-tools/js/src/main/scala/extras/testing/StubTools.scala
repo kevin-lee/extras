@@ -4,21 +4,18 @@ import extras.testing.StubTools.MissingStubException
 
 import scala.annotation.tailrec
 import scala.util.control.NoStackTrace
+import scala.util.Try
 
+@SuppressWarnings(Array("org.wartremover.warts.Equals"))
 trait StubTools {
   val thisClassName: String = getClass.getName
-
-  val firstInterfaceNames: List[String] = getClass.getInterfaces.map(_.getName).toList
 
   @SuppressWarnings(Array("org.wartremover.warts.Equals"))
   def isMissing(stackTraceElement: StackTraceElement): Boolean = {
     val className  = stackTraceElement.getClassName
     val methodName = stackTraceElement.getMethodName
     (
-      (className == thisClassName.stripSuffix("$") || className == thisClassName) ||
-        firstInterfaceNames.exists(interfaceName =>
-          (className == interfaceName.stripSuffix("$") || className == interfaceName)
-        )
+      (className == thisClassName.stripSuffix("$") || className == thisClassName)
     ) &&
     (methodName == "missing" || methodName.matches("^missing(?:[\\$]+[\\d]*)+")) ||
     (methodName == "missingStubException" || methodName.matches("^missingStubException(?:[\\$]+[\\d]*)+"))
@@ -27,7 +24,7 @@ trait StubTools {
   def missing: MissingStubException[Nothing] = missingStubException
 
   @SuppressWarnings(
-    // TODO: Fine a better way to handle these warts
+    // TODO: Find a better way to handle these warts
     Array("org.wartremover.warts.IterableOps", "org.wartremover.warts.SeqApply", "org.wartremover.warts.SizeIs")
   )
   def missingStubException[A]: MissingStubException[A] = {
@@ -61,7 +58,51 @@ trait StubTools {
         findMethodCalledMissing(stackTrace.drop(index))
           .getOrElse((stackTrace(2), stackTrace.drop(2)))
       }
-    MissingStubException(elem, truncatedStackTraces)
+
+    /* Try to resolve to Scala source location */
+    val resolvedElem        = resolveToScalaSource(elem)
+    val resolvedStackTraces = truncatedStackTraces.map(resolveToScalaSource)
+
+    MissingStubException(resolvedElem, resolvedStackTraces)
+  }
+
+  private def resolveToScalaSource(stackTraceElement: StackTraceElement): StackTraceElement = {
+    Try {
+      val fileName = stackTraceElement.getFileName
+
+      /* For now, use pattern-based inference to resolve JS locations to Scala sources */
+      // TODO: Add full source map integration in future enhancement
+      if (fileName != null && fileName.endsWith(".js")) { // scalafix:ok DisableSyntax.null
+        /* Direct pattern-based inference for Scala source location */
+        inferScalaSourceFromClassName(stackTraceElement)
+      } else {
+        stackTraceElement
+      }
+    }.getOrElse(stackTraceElement)
+  }
+
+  private def inferScalaSourceFromClassName(stackTraceElement: StackTraceElement): StackTraceElement = {
+    val className = stackTraceElement.getClassName
+
+    /* Generic extraction: get the last part of the class name and clean it */
+    val scalaFileName = className.split('.').lastOption match {
+      case Some(lastPart) =>
+        val cleanName = lastPart.replaceAll("\\$.*", "") // Remove Scala name mangling ($anon$1, $1, etc.)
+
+        if (cleanName.nonEmpty) cleanName else "Unknown"
+      case None =>
+        "Unknown"
+    }
+
+    /* Use generic line 0 - better than confusing JS line numbers
+     * Future enhancement: integrate with source maps for accurate line numbers if possible
+     */
+    new StackTraceElement(
+      stackTraceElement.getClassName,
+      stackTraceElement.getMethodName,
+      scalaFileName,
+      0,
+    )
   }
 
 }

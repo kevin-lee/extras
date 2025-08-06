@@ -80,6 +80,7 @@ lazy val extras = (project in file("."))
     extrasStringJvm,
     extrasStringJs,
     extrasTestingToolsJvm,
+    extrasTestingToolsJs,
     extrasTestingToolsCatsJvm,
     extrasTestingToolsEffectieJvm,
     extrasTypeInfoJvm,
@@ -462,7 +463,7 @@ lazy val extrasHedgehogCe3 = crossSubProject("hedgehog-ce3", crossProject(JVMPla
 lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCe3.jvm
 lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / fork := false)
 
-lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMPlatform))
+lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
     libraryDependencies :=
@@ -472,6 +473,7 @@ lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMP
   .dependsOn(extrasCore)
 
 lazy val extrasTestingToolsJvm = extrasTestingTools.jvm
+lazy val extrasTestingToolsJs  = extrasTestingTools.js.settings(Test / fork := false)
 
 lazy val extrasTestingToolsCats = crossSubProject("testing-tools-cats", crossProject(JVMPlatform))
   .settings(
