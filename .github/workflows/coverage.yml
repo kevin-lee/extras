@@ -13,7 +13,7 @@ on:
 
 env:
   GH_SBT_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions"
-  GH_JVM_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
 
 jobs:
 
@@ -40,7 +40,8 @@ jobs:
           CURRENT_BRANCH_NAME: ${{ github.ref }}
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
+          JAVA_OPTS: ${{ env.GH_JAVA_OPTS }}
+          JVM_OPTS: ${{ env.GH_JAVA_OPTS }}
           SBT_OPTS: ${{ env.GH_SBT_OPTS }}
         run: |
           echo "[BEFORE]CURRENT_BRANCH_NAME=${CURRENT_BRANCH_NAME}"
@@ -49,6 +50,9 @@ jobs:
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "Push #${PUSH_NUMBER}"
+          echo "JAVA_OPTS=${JAVA_OPTS}"
+          echo " JVM_OPTS=${JVM_OPTS}"
+          echo " SBT_OPTS=${SBT_OPTS}"
           java -version
           .github/workflows/sbt-build-all-with-scala-version.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
 
@@ -60,13 +64,17 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
+          JAVA_OPTS: ${{ env.GH_JAVA_OPTS }}
+          JVM_OPTS: ${{ env.GH_JAVA_OPTS }}
           SBT_OPTS: ${{ env.GH_SBT_OPTS }}
         run: |
           echo "Rull request to the '${CURRENT_BRANCH_NAME}' branch"
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "PR #${PR_NUMBER}"
+          echo "JAVA_OPTS=${JAVA_OPTS}"
+          echo " JVM_OPTS=${JVM_OPTS}"
+          echo " SBT_OPTS=${SBT_OPTS}"
           java -version
           .github/workflows/sbt-build-all-with-scala-version.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
 

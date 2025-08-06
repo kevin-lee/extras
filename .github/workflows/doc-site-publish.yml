@@ -3,6 +3,11 @@ name: "[Doc][M] Publish"
 on:
   workflow_dispatch:
 
+env:
+  GH_JAVA_VERSION: "11"
+  GH_JAVA_DISTRIBUTION: "temurin"
+  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+
 jobs:
   build_and_publish_doc_site:
     if: github.ref != 'refs/heads/gh-pages' && github.ref != 'gh-pages'
@@ -46,6 +51,9 @@ jobs:
           GA_TRACKING_ID: ${{ secrets.GA_TRACKING_ID }}
           GA_ANONYMIZE_IP: ${{ secrets.GA_ANONYMIZE_IP }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JAVA_OPTS: ${{ env.GH_JAVA_OPTS }}
+          JVM_OPTS: ${{ env.GH_JAVA_OPTS }}
+          SBT_OPTS: ${{ env.GH_JAVA_OPTS }}
         run: |
           sbt \
             clean \
