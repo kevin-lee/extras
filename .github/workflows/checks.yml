@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  GH_JVM_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
 
 jobs:
 
@@ -35,7 +35,9 @@ jobs:
           CURRENT_BRANCH_NAME: ${{ github.ref }}
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
+          JAVA_OPTS: ${{ env.GH_JAVA_OPTS }}
+          JVM_OPTS: ${{ env.GH_JAVA_OPTS }}
+          SBT_OPTS: ${{ env.GH_JAVA_OPTS }}
         run: |
           echo "[BEFORE]CURRENT_BRANCH_NAME=${CURRENT_BRANCH_NAME}"
           export CURRENT_BRANCH_NAME="${CURRENT_BRANCH_NAME#refs/heads/}"
@@ -44,8 +46,9 @@ jobs:
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "Push #${PUSH_NUMBER}"
           java -version
-          echo "JVM_OPTS=${JVM_OPTS}"
-          echo "SBT_OPTS=${SBT_OPTS}"
+          echo "JAVA_OPTS=${JAVA_OPTS}"
+          echo " JVM_OPTS=${JVM_OPTS}"
+          echo " SBT_OPTS=${SBT_OPTS}"
           sbt \
             "+scalafixAll --check" \
             +scalafmtCheckAll
@@ -57,15 +60,18 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          JVM_OPTS: ${{ env.GH_JVM_OPTS }}
+          JAVA_OPTS: ${{ env.GH_JAVA_OPTS }}
+          JVM_OPTS: ${{ env.GH_JAVA_OPTS }}
+          SBT_OPTS: ${{ env.GH_JAVA_OPTS }}
         run: |
           echo "Rull request to the '${CURRENT_BRANCH_NAME}' branch"
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
           echo "PR #${PR_NUMBER}"
           java -version
-          echo "JVM_OPTS=${JVM_OPTS}"
-          echo "SBT_OPTS=${SBT_OPTS}"
+          echo "JAVA_OPTS=${JAVA_OPTS}"
+          echo " JVM_OPTS=${JVM_OPTS}"
+          echo " SBT_OPTS=${SBT_OPTS}"
           sbt \
             "+scalafixAll --check" \
             +scalafmtCheckAll
