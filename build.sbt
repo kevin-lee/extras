@@ -466,6 +466,10 @@ lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3.js.settings(Test / for
 lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMPlatform, JSPlatform))
   .settings(
     crossScalaVersions := props.CrossScalaVersions,
+    libraryDependencies ++= (if (isScala3(scalaVersion.value))
+                               List.empty
+                             else
+                               List(libs.scalaReflect(scalaVersion.value))),
     libraryDependencies :=
       removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
     Test / console / scalacOptions := List.empty,
