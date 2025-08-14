@@ -6,7 +6,7 @@ on:
 env:
   GH_JAVA_VERSION: "11"
   GH_JAVA_DISTRIBUTION: "temurin"
-  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions"
 
 jobs:
   build_and_publish_doc_site:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { version: "2.13.12", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
+          - { version: "2.13.16", binary-version: "2.13", java-version: "11", java-distribution: "temurin" }
         node:
           - { version: "22.17.0" }
 

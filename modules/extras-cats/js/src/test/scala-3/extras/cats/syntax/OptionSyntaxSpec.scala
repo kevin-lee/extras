@@ -2,7 +2,7 @@ package extras.cats.syntax
 
 import cats.syntax.all.*
 import cats.effect.unsafe.IORuntime
-import extras.cats.testing.{ExecutionContextProvider, IoAppUtils, RandomGens}
+import extras.cats.testing.{IoAppUtils, RandomGens}
 import munit.Assertions
 
 import scala.concurrent.{ExecutionContext, Future}

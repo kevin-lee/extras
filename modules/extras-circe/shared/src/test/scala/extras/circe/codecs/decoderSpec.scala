@@ -244,7 +244,7 @@ object decoderSpec extends Properties {
         case Left(err) =>
           Result.any(
             List(
-              err.getMessage ==== "Attempt to decode value on failed cursor: DownField(name)", // for Scala 2
+              err.getMessage ==== "DecodingFailure at .name: Missing required field", // for Scala 2
               err.getMessage ==== "Missing required field: DownField(name)", // for Scala 3
             )
           )

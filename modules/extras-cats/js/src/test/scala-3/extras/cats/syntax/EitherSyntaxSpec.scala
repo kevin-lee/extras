@@ -1,9 +1,8 @@
 package extras.cats.syntax
 
-import cats.data.EitherT
 import cats.syntax.all.*
 import cats.effect.unsafe.IORuntime
-import extras.cats.testing.{ExecutionContextProvider, IoAppUtils, RandomGens}
+import extras.cats.testing.{IoAppUtils, RandomGens}
 import munit.Assertions
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -353,7 +352,7 @@ class EitherSyntaxSpec extends munit.FunSuite {
     given rt: IORuntime        = IoAppUtils.runtime
 
     def testAll(): Future[Unit] = {
-      import extras.cats.syntax.EitherSyntax.{*, given}
+      import extras.cats.syntax.EitherSyntax.*
       import cats.Applicative
       import cats.data.EitherT
       import cats.effect.*
