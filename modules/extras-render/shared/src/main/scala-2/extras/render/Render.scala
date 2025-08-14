@@ -2,7 +2,6 @@ package extras.render
 
 import java.util.UUID
 import scala.annotation.implicitNotFound
-import org.typelevel.scalaccompat.annotation.nowarn213
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 /** @author Kevin Lee
@@ -71,9 +70,6 @@ object Render {
       null // scalafix:ok DisableSyntax.null
   }
 
-  @nowarn213(
-    "msg=evidence parameter evidence\\$.+ of type (.+\\.)+CatsContravariant\\[F\\] in method renderContravariant is never used"
-  )
   @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
   implicit def renderContravariant[F[_[_]]: CatsContravariant]: F[Render] =
     new cats.Contravariant[Render] {

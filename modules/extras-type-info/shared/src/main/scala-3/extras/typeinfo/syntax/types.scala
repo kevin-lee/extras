@@ -154,8 +154,6 @@ object types extends types {
 
   import scala.quoted.*
 
-  import scala.compiletime.*
-
   trait TypeNamed {
     inline given [A]: TypeName[A] =
       ${ TypeNamed.expr }

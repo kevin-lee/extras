@@ -5,7 +5,7 @@ set -x
 if [ -z "$1" ]
   then
     echo "Missing parameters. Please enter the [Scala version]."
-    echo "sbt-build-all.sh 2.13.12"
+    echo "sbt-build-all.sh 2.13.16"
     exit 1
 else
   : ${CURRENT_BRANCH_NAME:?"CURRENT_BRANCH_NAME is missing."}
@@ -20,8 +20,9 @@ else
   test_task="test"
   if [ "$2" == "report" ]
   then
-    # For now it does nothing
-    test_task="coverage test coverageReport coverageAggregate"
+    # Coverage run: switch to coverage-only aggregator (JVM/JS only, no Native)
+    # Use a double quoted sbt command with semicolons to chain commands
+    test_task="project extrasCoverage; coverage; test; coverageReport; coverageAggregate"
 #    test_task="coverage test scalafix coverageReport coverageAggregate coveralls"
 #    echo "report build but it does nothing for now."
   fi
@@ -42,14 +43,14 @@ else
       ++${scala_version}! \
       -v \
       clean \
-      ${test_task} \
+      "${test_task}" \
       packagedArtifacts
   else
     sbt \
       ++${scala_version}! \
       -v \
       clean \
-      ${test_task} \
+      "${test_task}" \
       package
   fi
 

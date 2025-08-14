@@ -13,7 +13,7 @@ on:
 
 env:
   GH_SBT_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions"
-  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler"
+  GH_JAVA_OPTS: "-Xss64m -Xms1024m -Xmx8G -XX:MaxMetaspaceSize=2G -XX:-UseGCOverheadLimit -XX:MaxInlineLevel=18 -XX:+UnlockExperimentalVMOptions"
 
 jobs:
 
@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { name: "Scala 2.13", version: "2.13.12", binary-version: "2.13", java-version: "11", java-distribution: "temurin", report: "report" }
+          - { name: "Scala 2.13", version: "2.13.16", binary-version: "2.13", java-version: "11", java-distribution: "temurin", report: "report" }
 
     steps:
       - uses: actions/checkout@v4

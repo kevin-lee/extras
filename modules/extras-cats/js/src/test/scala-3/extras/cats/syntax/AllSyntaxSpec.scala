@@ -1,15 +1,13 @@
 package extras.cats.syntax
 
-import cats.data.EitherT
 import cats.effect.unsafe.IORuntime
 import cats.syntax.all.*
-import extras.cats.testing.{ExecutionContextProvider, IoAppUtils, RandomGens}
+import extras.cats.testing.{IoAppUtils, RandomGens}
 import munit.Assertions
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration.FiniteDuration
 import scala.concurrent.duration.DurationInt
-import scala.util.{Failure, Success}
 
 /** @author Kevin Lee
   * @since 2021-08-24
@@ -320,7 +318,6 @@ class AllSyntaxSpec extends munit.FunSuite {
     given ec: ExecutionContext = IORuntime.defaultComputeExecutionContext
     given rt: IORuntime        = IoAppUtils.runtime
 
-    import cats.Applicative
     import cats.data.OptionT
     import cats.effect.IO
     import cats.syntax.option.*
@@ -388,7 +385,6 @@ class AllSyntaxSpec extends munit.FunSuite {
     given ec: ExecutionContext = IORuntime.defaultComputeExecutionContext
     given rt: IORuntime        = IoAppUtils.runtime
 
-    import cats.Applicative
     import cats.data.OptionT
     import cats.effect.IO
     import cats.syntax.option.*
@@ -935,7 +931,7 @@ class AllSyntaxSpec extends munit.FunSuite {
     given rt: IORuntime        = IoAppUtils.runtime
 
     def testAll(): Future[Unit] = {
-      import extras.cats.syntax.all.{*, given}
+      import extras.cats.syntax.all.*
       import cats.Applicative
       import cats.data.EitherT
       import cats.effect.*
@@ -1207,8 +1203,8 @@ class AllSyntaxSpec extends munit.FunSuite {
       }
       val s        = RandomGens.genAlphaNumericString(10)
 
-      val eitherSI    = toEither(s, RandomGens.genRandomIntWithMinMax(n, max))
-      val alternative = n + 10
+      val eitherSI = toEither(s, RandomGens.genRandomIntWithMinMax(n, max))
+      val _        = n + 10
 
       val pf1: PartialFunction[Int, Int] = {
         case x if x == eitherSI.getOrElse(Int.MinValue) => x // Should match if Right
