@@ -39,6 +39,74 @@ inThisBuild(
 
 ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.3.0"
 
+/* Single source of truth for aggregation membership used by both root and coverage aggregators.
+ * Update this list when adding/removing modules. The coverage aggregator derives from this.
+ */
+lazy val allAggregatedProjects: Seq[ProjectReference] = Seq(
+  extrasCatsJvm,
+  extrasCatsJs,
+  extrasCatsNative,
+  extrasCirceJvm,
+  extrasCirceJs,
+  extrasCirceNative,
+  extrasConcurrentJvm,
+  extrasConcurrentJs,
+  extrasConcurrentNative,
+  extrasConcurrentTestingJvm,
+  extrasConcurrentTestingNative,
+  extrasCoreJvm,
+  extrasCoreJs,
+  extrasCoreNative,
+  extrasDoobieNewtypeCe2Jvm,
+  extrasDoobieNewtypeCe3Jvm,
+  extrasDoobieToolsCe2Jvm,
+  extrasDoobieToolsCe3Jvm,
+  extrasFs2V2TextJvm,
+  extrasFs2V2TextJs,
+  extrasFs2V3TextJvm,
+  extrasFs2V3TextJs,
+  extrasHedgehogCirceJvm,
+  extrasHedgehogCirceJs,
+  extrasHedgehogCirceNative,
+  extrasHedgehogCatsEffect3Jvm,
+  extrasHedgehogCatsEffect3Js,
+  extrasHedgehogCatsEffect3Native,
+  extrasRenderJvm,
+  extrasRenderJs,
+  extrasRenderNative,
+  extrasRenderRefinedJvm,
+  extrasRenderRefinedJs,
+  extrasReflectsJvm,
+  extrasRefinementJvm,
+  extrasScalaIoJvm,
+  extrasScalaIoJs,
+  extrasScalaIoNative,
+  extrasStringJvm,
+  extrasStringJs,
+  extrasStringNative,
+  extrasTestingToolsJvm,
+  extrasTestingToolsJs,
+  extrasTestingToolsCatsJvm,
+  extrasTestingToolsEffectieJvm,
+  extrasTypeInfoJvm,
+)
+
+/* Helper to get project id from a ProjectReference */
+def projectId(ref: ProjectReference): String = ref match {
+  case LocalProject(id) => id
+  case ProjectRef(_, id) => id
+  case RootProject(_) => ""
+  case LocalRootProject => ""
+  case ThisProject => ""
+}
+
+/* Coverage aggregator excludes Scala Native modules by naming convention (*Native) */
+lazy val nonNativeAggregatedProjects: Seq[ProjectReference] =
+  allAggregatedProjects.filterNot { ref =>
+    val id = projectId(ref)
+    id.endsWith("Native") || id.isEmpty
+  }
+
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
@@ -47,54 +115,18 @@ lazy val extras = (project in file("."))
   )
   .settings(noPublish)
   .settings(noDoc)
-  .aggregate(
-    extrasCatsJvm,
-    extrasCatsJs,
-    extrasCatsNative,
-    extrasCirceJvm,
-    extrasCirceJs,
-    extrasCirceNative,
-    extrasConcurrentJvm,
-    extrasConcurrentJs,
-    extrasConcurrentNative,
-    extrasConcurrentTestingJvm,
-    extrasConcurrentTestingNative,
-    extrasCoreJvm,
-    extrasCoreJs,
-    extrasCoreNative,
-    extrasDoobieNewtypeCe2Jvm,
-    extrasDoobieNewtypeCe3Jvm,
-    extrasDoobieToolsCe2Jvm,
-    extrasDoobieToolsCe3Jvm,
-    extrasFs2V2TextJvm,
-    extrasFs2V2TextJs,
-    extrasFs2V3TextJvm,
-    extrasFs2V3TextJs,
-    extrasHedgehogCirceJvm,
-    extrasHedgehogCirceJs,
-    extrasHedgehogCirceNative,
-    extrasHedgehogCatsEffect3Jvm,
-    extrasHedgehogCatsEffect3Js,
-    extrasHedgehogCatsEffect3Native,
-    extrasRenderJvm,
-    extrasRenderJs,
-    extrasRenderNative,
-    extrasRenderRefinedJvm,
-    extrasRenderRefinedJs,
-    extrasReflectsJvm,
-    extrasRefinementJvm,
-    extrasScalaIoJvm,
-    extrasScalaIoJs,
-    extrasScalaIoNative,
-    extrasStringJvm,
-    extrasStringJs,
-    extrasStringNative,
-    extrasTestingToolsJvm,
-    extrasTestingToolsJs,
-    extrasTestingToolsCatsJvm,
-    extrasTestingToolsEffectieJvm,
-    extrasTypeInfoJvm,
+  .aggregate(allAggregatedProjects: _*)
+
+/* Coverage-only aggregator: aggregates JVM/JS projects only (no Scala Native)
+ * Aggregation list is derived dynamically from `allAggregatedProjects`, excluding any id ending with "Native".
+ */
+lazy val extrasCoverage = (project in file("coverage-aggregate"))
+  .settings(
+    name := s"${props.RepoName}-coverage"
   )
+  .settings(noPublish)
+  .settings(noDoc)
+  .aggregate(nonNativeAggregatedProjects: _*)
 
 lazy val extrasCore       = crossSubProject("core", crossProject(JVMPlatform, JSPlatform, NativePlatform))
   .settings(
@@ -504,7 +536,7 @@ lazy val extrasHedgehogCe3 =
     )
     .dependsOn(extrasCore, extrasCats)
 
-lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCe3
+lazy val extrasHedgehogCatsEffect3Jvm    = extrasHedgehogCe3
   .jvm
   .settings(
     libraryDependencies ++= List(
@@ -512,7 +544,7 @@ lazy val extrasHedgehogCatsEffect3Jvm = extrasHedgehogCe3
       libs.libCatsEffectTestKit.value.excludeAll("org.scalacheck"),
     )
   )
-lazy val extrasHedgehogCatsEffect3Js  = extrasHedgehogCe3
+lazy val extrasHedgehogCatsEffect3Js     = extrasHedgehogCe3
   .js
   .settings(Test / fork := false)
   .settings(
