@@ -39,74 +39,6 @@ inThisBuild(
 
 ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.3.0"
 
-/* Single source of truth for aggregation membership used by both root and coverage aggregators.
- * Update this list when adding/removing modules. The coverage aggregator derives from this.
- */
-lazy val allAggregatedProjects: Seq[ProjectReference] = Seq(
-  extrasCatsJvm,
-  extrasCatsJs,
-  extrasCatsNative,
-  extrasCirceJvm,
-  extrasCirceJs,
-  extrasCirceNative,
-  extrasConcurrentJvm,
-  extrasConcurrentJs,
-  extrasConcurrentNative,
-  extrasConcurrentTestingJvm,
-  extrasConcurrentTestingNative,
-  extrasCoreJvm,
-  extrasCoreJs,
-  extrasCoreNative,
-  extrasDoobieNewtypeCe2Jvm,
-  extrasDoobieNewtypeCe3Jvm,
-  extrasDoobieToolsCe2Jvm,
-  extrasDoobieToolsCe3Jvm,
-  extrasFs2V2TextJvm,
-  extrasFs2V2TextJs,
-  extrasFs2V3TextJvm,
-  extrasFs2V3TextJs,
-  extrasHedgehogCirceJvm,
-  extrasHedgehogCirceJs,
-  extrasHedgehogCirceNative,
-  extrasHedgehogCatsEffect3Jvm,
-  extrasHedgehogCatsEffect3Js,
-  extrasHedgehogCatsEffect3Native,
-  extrasRenderJvm,
-  extrasRenderJs,
-  extrasRenderNative,
-  extrasRenderRefinedJvm,
-  extrasRenderRefinedJs,
-  extrasReflectsJvm,
-  extrasRefinementJvm,
-  extrasScalaIoJvm,
-  extrasScalaIoJs,
-  extrasScalaIoNative,
-  extrasStringJvm,
-  extrasStringJs,
-  extrasStringNative,
-  extrasTestingToolsJvm,
-  extrasTestingToolsJs,
-  extrasTestingToolsCatsJvm,
-  extrasTestingToolsEffectieJvm,
-  extrasTypeInfoJvm,
-)
-
-/* Helper to get project id from a ProjectReference */
-def projectId(ref: ProjectReference): String = ref match {
-  case LocalProject(id) => id
-  case ProjectRef(_, id) => id
-  case RootProject(_) => ""
-  case LocalRootProject => ""
-  case ThisProject => ""
-}
-
-/* Coverage aggregator excludes Scala Native modules by naming convention (*Native) */
-lazy val nonNativeAggregatedProjects: Seq[ProjectReference] =
-  allAggregatedProjects.filterNot { ref =>
-    val id = projectId(ref)
-    id.endsWith("Native") || id.isEmpty
-  }
-
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
   .settings(
@@ -115,18 +47,54 @@ lazy val extras = (project in file("."))
   )
   .settings(noPublish)
   .settings(noDoc)
-  .aggregate(allAggregatedProjects: _*)
-
-/* Coverage-only aggregator: aggregates JVM/JS projects only (no Scala Native)
- * Aggregation list is derived dynamically from `allAggregatedProjects`, excluding any id ending with "Native".
- */
-lazy val extrasCoverage = (project in file("coverage-aggregate"))
-  .settings(
-    name := s"${props.RepoName}-coverage"
+  .aggregate(
+    extrasCatsJvm,
+    extrasCatsJs,
+    extrasCatsNative,
+    extrasCirceJvm,
+    extrasCirceJs,
+    extrasCirceNative,
+    extrasConcurrentJvm,
+    extrasConcurrentJs,
+    extrasConcurrentNative,
+    extrasConcurrentTestingJvm,
+    extrasConcurrentTestingNative,
+    extrasCoreJvm,
+    extrasCoreJs,
+    extrasCoreNative,
+    extrasDoobieNewtypeCe2Jvm,
+    extrasDoobieNewtypeCe3Jvm,
+    extrasDoobieToolsCe2Jvm,
+    extrasDoobieToolsCe3Jvm,
+    extrasFs2V2TextJvm,
+    extrasFs2V2TextJs,
+    extrasFs2V3TextJvm,
+    extrasFs2V3TextJs,
+    extrasHedgehogCirceJvm,
+    extrasHedgehogCirceJs,
+    extrasHedgehogCirceNative,
+    extrasHedgehogCatsEffect3Jvm,
+    extrasHedgehogCatsEffect3Js,
+    extrasHedgehogCatsEffect3Native,
+    extrasRenderJvm,
+    extrasRenderJs,
+    extrasRenderNative,
+    extrasRenderRefinedJvm,
+    extrasRenderRefinedJs,
+    extrasReflectsJvm,
+    extrasRefinementJvm,
+    extrasScalaIoJvm,
+    extrasScalaIoJs,
+    extrasScalaIoNative,
+    extrasStringJvm,
+    extrasStringJs,
+    extrasStringNative,
+    extrasTestingToolsJvm,
+    extrasTestingToolsJs,
+    extrasTestingToolsCatsJvm,
+    extrasTestingToolsEffectieJvm,
+    extrasTypeInfoJvm,
   )
-  .settings(noPublish)
-  .settings(noDoc)
-  .aggregate(nonNativeAggregatedProjects: _*)
 
 lazy val extrasCore       = crossSubProject("core", crossProject(JVMPlatform, JSPlatform, NativePlatform))
   .settings(
@@ -134,7 +102,7 @@ lazy val extrasCore       = crossSubProject("core", crossProject(JVMPlatform, JS
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasCoreJvm    = extrasCore.jvm
-lazy val extrasCoreJs     = extrasCore.js.settings(Test / fork := false)
+lazy val extrasCoreJs     = extrasCore.js.settings(jsSettings)
 lazy val extrasCoreNative = extrasCore.native.settings(nativeSettings)
 
 lazy val extrasString       = crossSubProject("string", crossProject(JVMPlatform, JSPlatform, NativePlatform))
@@ -144,7 +112,7 @@ lazy val extrasString       = crossSubProject("string", crossProject(JVMPlatform
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasStringJvm    = extrasString.jvm
-lazy val extrasStringJs     = extrasString.js.settings(Test / fork := false)
+lazy val extrasStringJs     = extrasString.js.settings(jsSettings)
 lazy val extrasStringNative = extrasString.native.settings(nativeSettings)
 
 lazy val extrasCirce       = crossSubProject("circe", crossProject(JVMPlatform, JSPlatform, NativePlatform))
@@ -171,7 +139,7 @@ lazy val extrasCirce       = crossSubProject("circe", crossProject(JVMPlatform, 
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasCirceJvm    = extrasCirce.jvm
-lazy val extrasCirceJs     = extrasCirce.js.settings(Test / fork := false)
+lazy val extrasCirceJs     = extrasCirce.js.settings(jsSettings)
 lazy val extrasCirceNative = extrasCirce
   .native
   .settings(nativeSettings)
@@ -308,7 +276,7 @@ lazy val extrasFs2V2TextJvm = extrasFs2V2Text
   )
 lazy val extrasFs2V2TextJs  = extrasFs2V2Text
   .js
-  .settings(Test / fork := false)
+  .settings(jsSettings)
 //  .settings(libraryDependencies ++= List(libs.munit.value))
 
 lazy val extrasFs2V3Text    = crossSubProject("fs2-v3-text", crossProject(JVMPlatform, JSPlatform))
@@ -322,7 +290,7 @@ lazy val extrasFs2V3Text    = crossSubProject("fs2-v3-text", crossProject(JVMPla
   )
   .dependsOn(extrasHedgehogCe3 % Test)
 lazy val extrasFs2V3TextJvm = extrasFs2V3Text.jvm
-lazy val extrasFs2V3TextJs  = extrasFs2V3Text.js.settings(Test / fork := false)
+lazy val extrasFs2V3TextJs  = extrasFs2V3Text.js.settings(jsSettings)
 
 lazy val extrasRender       = crossSubProject("render", crossProject(JVMPlatform, JSPlatform, NativePlatform))
   .settings(
@@ -337,7 +305,7 @@ lazy val extrasRender       = crossSubProject("render", crossProject(JVMPlatform
 lazy val extrasRenderJvm    = extrasRender.jvm
 lazy val extrasRenderJs     = extrasRender
   .js
-  .settings(Test / fork := false)
+  .settings(jsSettings)
   .settings(
     libraryDependencies ++= List(
       libs.scalajsJavaSecurerandom.value % Test
@@ -364,7 +332,7 @@ lazy val extrasRenderRefined    = crossSubProject("render-refined", crossProject
   )
   .dependsOn(extrasRender)
 lazy val extrasRenderRefinedJvm = extrasRenderRefined.jvm
-lazy val extrasRenderRefinedJs  = extrasRenderRefined.js.settings(Test / fork := false)
+lazy val extrasRenderRefinedJs  = extrasRenderRefined.js.settings(jsSettings)
 
 lazy val extrasReflects    = crossSubProject("reflects", crossProject(JVMPlatform))
   .settings(
@@ -434,7 +402,7 @@ lazy val extrasScalaIo       = crossSubProject("scala-io", crossProject(JVMPlatf
     extrasCore
   )
 lazy val extrasScalaIoJvm    = extrasScalaIo.jvm
-lazy val extrasScalaIoJs     = extrasScalaIo.js.settings(Test / fork := false)
+lazy val extrasScalaIoJs     = extrasScalaIo.js.settings(jsSettings)
 lazy val extrasScalaIoNative = extrasScalaIo.native.settings(nativeSettings)
 
 lazy val extrasConcurrent       = crossSubProject("concurrent", crossProject(JVMPlatform, JSPlatform, NativePlatform))
@@ -443,7 +411,7 @@ lazy val extrasConcurrent       = crossSubProject("concurrent", crossProject(JVM
     libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
   )
 lazy val extrasConcurrentJvm    = extrasConcurrent.jvm
-lazy val extrasConcurrentJs     = extrasConcurrent.js.settings(Test / fork := false)
+lazy val extrasConcurrentJs     = extrasConcurrent.js.settings(jsSettings)
 lazy val extrasConcurrentNative = extrasConcurrent.native.settings(nativeSettings)
 
 lazy val extrasConcurrentTesting = crossSubProject("concurrent-testing", crossProject(JVMPlatform, NativePlatform))
@@ -474,7 +442,7 @@ lazy val extrasCatsJvm    = extrasCats
   .dependsOn(extrasConcurrentTestingJvm % Test)
 lazy val extrasCatsJs     = extrasCats
   .js
-  .settings(Test / fork := false)
+  .settings(jsSettings)
   .settings(
     libraryDependencies ++= (if (scalaVersion.value.startsWith("3")) {
                                List(libs.cats.value, libs.catsEffect3.value % Test)
@@ -516,7 +484,7 @@ lazy val extrasHedgehogCirceJvm = extrasHedgehogCirce
   .dependsOn(
     extrasTypeInfoJvm
   )
-lazy val extrasHedgehogCirceJs     = extrasHedgehogCirce.js.settings(Test / fork := false)
+lazy val extrasHedgehogCirceJs     = extrasHedgehogCirce.js.settings(jsSettings)
 lazy val extrasHedgehogCirceNative = extrasHedgehogCirce
   .native
   .settings(nativeSettings)
@@ -546,7 +514,7 @@ lazy val extrasHedgehogCatsEffect3Jvm    = extrasHedgehogCe3
   )
 lazy val extrasHedgehogCatsEffect3Js     = extrasHedgehogCe3
   .js
-  .settings(Test / fork := false)
+  .settings(jsSettings)
   .settings(
     libraryDependencies ++= List(
       libs.catsEffect3.value,
@@ -577,7 +545,7 @@ lazy val extrasTestingTools = crossSubProject("testing-tools", crossProject(JVMP
   .dependsOn(extrasCore)
 
 lazy val extrasTestingToolsJvm = extrasTestingTools.jvm
-lazy val extrasTestingToolsJs  = extrasTestingTools.js.settings(Test / fork := false)
+lazy val extrasTestingToolsJs  = extrasTestingTools.js.settings(jsSettings)
 
 lazy val extrasTestingToolsCats = crossSubProject("testing-tools-cats", crossProject(JVMPlatform))
   .settings(
@@ -1423,6 +1391,12 @@ def scalacOptionsPostProcess(scalaVersion: String, options: Seq[String]): Seq[St
     options.filterNot(_ == "UTF-8")
   }
 
+lazy val jsSettings: SettingsDefinition = List(
+  Test / fork := false,
+  coverageEnabled := false,
+)
+
 lazy val nativeSettings: SettingsDefinition = List(
-  Test / fork := false
+  Test / fork := false,
+  coverageEnabled := false,
 )
