@@ -22,7 +22,7 @@ else
   then
     # Coverage run: switch to coverage-only aggregator (JVM/JS only, no Native)
     # Use a double quoted sbt command with semicolons to chain commands
-    test_task="project extrasCoverage; coverage; test; coverageReport; coverageAggregate"
+    test_task="coverage test coverageReport coverageAggregate"
 #    test_task="coverage test scalafix coverageReport coverageAggregate coveralls"
 #    echo "report build but it does nothing for now."
   fi
@@ -43,14 +43,14 @@ else
       ++${scala_version}! \
       -v \
       clean \
-      "${test_task}" \
+      ${test_task} \
       packagedArtifacts
   else
     sbt \
       ++${scala_version}! \
       -v \
       clean \
-      "${test_task}" \
+      ${test_task} \
       package
   fi
 
