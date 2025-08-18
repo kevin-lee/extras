@@ -44,7 +44,7 @@ jobs:
           echo " [AFTER]CURRENT_BRANCH_NAME=${CURRENT_BRANCH_NAME}"
           echo "RUN_ID=${RUN_ID}"
           echo "RUN_NUMBER=${RUN_NUMBER}"
-          echo "Push #${PUSH_NUMBER}"
+          
           java -version
           echo "JAVA_OPTS=${JAVA_OPTS}"
           echo " JVM_OPTS=${JVM_OPTS}"
