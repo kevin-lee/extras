@@ -3,5 +3,5 @@ package extras.core.syntax
 /** @author Kevin Lee
   * @since 2025-09-06
   */
-trait all extends strings
+trait all extends strings, predefs
 object all extends all
