@@ -108,7 +108,7 @@ object RainbowSyntaxSpec extends Properties {
     import extras.scala.io.syntax.truecolor.rainbow._
     val expected = ""
     val actual   = "".rainbowed
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }
@@ -164,7 +164,7 @@ object RainbowSyntaxSpec extends Properties {
     import extras.scala.io.syntax.truecolor.rainbow._
     val expected = ""
     val actual   = "".rainbowedHtml
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }

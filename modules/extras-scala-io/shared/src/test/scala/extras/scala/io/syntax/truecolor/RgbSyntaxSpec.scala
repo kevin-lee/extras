@@ -113,7 +113,7 @@ object RgbSyntaxSpec extends Properties {
     import extras.scala.io.syntax.truecolor.rgb._
     val expected = ""
     val actual   = "".rgb(intValue)
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }
@@ -155,7 +155,7 @@ object RgbSyntaxSpec extends Properties {
     import extras.scala.io.syntax.truecolor.rgb._
     val expected = ""
     val actual   = "".rgbed(intValue)
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }

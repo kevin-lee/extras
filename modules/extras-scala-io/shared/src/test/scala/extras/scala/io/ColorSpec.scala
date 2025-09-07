@@ -1,6 +1,6 @@
 package extras.scala.io
 
-import extras.core.syntax.string._
+import extras.core.syntax.strings._
 import hedgehog._
 import hedgehog.runner._
 
