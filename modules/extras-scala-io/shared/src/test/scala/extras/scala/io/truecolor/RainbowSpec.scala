@@ -100,7 +100,7 @@ object RainbowSpec extends Properties {
   def testRainbowEmptyString: Result = {
     val expected = ""
     val actual   = Rainbow.rainbow("")
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }
@@ -154,7 +154,7 @@ object RainbowSpec extends Properties {
   def testRainbowHtmlEmptyString: Result = {
     val expected = ""
     val actual   = Rainbow.rainbowHtml("")
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }

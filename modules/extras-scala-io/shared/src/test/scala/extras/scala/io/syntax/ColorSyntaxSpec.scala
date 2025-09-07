@@ -58,7 +58,7 @@ object ColorSyntaxSpec extends Properties {
   } yield {
     val expected = ""
     val actual   = "".colored(color)
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be "" (an empty String)""")
   }

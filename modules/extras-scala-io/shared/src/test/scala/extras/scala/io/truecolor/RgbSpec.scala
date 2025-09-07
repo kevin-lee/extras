@@ -545,7 +545,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
   } yield {
     val expected = ""
     val actual   = Rgb.unsafeFromInt(rgbInt).color("")
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }
@@ -574,7 +574,7 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
   } yield {
     val expected = ""
     val actual   = Rgb.unsafeFromInt(rgbInt).colored("")
-    import extras.core.syntax.string._
+    import extras.core.syntax.strings._
     (actual ==== expected)
       .log(s"""${actual.encodeToUnicode} should be """"")
   }

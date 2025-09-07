@@ -6,7 +6,7 @@ import hedgehog.runner._
 /** @author Kevin Lee
   * @since 2022-06-25
   */
-object StringSyntaxSpec extends Properties {
+object stringsSpec extends Properties {
   override def tests: List[Test] = List(
     property("test String.encodeToUnicode", testEncodeToUnicode)
   )
@@ -14,7 +14,7 @@ object StringSyntaxSpec extends Properties {
   def testEncodeToUnicode: Property = for {
     s <- Gen.string(Gen.unicode, Range.linear(1, 100)).log("s")
   } yield {
-    import StringSyntax._
+    import strings._
     val expected = s
       .map(_.toInt)
       .map { c =>
