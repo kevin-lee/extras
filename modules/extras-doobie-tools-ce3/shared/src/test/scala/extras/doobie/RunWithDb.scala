@@ -3,6 +3,7 @@ package extras.doobie
 import cats.effect.*
 import cats.syntax.all.*
 import doobie.implicits.*
+import doobie.util.log.LogHandler
 import doobie.util.transactor.Transactor
 import effectie.core.*
 import effectie.resource.Ce3Resource
@@ -53,6 +54,7 @@ trait RunWithDb {
                                 url,
                                 user,
                                 password,
+                                LogHandler.jdkLogHandler[F].some,
                               )
                             )
 

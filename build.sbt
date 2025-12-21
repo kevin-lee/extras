@@ -33,11 +33,12 @@ inThisBuild(
   List(
     scalaVersion := scalaVersion.value,
     semanticdbEnabled := true,
-//    semanticdbVersion := "4.8.15",
+    semanticdbVersion := scalafixSemanticdb.revision,
+    //    semanticdbVersion := "4.8.15",
   )
 )
 
-ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.3.0"
+ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.6.20"
 
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
@@ -734,7 +735,7 @@ lazy val docsExtrasDoobieToolsCe3 =
   docsProject("docs-extras-doobie-tools-ce3", file("docs-gen-tmp/extras-doobie-tools-ce3"))
     .enablePlugins(MdocPlugin)
     .settings(
-      scalaVersion := props.DocsScalaVersion,
+      scalaVersion := "2.13.18",
       mdocIn := file("docs/extras-doobie-tools/ce3"),
       mdocOut := file("generated-docs/docs/extras-doobie-tools/ce3"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-doobie-tools" / "ce3"),
@@ -748,6 +749,7 @@ lazy val docsExtrasDoobieToolsCe3 =
           libs.effectieCe3.value,
         )
       } ++ List(libs.hedgehogCore.value, libs.hedgehogRunner.value),
+      dependencyOverrides ++= List(libs.doobieCe3Core),
       mdocVariables := createMdocVariables(),
     )
     .settings(noPublish)
@@ -1229,7 +1231,7 @@ lazy val props = new {
   val CatsEffect3_7Version = "3.7.0-RC1"
 
   val DoobieCe2Version = "0.13.4"
-  val DoobieCe3Version = "1.0.0-RC2"
+  val DoobieCe3Version = "1.0.0-RC10"
 
   val KittensVersion = "3.0.0"
 

@@ -1,6 +1,7 @@
 package extras.doobie.newtype
 
 import cats.Eq
+import doobie.*
 import io.estatico.newtype.macros.newtype
 
 /** @author Kevin Lee
@@ -11,20 +12,20 @@ object data {
 
   object Example {
 
-    @newtype case class Id(value: Int)
+    implicit val exampleRead: Read[Example]   = Read.derived
+    implicit val exampleWrite: Write[Example] = Write.derived
 
+    @newtype case class Id(value: Int)
     object Id {
       implicit val idEq: Eq[Id] = deriving
     }
 
     @newtype case class Name(value: String)
-
     object Name {
       implicit val nameEq: Eq[Name] = deriving
     }
 
     @newtype case class Note(value: String)
-
     object Note {
       implicit val noteEq: Eq[Note] = deriving
     }

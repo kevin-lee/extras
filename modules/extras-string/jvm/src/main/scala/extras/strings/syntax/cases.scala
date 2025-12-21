@@ -66,6 +66,7 @@ object cases extends cases {
 
     @SuppressWarnings(Array("org.wartremover.warts.Equals"))
     def splitByCase: Vector[String] = {
+      @SuppressWarnings(Array("org.wartremover.warts.MutableDataStructures"))
       @scala.annotation.tailrec
       def splitEach(cs: List[Char], last: Char, current: StringBuilder, acc: Vector[String]): Vector[String] =
         cs match {
