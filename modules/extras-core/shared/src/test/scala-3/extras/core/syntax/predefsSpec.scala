@@ -28,71 +28,113 @@ object predefsSpec extends Properties {
     s <- Gen.string(Gen.alpha, Range.linear(1, 5)).log("s")
   } yield {
     val input: String | Null = s
+    val input2: String       = s
     val expected: String     = s
 
-    val actual = input ?: "DEFAULT"
+    val actual  = input ?: "DEFAULT"
+    val actual2 = input2 ?: "DEFAULT"
 
-    actual ==== expected
+    Result.all(
+      List(
+        (actual ==== expected).log("actual is not equal to expected"),
+        (actual2 ==== expected).log("actual2 is not equal to expected"),
+      )
+    )
   }
 
   def testElvisWithNonNullNeverEvaluatesAlternativeValue: Property = for {
     s <- Gen.string(Gen.alpha, Range.linear(1, 5)).log("s")
   } yield {
     val input: String | Null = s
+    val input2: String       = s
 
     val alternativeValue: String = "DEFAULT"
 
-    var evaluatedAlternative: Option[String] = None // scalafix:ok DisableSyntax.var
+    var evaluatedAlternative: Option[String]  = None // scalafix:ok DisableSyntax.var
+    var evaluatedAlternative2: Option[String] = None // scalafix:ok DisableSyntax.var
 
     val expected = s
 
-    val resultBeforeElvis = evaluatedAlternative ==== None
-    val actual            = input ?: {
+    val resultBeforeElvis  = evaluatedAlternative ==== None
+    val result2BeforeElvis = evaluatedAlternative2 ==== None
+
+    val actual = input ?: {
       evaluatedAlternative = Some(alternativeValue)
       alternativeValue
     }
+
+    val actual2 = input2 ?: {
+      evaluatedAlternative2 = Some(alternativeValue)
+      alternativeValue
+    }
+
     val resultAfterElvis  = evaluatedAlternative ==== None
+    val result2AfterElvis = evaluatedAlternative2 ==== None
 
     Result.all(
       List(
         resultBeforeElvis.log("Failed: Result before elvis"),
-        actual ==== expected,
+        (actual ==== expected).log("actual is not equal to expected"),
         resultAfterElvis.log("Failed: Result after elvis"),
+        ///
+        result2BeforeElvis.log("Failed: Result 2 before elvis"),
+        (actual2 ==== expected).log("actual is not equal to expected"),
+        result2AfterElvis.log("Failed: Result 2 after elvis"),
       )
     )
   }
 
   def testElvisWithNull: Result = {
     val s: String | Null = null // scalafix:ok DisableSyntax.null
+    val s2: String       = null // scalafix:ok DisableSyntax.null
 
     val expected: String = "DEFAULT"
     val actual: String   = s ?: "DEFAULT"
+    val actual2: String  = s2 ?: "DEFAULT"
 
-    actual ==== expected
+    Result.all(
+      List(
+        (actual ==== expected).log("actual is not equal to expected"),
+        (actual2 ==== expected).log("actual2 is not equal to expected"),
+      )
+    )
   }
 
   def testElvisWithNullShouldEvaluateTheAlternativeValue: Result = {
-    val alternativeValue: String             = "DEFAULT"
-    var evaluatedAlternative: Option[String] = None // scalafix:ok DisableSyntax.var
+    val alternativeValue: String              = "DEFAULT"
+    var evaluatedAlternative: Option[String]  = None // scalafix:ok DisableSyntax.var
+    var evaluatedAlternative2: Option[String] = None // scalafix:ok DisableSyntax.var
 
     val s: String | Null = null // scalafix:ok DisableSyntax.null
+    val s2: String       = null // scalafix:ok DisableSyntax.null
 
     val expected = alternativeValue
 
-    val resultBeforeElvis = evaluatedAlternative ==== None
+    val resultBeforeElvis  = evaluatedAlternative ==== None
+    val result2BeforeElvis = evaluatedAlternative2 ==== None
 
     val actual = s ?: {
       evaluatedAlternative = Some(alternativeValue)
       alternativeValue
     }
 
-    val resultAfterElvis = evaluatedAlternative ==== Some(expected)
+    val actual2 = s2 ?: {
+      evaluatedAlternative2 = Some(alternativeValue)
+      alternativeValue
+    }
+
+    val resultAfterElvis  = evaluatedAlternative ==== Some(expected)
+    val result2AfterElvis = evaluatedAlternative2 ==== Some(expected)
 
     Result.all(
       List(
         resultBeforeElvis.log("Failed: Result before elvis"),
-        actual ==== expected,
+        (actual ==== expected).log("actual is not equal to expected"),
         resultAfterElvis.log("Failed: Result after elvis"),
+        ///
+        result2BeforeElvis.log("Failed: Result 2 before elvis"),
+        (actual2 ==== expected).log("actual2 is not equal to expected"),
+        result2AfterElvis.log("Failed: Result 2 after elvis"),
       )
     )
   }
