@@ -734,7 +734,7 @@ lazy val docsExtrasDoobieToolsCe3 =
   docsProject("docs-extras-doobie-tools-ce3", file("docs-gen-tmp/extras-doobie-tools-ce3"))
     .enablePlugins(MdocPlugin)
     .settings(
-      scalaVersion := "2.13.18",
+      scalaVersion := props.DocsScalaVersion,
       mdocIn := file("docs/extras-doobie-tools/ce3"),
       mdocOut := file("generated-docs/docs/extras-doobie-tools/ce3"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-doobie-tools" / "ce3"),
@@ -856,7 +856,6 @@ lazy val docsExtrasTypeInfo = docsProject("docs-extras-type-info", file("docs-ge
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-type-info"),
     mdocOut := file("generated-docs/docs/extras-type-info"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-type-info"),
@@ -876,7 +875,6 @@ lazy val docsExtrasTypeInfoScala2 =
     .enablePlugins(MdocPlugin)
     .settings(
       scalaVersion := props.DocsScalaVersion,
-      scalaVersion := props.Scala2Version,
       mdocIn := file("docs/extras-type-info-scala2"),
       mdocOut := file("generated-docs/docs/extras-type-info/scala2"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-type-info/scala2"),
@@ -920,7 +918,6 @@ lazy val docsExtrasCirce = docsProject("docs-extras-circe", file("docs-gen-tmp/e
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-circe"),
     mdocOut := file("generated-docs/docs/extras-circe"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-circe"),
@@ -943,7 +940,6 @@ lazy val docsExtrasFs2 = docsProject("docs-extras-fs2", file("docs-gen-tmp/extra
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-fs2/common"),
     mdocOut := file("generated-docs/docs/extras-fs2"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2"),
@@ -957,7 +953,6 @@ lazy val docsExtrasFs2V2 = docsProject("docs-extras-fs2-v2", file("docs-gen-tmp/
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-fs2/v2"),
     mdocOut := file("generated-docs/docs/extras-fs2/v2"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2" / "v2"),
@@ -977,7 +972,6 @@ lazy val docsExtrasFs2V3 = docsProject("docs-extras-fs2-v3", file("docs-gen-tmp/
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-fs2/v3"),
     mdocOut := file("generated-docs/docs/extras-fs2/v3"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-fs2" / "v3"),
@@ -997,7 +991,6 @@ lazy val docsExtrasTestingTools = docsProject("docs-extras-testing-tools", file(
   .enablePlugins(MdocPlugin)
   .settings(
     scalaVersion := props.DocsScalaVersion,
-    scalaVersion := props.Scala2Version,
     mdocIn := file("docs/extras-testing-tools/common"),
     mdocOut := file("generated-docs/docs/extras-testing-tools"),
     cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-testing-tools"),
@@ -1021,7 +1014,6 @@ lazy val docsExtrasTestingToolsCats =
     .enablePlugins(MdocPlugin)
     .settings(
       scalaVersion := props.DocsScalaVersion,
-      scalaVersion := props.Scala2Version,
       mdocIn := file("docs/extras-testing-tools/cats"),
       mdocOut := file("generated-docs/docs/extras-testing-tools/cats"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-testing-tools" / "cats"),
@@ -1046,7 +1038,6 @@ lazy val docsExtrasTestingToolsEffectie =
     .enablePlugins(MdocPlugin)
     .settings(
       scalaVersion := props.DocsScalaVersion,
-      scalaVersion := props.Scala2Version,
       mdocIn := file("docs/extras-testing-tools/effectie"),
       mdocOut := file("generated-docs/docs/extras-testing-tools/effectie"),
       cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-testing-tools" / "effectie"),
@@ -1216,7 +1207,7 @@ lazy val props = new {
   val ProjectScalaVersion = Scala2Version
 //  val ProjectScalaVersion = Scala3Version
 
-  val DocsScalaVersion = Scala2Version
+  val DocsScalaVersion = "2.13.18"
 
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
