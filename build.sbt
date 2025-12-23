@@ -34,7 +34,6 @@ inThisBuild(
     scalaVersion := scalaVersion.value,
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    //    semanticdbVersion := "4.8.15",
   )
 )
 
@@ -1222,10 +1221,10 @@ lazy val props = new {
   val CrossScalaVersions =
     (Scala3Versions ++ Scala2Versions).distinct
 
-  val CatsVersion      = "2.12.0"
+  val CatsVersion      = "2.13.0"
   val Cats2_0_0Version = "2.0.0"
 
-  val CatsEffect3Version = "3.3.14"
+  val CatsEffect3Version = "3.6.3"
   val CatsEffectVersion  = "2.5.5"
 
   val CatsEffect3_7Version = "3.7.0-RC1"
@@ -1233,29 +1232,29 @@ lazy val props = new {
   val DoobieCe2Version = "0.13.4"
   val DoobieCe3Version = "1.0.0-RC10"
 
-  val KittensVersion = "3.0.0"
+  val KittensVersion = "3.5.0"
 
-  val CirceVersion = "0.14.12"
+  val CirceVersion = "0.14.13"
 //  val Circe_0_14_3_Version = "0.14.3"
 
   val Fs2V2Version = "2.5.11"
-  val Fs2V3Version = "3.3.0"
+  val Fs2V3Version = "3.12.2"
 
   val Http4s_0_22_Version = "0.22.15"
   val Http4s_0_23_Version = "0.23.16"
 
   val HedgehogVersion = "0.13.0"
 
-  val HedgehogExtraVersion = "0.11.0"
+  val HedgehogExtraVersion = "0.19.0"
 
   val NewtypeVersion = "0.4.4"
 
   val RefinedVersion       = "0.9.27"
   val RefinedLatestVersion = "0.10.1"
 
-  val EmbeddedPostgresVersion = "2.0.1"
+  val EmbeddedPostgresVersion = "2.2.0"
 
-  val EffectieVersion = "2.0.0"
+  val EffectieVersion = "2.3.0"
 
   val ScalajsJavaSecurerandomVersion = "1.0.0"
 
