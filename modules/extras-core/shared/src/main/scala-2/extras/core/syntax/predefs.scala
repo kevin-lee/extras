@@ -12,7 +12,9 @@ object predefs extends predefs {
     *
     * Scala 2 doesn't have union types like `A | Null`, so this operates on a plain `A` value that may be `null` at runtime.
     *
-    * In Scala 2, operator (method) names ending with `:` are right-associative, so `a ?: b` would be evaluated as `b.?: (a)`.
+    * Unlike Scala 3's extension methods, in Scala 2, extension methods are just regular methods in an implicit value class.
+    * As a result, method names ending with `:` are right-associative, so `a ?: b` is evaluated as `b.?:(a)`.
+    *
     * Since we need the possibly-null value (`a`) to be the receiver, the operator is provided as `?:=` (not ending with `:`),
     * so `a ?:= b` is evaluated as `a.?:=(b)`.
     *
