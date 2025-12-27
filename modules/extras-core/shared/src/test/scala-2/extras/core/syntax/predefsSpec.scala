@@ -3,12 +3,20 @@ package extras.core.syntax
 import hedgehog._
 import hedgehog.runner._
 
-import extras.core.syntax.predefs._
-
 /** @author Kevin Lee
   * @since 2025-09-06
   */
-object predefsSpec extends Properties {
+object predefsSpec extends Properties with CommonPredefsSpec {
+  override val predefsImport: predefs = extras.core.syntax.predefs
+}
+
+trait CommonPredefsSpec {
+  self: Properties =>
+
+  val predefsImport: extras.core.syntax.predefs
+
+  import predefsImport._
+
   def tests: List[Test] = List(
     property("a ?:= alternative where a is non-null value should return a", testElvisWithNonNull),
     property(

@@ -3,14 +3,21 @@ package extras.core.syntax
 import hedgehog.*
 import hedgehog.runner.*
 
-import extras.core.syntax.predefs.*
-
 import scala.language.unsafeNulls
 
 /** @author Kevin Lee
   * @since 2025-09-06
   */
-object predefsSpec extends Properties {
+object predefsSpec extends Properties, CommonPredefsSpec {
+  override val predefsImport: predefs = extras.core.syntax.predefs
+}
+trait CommonPredefsSpec {
+  self: Properties =>
+
+  val predefsImport: predefs
+
+  import predefsImport.*
+
   def tests: List[Test] = List(
     // ?:
     property("a ?: alternative where a is non-null value should return a", testElvisWithNonNull),
