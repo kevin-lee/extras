@@ -639,6 +639,24 @@ lazy val docs = (project in file("docs-gen-tmp/docs"))
   )
   .settings(noPublish)
 
+lazy val docsExtrasCore = docsProject("docs-extras-core", file("docs-gen-tmp/extras-core"))
+  .settings(
+    scalaVersion := props.DocsScalaVersion,
+    mdocIn := file("docs/extras-core"),
+    mdocOut := file("generated-docs/docs/extras-core"),
+    cleanFiles += ((ThisBuild / baseDirectory).value / "generated-docs" / "docs" / "extras-core"),
+    libraryDependencies := removeScala3Incompatible(scalaVersion.value, libraryDependencies.value),
+    libraryDependencies ++= {
+      val latestVersion = getLatestExtrasVersion()
+      List(
+        "io.kevinlee" %% "extras-core" % latestVersion
+      )
+    } ++ List(libs.hedgehogCore.value, libs.hedgehogRunner.value),
+    mdocVariables := createMdocVariables(),
+  )
+  .settings(noPublish)
+
+
 lazy val docsExtrasRender = docsProject("docs-extras-render", file("docs-gen-tmp/extras-render"))
   .settings(
     scalaVersion := props.DocsScalaVersion,
@@ -1167,7 +1185,7 @@ addCommandAlias(
 )
 addCommandAlias(
   "docsMdocAll",
-  "; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehog/mdoc; docsExtrasDoobieTools/mdoc; docsExtrasDoobieToolsCe2/mdoc; docsExtrasDoobieToolsCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasString/mdoc; docsExtrasFs2/mdoc; docsExtrasFs2V2/mdoc; docsExtrasFs2V3/mdoc; docsExtrasTestingTools/mdoc; docsExtrasTestingToolsCats/mdoc; docsExtrasTestingToolsEffectie/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
+  "; docsExtrasCore/mdoc; docsExtrasRender/mdoc; docsExtrasCats/mdoc; docsExtrasCirce/mdoc; docsExtrasHedgehog/mdoc; docsExtrasDoobieTools/mdoc; docsExtrasDoobieToolsCe2/mdoc; docsExtrasDoobieToolsCe3/mdoc; docsExtrasRefinement/mdoc; docsExtrasTypeInfo/mdoc; docsExtrasTypeInfoScala2/mdoc; docsExtrasTypeInfoScala3/mdoc; docsExtrasScalaIo/mdoc; docsExtrasString/mdoc; docsExtrasFs2/mdoc; docsExtrasFs2V2/mdoc; docsExtrasFs2V3/mdoc; docsExtrasTestingTools/mdoc; docsExtrasTestingToolsCats/mdoc; docsExtrasTestingToolsEffectie/mdoc; docsExtrasConcurrent/mdoc; docsExtrasReflects/mdoc; docs/mdoc",
 )
 
 def easeScalacOptionsForDocs(scalacOptions: Seq[String]): Seq[String] =
