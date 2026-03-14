@@ -156,7 +156,14 @@ object Color {
       if s.isEmpty then "" else s"$toAnsi$s"
 
     def colored(s: String): String =
-      if s.isEmpty then "" else color(s) + Color.render(Color.reset)
+      if s.isEmpty then ""
+      else {
+        val colored = color(s)
+        if colored.endsWith(AnsiResetString) then colored
+        else colored + AnsiResetString
+      }
   }
+
+  private[io] val AnsiResetString = Color.render(Color.reset)
 
 }

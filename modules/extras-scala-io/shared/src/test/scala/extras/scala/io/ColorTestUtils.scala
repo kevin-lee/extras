@@ -46,4 +46,10 @@ object ColorTestUtils {
     Color.dim        -> "\u001b[2m",
   )
 
+  def showAnsiLiterally(s: String): String =
+    s.flatMap {
+      case '\u001b' => "\\u001b"
+      case c => c.toString
+    }
+
 }
