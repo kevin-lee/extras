@@ -4,6 +4,8 @@ import extras.core.syntax.strings._
 import hedgehog._
 import hedgehog.runner._
 
+import scala.io.AnsiColor
+
 /** @author Kevin Lee
   * @since 2021-09-19
   */
@@ -17,7 +19,11 @@ object ColorSpec extends Properties {
     property("test Color.colored(an empty String)", testColoredEmpty),
     property("test Color.show", testColorShow),
     property("test Color.render(color)", testColorRender),
+    property("test Color.colored(color)(txt) multiple times", testMultipleColors),
   )
+
+  def multipleColorsAndReset(text: String, ansiColor: String, ansiColors: String*): String =
+    s"${(ansiColor +: ansiColors).reverse.mkString}$text${AnsiColor.RESET}"
 
   def testColor: Property = for {
     colorAndAnsi <- ColorGens.genColor.log("(color, ansi)")
@@ -78,6 +84,26 @@ object ColorSpec extends Properties {
     val expected = color.toAnsi
     val actual   = Color.render(color)
     actual ==== expected
+  }
+
+  def testMultipleColors: Property = for {
+    text   <- Gen.string(Gen.alphaNum, Range.linear(3, 5)).log("text")
+    color  <- ColorGens.genColor.log("color")
+    colors <- ColorGens.genColor.list(Range.linear(1, 10)).log("colors")
+  } yield {
+    val actual   = (color :: colors).foldLeft(text) {
+      case (txt, (color, _)) =>
+        Color.colored(color)(txt)
+    }
+    val expected = multipleColorsAndReset(
+      text,
+      (color match { case (_, ansiColor) => ansiColor }),
+      colors.map { case (_, ansiColor) => ansiColor }: _*
+    )
+    (actual ==== expected).log(s""">> Escaped ANSI:
+         |     ⎬⎯ actual: ${ColorTestUtils.showAnsiLiterally(actual)}
+         |     ⎩expected: ${ColorTestUtils.showAnsiLiterally(expected)}
+         |""".stripMargin)
   }
 
 }

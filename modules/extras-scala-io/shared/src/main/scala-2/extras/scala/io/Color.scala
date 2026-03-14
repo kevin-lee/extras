@@ -152,8 +152,15 @@ object Color {
   def color(color: Color)(s: String): String =
     if (s.isEmpty) "" else s"${Color.render(color)}$s"
 
+  private[io] val AnsiResetString = Color.render(Color.reset)
+
   def colored(color: Color)(s: String): String =
-    if (s.isEmpty) "" else Color.color(color)(s) + Color.render(Color.reset)
+    if (s.isEmpty) ""
+    else {
+      val colored = Color.color(color)(s)
+      if (colored.endsWith(AnsiResetString)) colored
+      else colored + AnsiResetString
+    }
 
   implicit final class ColorOps(private val colour: Color) extends AnyVal {
     def toAnsi: String = Color.render(colour)

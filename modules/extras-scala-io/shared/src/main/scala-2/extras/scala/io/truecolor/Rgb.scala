@@ -128,6 +128,13 @@ object Rgb {
 
     def color(s: String): String = if (s.isEmpty) "" else toAsciiEsc + s
 
-    def colored(s: String): String = if (s.isEmpty) "" else toAsciiEsc + s + extras.scala.io.Color.Reset.toAnsi
+    def colored(s: String): String = if (s.isEmpty) ""
+    else {
+      val coloredString = toAsciiEsc + s
+      if (coloredString.endsWith(extras.scala.io.Color.AnsiResetString))
+        coloredString
+      else
+        coloredString + extras.scala.io.Color.AnsiResetString
+    }
   }
 }

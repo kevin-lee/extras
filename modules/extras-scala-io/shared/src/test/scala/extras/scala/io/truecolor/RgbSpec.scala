@@ -1,5 +1,6 @@
 package extras.scala.io.truecolor
 
+import extras.scala.io.ColorTestUtils
 import hedgehog._
 import hedgehog.runner._
 
@@ -59,6 +60,10 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
     property(
       """Rgb(value).colored(String value) should return value in colored String value with ASCII escape chars ending with scala.io.AnsiColor.RESET""",
       testColored,
+    ),
+    property(
+      """Rgb(value).colored(String value) multiple times should return value in colored String value with ASCII escape chars ending with only one scala.io.AnsiColor.RESET""",
+      testColoredMultipleTimes,
     ),
     property(
       """Rgb(value).colored("") should return """"",
@@ -565,6 +570,31 @@ object RgbSpec extends Properties with CrossVersionRgbSpec {
         .toAnsi
     val actual   = Rgb.unsafeFromInt(rgbInt).colored(text)
     actual ==== expected
+  }
+
+  def testColoredMultipleTimes: Property = for {
+    rgbInputs <-
+      Gens
+        .genRgbIntAndInts
+        .list(Range.linear(5, 10))
+        .log("rgbInputs: List of (rgbInt, (expectedRed, expectedGreen, expectedBlue))")
+    text      <- Gen.string(Gen.alphaNum, Range.linear(1, 30)).log("text")
+  } yield {
+    val expected =
+      rgbInputs.foldLeft(text) {
+        case (acc, (_, (expectedRed, expectedGreen, expectedBlue))) =>
+          TestTools.toRgbAsciiEsc(expectedRed, expectedGreen, expectedBlue) + acc
+      } + extras.scala.io.Color.AnsiResetString
+
+    val actual = rgbInputs.foldLeft(text) {
+      case (acc, (rgbInt, _)) =>
+        Rgb.unsafeFromInt(rgbInt).colored(acc)
+    }
+    (actual ==== expected)
+      .log(s""">> Escaped ANSI:
+           |     ⎬⎯ actual: ${ColorTestUtils.showAnsiLiterally(actual)}
+           |     ⎩expected: ${ColorTestUtils.showAnsiLiterally(expected)}
+           |""".stripMargin)
   }
 
   def testColoredEmptyString: Property = for {

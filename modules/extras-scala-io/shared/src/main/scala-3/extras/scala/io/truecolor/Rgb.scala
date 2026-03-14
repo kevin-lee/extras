@@ -172,6 +172,13 @@ object Rgb {
 
     def color(s: String): String = if s.isEmpty then "" else toAsciiEsc + s
 
-    def colored(s: String): String = if s.isEmpty then "" else toAsciiEsc + s + extras.scala.io.Color.Reset.toAnsi
+    def colored(s: String): String =
+      if s.isEmpty then ""
+      else {
+        val coloredString = toAsciiEsc + s
+        if coloredString.endsWith(extras.scala.io.Color.AnsiResetString)
+        then coloredString
+        else coloredString + extras.scala.io.Color.AnsiResetString
+      }
   }
 }
