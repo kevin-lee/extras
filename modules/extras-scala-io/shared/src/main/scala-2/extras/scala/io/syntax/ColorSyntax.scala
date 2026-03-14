@@ -39,6 +39,7 @@ object ColorSyntax {
     def blink: String         = colored(Color.blink)
     def reversedColor: String = colored(Color.reversed)
     def invisible: String     = colored(Color.invisible)
+    def dim: String           = colored(Color.dim)
   }
 
 }

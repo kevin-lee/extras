@@ -27,6 +27,7 @@ object Color {
   case object Blink extends Color
   case object Reversed extends Color
   case object Invisible extends Color
+  case object Dim extends Color
 
   def black: Color = Black
 
@@ -71,6 +72,8 @@ object Color {
   def reversed: Color = Reversed
 
   def invisible: Color = Invisible
+
+  def dim: Color = Dim
 
   def render(color: Color): String = color match {
     case Black =>
@@ -138,6 +141,9 @@ object Color {
 
     case Invisible =>
       AnsiColor.INVISIBLE
+
+    case Dim =>
+      "\u001b[2m"
   }
 
   @SuppressWarnings(Array("org.wartremover.warts.ToString"))

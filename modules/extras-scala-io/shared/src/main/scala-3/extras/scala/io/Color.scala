@@ -25,6 +25,7 @@ enum Color derives CanEqual {
   case Blink
   case Reversed
   case Invisible
+  case Dim
 }
 
 object Color {
@@ -72,6 +73,8 @@ object Color {
   def reversed: Color = Color.Reversed
 
   def invisible: Color = Color.Invisible
+
+  def dim: Color = Color.Dim
 
   extension (colour: Color) {
     def render: String = colour match {
@@ -140,6 +143,9 @@ object Color {
 
       case Invisible =>
         AnsiColor.INVISIBLE
+
+      case Dim =>
+        "\u001b[2m"
     }
 
     def toAnsi: String = Color.render(colour)
