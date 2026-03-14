@@ -35,6 +35,7 @@ object ColorSyntaxSpec extends Properties {
     property("test txt.blink", testBlink),
     property("test txt.reversed", testReversed),
     property("test txt.invisible", testInvisible),
+    property("test txt.dim", testDim),
   )
 
   import extras.scala.io.syntax.color._
@@ -236,6 +237,14 @@ object ColorSyntaxSpec extends Properties {
   } yield {
     val actual   = text.invisible
     val expected = colorAndReset(text, AnsiColor.INVISIBLE)
+    actual ==== expected
+  }
+
+  def testDim: Property = for {
+    text <- Gen.string(Gen.alphaNum, Range.linear(3, 5)).log("text")
+  } yield {
+    val actual   = text.dim
+    val expected = colorAndReset(text, "\u001b[2m")
     actual ==== expected
   }
 

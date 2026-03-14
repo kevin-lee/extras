@@ -43,6 +43,7 @@ object ColorTestUtils {
     Color.blink      -> AnsiColor.BLINK,
     Color.reversed   -> AnsiColor.REVERSED,
     Color.invisible  -> AnsiColor.INVISIBLE,
+    Color.dim        -> "\u001b[2m",
   )
 
 }
