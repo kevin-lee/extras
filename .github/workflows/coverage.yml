@@ -79,6 +79,6 @@ jobs:
           .github/workflows/sbt-build-all-with-scala-version.sh ${{ matrix.scala.version }} ${{ matrix.scala.report }}
 
       - if: ${{ matrix.scala.report == 'report' }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
