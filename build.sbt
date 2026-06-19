@@ -788,7 +788,7 @@ lazy val props = new {
   val CatsEffect3_7Version = "3.7.0-RC1"
 
   val DoobieCe2Version = "0.13.4"
-  val DoobieCe3Version = "1.0.0-RC10"
+  val DoobieCe3Version = "1.0.0-RC11"
 
   val KittensVersion = "3.5.0"
 
