@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         scala:
-          - { name: "Scala 2.13", version: "2.13.17", binary-version: "2.13", java-version: "11", java-distribution: "temurin", report: "report" }
+          - { name: "Scala 2.13", version: "2.13.18", binary-version: "2.13", java-version: "11", java-distribution: "temurin", report: "report" }
 
     steps:
       - uses: actions/checkout@v6

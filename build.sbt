@@ -461,7 +461,7 @@ lazy val extrasCatsNative = extrasCats
   .native
   .settings(nativeSettings)
   .settings(
-    libraryDependencies ++= List(libs.cats.value, libs.tests.catsEffect3_7.value) ++
+    libraryDependencies ++= List(libs.cats.value, libs.tests.catsEffect3.value) ++
       List("org.slf4j" % "slf4j-api" % "1.7.32" % Test)
   )
   .dependsOn(extrasConcurrentTestingNative % Test)
@@ -527,8 +527,8 @@ lazy val extrasHedgehogCatsEffect3Native = extrasHedgehogCe3
   .settings(nativeSettings)
   .settings(
     libraryDependencies ++= List(
-      libs.libCatsEffectTestKit3_7.value.excludeAll("org.scalacheck"),
-      libs.tests.catsEffect3_7.value,
+      libs.libCatsEffectTestKit.value.excludeAll("org.scalacheck"),
+      libs.tests.catsEffect3.value,
     )
   )
 
@@ -763,7 +763,7 @@ lazy val props = new {
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   val Scala2Versions = List(
-    "2.13.17",
+    "2.13.18",
     "2.12.18",
   )
   val Scala2Version  = Scala2Versions.head
@@ -782,10 +782,8 @@ lazy val props = new {
   val CatsVersion      = "2.13.0"
   val Cats2_0_0Version = "2.0.0"
 
-  val CatsEffect3Version = "3.6.3"
+  val CatsEffect3Version = "3.7.0"
   val CatsEffectVersion  = "2.5.5"
-
-  val CatsEffect3_7Version = "3.7.0-RC1"
 
   val DoobieCe2Version = "0.13.4"
   val DoobieCe3Version = "1.0.0-RC11"
@@ -847,8 +845,6 @@ lazy val libs = new {
   lazy val doobieCe3Core    = "org.tpolecat" %% "doobie-core"    % props.DoobieCe3Version
 
   lazy val libCatsEffectTestKit = Def.setting("org.typelevel" %%% "cats-effect-testkit" % props.CatsEffect3Version)
-
-  lazy val libCatsEffectTestKit3_7 = Def.setting("org.typelevel" %%% "cats-effect-testkit" % props.CatsEffect3_7Version)
 
   lazy val kittens = Def.setting("org.typelevel" %%% "kittens" % props.KittensVersion)
 
@@ -925,7 +921,7 @@ lazy val libs = new {
     lazy val scalaNativeCrypto =
       Def.setting("com.github.lolgab" %%% "scala-native-crypto" % props.ScalaNativeCryptoVersion % Test)
 
-    lazy val catsEffect3_7 = Def.setting("org.typelevel" %%% "cats-effect" % props.CatsEffect3_7Version % Test)
+    lazy val catsEffect3 = Def.setting("org.typelevel" %%% "cats-effect" % props.CatsEffect3Version % Test)
 
   }
 }
