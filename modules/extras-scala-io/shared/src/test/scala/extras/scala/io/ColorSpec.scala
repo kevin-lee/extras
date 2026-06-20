@@ -81,7 +81,7 @@ object ColorSpec extends Properties {
     colorAndAnsi <- ColorGens.genColor.log("(color, ansi)")
     (color, ansi) = colorAndAnsi
   } yield {
-    val expected = color.toAnsi
+    val expected = ansi
     val actual   = Color.render(color)
     actual ==== expected
   }
