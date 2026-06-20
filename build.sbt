@@ -763,7 +763,7 @@ lazy val props = new {
   val licenses = List("MIT" -> url("http://opensource.org/licenses/MIT"))
 
   val Scala2Versions = List(
-    "2.13.16",
+    "2.13.17",
     "2.12.18",
   )
   val Scala2Version  = Scala2Versions.head

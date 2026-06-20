@@ -13,7 +13,7 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "2.4.3")
 addSbtPlugin("org.scalameta" % "sbt-mdoc"      % "2.8.1")
 addSbtPlugin("io.kevinlee"   % "sbt-docusaur"  % "0.18.0")
 
-addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.18.2")
+addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.20.2")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
 
 addSbtPlugin("org.scala-native"   % "sbt-scala-native"              % "0.5.8")
