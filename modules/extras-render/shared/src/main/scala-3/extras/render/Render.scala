@@ -67,8 +67,8 @@ object Render {
       "If you want to have an instance of cats.Contravariant[Render] provided by extras, " +
       """please add `"org.typelevel" %% "cats-core" % CATS_VERSION` to your libraryDependencies in build.sbt"""
   )
-  sealed private[Render] trait CatsContravariant[M[_[_]]]
-  private[Render] object CatsContravariant {
+  sealed trait CatsContravariant[M[_[_]]]
+  object CatsContravariant {
     @SuppressWarnings(Array("org.wartremover.warts.Null"))
     inline given getCatsContravariant: CatsContravariant[cats.Contravariant] = null // scalafix:ok DisableSyntax.null
   }
