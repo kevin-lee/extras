@@ -794,14 +794,15 @@ lazy val props = new {
 //  val Circe_0_14_3_Version = "0.14.3"
 
   val Fs2V2Version = "2.5.11"
-  val Fs2V3Version = "3.12.2"
+
+  val Fs2V3Version = "3.13.0"
 
   val Http4s_0_22_Version = "0.22.15"
-  val Http4s_0_23_Version = "0.23.16"
+  val Http4s_0_23_Version = "0.23.33"
 
-  val HedgehogVersion = "0.13.0"
+  val HedgehogVersion = "0.13.1"
 
-  val HedgehogExtraVersion = "0.19.0"
+  val HedgehogExtraVersion = "0.21.0"
 
   val NewtypeVersion = "0.4.4"
 
@@ -810,7 +811,7 @@ lazy val props = new {
 
   val EmbeddedPostgresVersion = "2.2.0"
 
-  val EffectieVersion = "2.3.0"
+  val EffectieVersion = "2.4.0"
 
   val ScalajsJavaSecurerandomVersion = "1.0.0"
 
