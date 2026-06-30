@@ -2,7 +2,7 @@ package extras.doobie.ce3
 
 import cats.effect.IO
 import cats.syntax.all.*
-import doobie.syntax.all.toSqlInterpolator
+import org.typelevel.doobie.syntax.all.toSqlInterpolator
 import extras.doobie.RunWithDb
 import extras.doobie.ce3.data.{Compat, Example}
 import extras.hedgehog.ce3.CatsEffectRunner

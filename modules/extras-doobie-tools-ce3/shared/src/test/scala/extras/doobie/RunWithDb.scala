@@ -2,9 +2,9 @@ package extras.doobie
 
 import cats.effect.*
 import cats.syntax.all.*
-import doobie.implicits.*
-import doobie.util.log.LogHandler
-import doobie.util.transactor.Transactor
+import org.typelevel.doobie.implicits.*
+import org.typelevel.doobie.util.log.LogHandler
+import org.typelevel.doobie.util.transactor.Transactor
 import effectie.core.*
 import effectie.resource.Ce3Resource
 import effectie.syntax.all.*

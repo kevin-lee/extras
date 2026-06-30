@@ -1,7 +1,7 @@
 package extras.doobie.newtype
 
 import cats.Eq
-import doobie.*
+import org.typelevel.doobie.*
 import io.estatico.newtype.macros.newtype
 
 /** @author Kevin Lee

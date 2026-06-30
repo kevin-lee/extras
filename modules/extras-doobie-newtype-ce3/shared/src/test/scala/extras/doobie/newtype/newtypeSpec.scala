@@ -2,7 +2,7 @@ package extras.doobie.newtype
 
 import cats.effect.IO
 import cats.syntax.all._
-import doobie.syntax.all.toSqlInterpolator
+import org.typelevel.doobie.syntax.all.toSqlInterpolator
 import extras.doobie.RunWithDb
 import extras.doobie.ce3.DbTools
 import extras.doobie.newtype.data.Example

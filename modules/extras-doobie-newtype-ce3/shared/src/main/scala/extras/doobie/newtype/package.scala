@@ -1,7 +1,7 @@
 package extras.doobie
 
 import cats.Eq
-import doobie.{Put, Read}
+import org.typelevel.doobie.{Put, Read}
 
 import scala.annotation.nowarn
 

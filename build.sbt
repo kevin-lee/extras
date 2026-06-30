@@ -34,10 +34,20 @@ inThisBuild(
     scalaVersion := scalaVersion.value,
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
+    scalacOptions += (
+      if (scalaVersion.value.startsWith("3."))
+        "-Xsemanticdb"
+      else
+        "-Yrangepos"
+    ),
   )
 )
 
-ThisBuild / scalafixDependencies += "com.github.xuwei-k" %% "scalafix-rules" % "0.6.20"
+ThisBuild / scalafixDependencies ++= (
+  if (!scalaVersion.value.startsWith("3."))
+    List("com.github.xuwei-k" %% "scalafix-rules" % "0.6.28")
+  else List.empty
+)
 
 lazy val extras = (project in file("."))
   .enablePlugins(DevOopsGitHubReleasePlugin)
@@ -624,7 +634,6 @@ lazy val extrasTestingToolsEffectie = crossSubProject("testing-tools-effectie", 
 
 lazy val extrasTestingToolsEffectieJvm = extrasTestingToolsEffectie.jvm
 
-
 // scalafmt: off
 
 def prefixedProjectName(name: String) = s"${props.RepoName}${if (name.isEmpty) "" else s"-$name"}"
@@ -786,7 +795,7 @@ lazy val props = new {
   val CatsEffectVersion  = "2.5.5"
 
   val DoobieCe2Version = "0.13.4"
-  val DoobieCe3Version = "1.0.0-RC12"
+  val DoobieCe3Version = "1.0.0-RC13"
 
   val KittensVersion = "3.5.0"
 
@@ -841,9 +850,9 @@ lazy val libs = new {
   lazy val catsEffect3 = Def.setting("org.typelevel" %%% "cats-effect" % props.CatsEffect3Version)
   lazy val catsEffect  = Def.setting("org.typelevel" %%% "cats-effect" % props.CatsEffectVersion)
 
-  lazy val doobieCe2Core    = "org.tpolecat" %% "doobie-core"    % props.DoobieCe2Version
-  lazy val doobieCe2Refined = "org.tpolecat" %% "doobie-refined" % props.DoobieCe2Version
-  lazy val doobieCe3Core    = "org.tpolecat" %% "doobie-core"    % props.DoobieCe3Version
+  lazy val doobieCe2Core    = "org.tpolecat"  %% "doobie-core"    % props.DoobieCe2Version
+  lazy val doobieCe2Refined = "org.tpolecat"  %% "doobie-refined" % props.DoobieCe2Version
+  lazy val doobieCe3Core    = "org.typelevel" %% "doobie-core"    % props.DoobieCe3Version
 
   lazy val libCatsEffectTestKit = Def.setting("org.typelevel" %%% "cats-effect-testkit" % props.CatsEffect3Version)
 
@@ -943,7 +952,7 @@ def scalacOptionsPostProcess(scalaVersion: String, options: Seq[String]): Seq[St
   if (scalaVersion.startsWith("3.")) {
     scala3cLanguageOptions ++
       options.filterNot(o =>
-        o == "-language:dynamics,existentials,higherKinds,reflectiveCalls,experimental.macros,implicitConversions" || o == "UTF-8"
+        o == "-language:dynamics,existentials,higherKinds,reflectiveCalls,experimental.macros,implicitConversions" || o == "UTF-8" || o == "-Yrangepos"
       )
   } else {
     options.filterNot(_ == "UTF-8")

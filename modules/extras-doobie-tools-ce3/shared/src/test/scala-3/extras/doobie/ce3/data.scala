@@ -1,8 +1,8 @@
 package extras.doobie.ce3
 
-import doobie.{Get, Put}
-import doobie.Meta
-import doobie.util.{Read, Write}
+import org.typelevel.doobie.{Get, Put}
+import org.typelevel.doobie.Meta
+import org.typelevel.doobie.util.{Read, Write}
 
 /** @author Kevin Lee
   * @since 2022-11-27
