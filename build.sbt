@@ -34,12 +34,6 @@ inThisBuild(
     scalaVersion := scalaVersion.value,
     semanticdbEnabled := true,
     semanticdbVersion := scalafixSemanticdb.revision,
-    scalacOptions += (
-      if (scalaVersion.value.startsWith("3."))
-        "-Xsemanticdb"
-      else
-        "-Yrangepos"
-    ),
   )
 )
 
@@ -700,6 +694,12 @@ def crossSubProject(projectName: String, crossProject: CrossProject.Builder): Cr
         else
           scalacOptions.value
       },
+      scalacOptions += (
+        if (scalaVersion.value.startsWith("3."))
+          "-Xsemanticdb"
+        else
+          "-Yrangepos"
+        ),
     )
 }
 
