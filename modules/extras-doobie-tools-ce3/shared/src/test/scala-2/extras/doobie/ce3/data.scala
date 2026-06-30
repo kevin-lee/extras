@@ -1,8 +1,8 @@
 package extras.doobie.ce3
 
 import cats.Eq
-import doobie.Read
-import doobie.util.{Put, Write}
+import org.typelevel.doobie.Read
+import org.typelevel.doobie.util.{Put, Write}
 import io.estatico.newtype.macros.newtype
 
 import scala.annotation.nowarn

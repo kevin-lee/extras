@@ -1,9 +1,9 @@
 package extras.doobie.ce3
 
 import cats.effect.MonadCancelThrow
-import doobie.syntax.all.toConnectionIOOps
-import doobie.util.Write
-import doobie.{Fragment, Read, Transactor, Update}
+import org.typelevel.doobie.syntax.all.toConnectionIOOps
+import org.typelevel.doobie.util.Write
+import org.typelevel.doobie.{Fragment, Read, Transactor, Update}
 
 /** @author Kevin Lee
   * @since 2022-11-27
