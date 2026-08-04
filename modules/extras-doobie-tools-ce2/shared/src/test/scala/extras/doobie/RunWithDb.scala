@@ -5,7 +5,7 @@ import cats.syntax.all.*
 import doobie.implicits.*
 import doobie.util.transactor.Transactor
 import effectie.core.*
-import effectie.resource.Ce2Resource
+import effectie.resource.{Ce2UseResource, ReleasableResource, UseResource}
 import effectie.syntax.all.*
 import extras.runner.RunSync
 import extras.tools.*
@@ -29,12 +29,14 @@ trait RunWithDb {
   def withDb[F[*]: Fx: Async: ContextShift: RunSync](
     testName: String
   )(test: Transactor[F] => F[Result]): Result =
-    RunSync[F].runSync(
-      Ce2Resource
+    RunSync[F].runSync {
+      implicit val useResource: UseResource[F] = Ce2UseResource.useResource[F]
+
+      ReleasableResource
         .fromAutoCloseable(effectOf(AutoDeletingFile(Files.createTempDirectory("pg-test").toFile)))
         .use { autoDeletingWorkingDir =>
           val workingDir = autoDeletingWorkingDir.file
-          Ce2Resource
+          ReleasableResource
             .fromAutoCloseable(
               effectOf(
                 EmbeddedPostgres
@@ -59,7 +61,8 @@ trait RunWithDb {
                               )
 
                 _ <- sql"""CREATE SCHEMA IF NOT EXISTS db_tools_test""".update.run.transact(transactor)
-                _ <- sql"""
+                _ <-
+                  sql"""
                        CREATE TABLE IF NOT EXISTS db_tools_test.example
                        (
                            id SERIAL PRIMARY KEY,
@@ -74,15 +77,15 @@ trait RunWithDb {
                                 .failure
                                 .log(
                                   s""""$testName": Test failed due to error
-                                      |> ERROR: ${err.getMessage.split("\n").mkString("\n>      ")}
-                                      |> Type: ${err.getClass.getName}
-                                      |> StackTrace: ${err.stackTraceString}
-                                      |""".stripMargin
+                             |> ERROR: ${err.getMessage.split("\n").mkString("\n>      ")}
+                             |> Type: ${err.getClass.getName}
+                             |> StackTrace: ${err.stackTraceString}
+                             |""".stripMargin
                                 )
                             }
               } yield result
             }
         }
-    )
+    }
 
 }

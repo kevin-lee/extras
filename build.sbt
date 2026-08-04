@@ -820,7 +820,7 @@ lazy val props = new {
 
   val EmbeddedPostgresVersion = "2.2.0"
 
-  val EffectieVersion = "2.4.0"
+  val EffectieVersion = "2.5.0"
 
   val ScalajsJavaSecurerandomVersion = "1.0.0"
 
