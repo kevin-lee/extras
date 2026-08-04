@@ -2,16 +2,16 @@ package extras.doobie
 
 import cats.effect.*
 import cats.syntax.all.*
-import org.typelevel.doobie.implicits.*
-import org.typelevel.doobie.util.log.LogHandler
-import org.typelevel.doobie.util.transactor.Transactor
 import effectie.core.*
-import effectie.resource.Ce3Resource
+import effectie.resource.{Ce3UseResource, ReleasableResource, UseResource}
 import effectie.syntax.all.*
 import extras.tools.*
 import hedgehog.*
 import hedgehog.runner.*
 import io.zonky.test.db.postgres.embedded.EmbeddedPostgres
+import org.typelevel.doobie.implicits.*
+import org.typelevel.doobie.util.log.LogHandler
+import org.typelevel.doobie.util.transactor.Transactor
 
 import java.nio.file.Files
 
@@ -29,11 +29,13 @@ trait RunWithDb {
   def withDb[F[*]: Fx: Async](
     testName: String
   )(test: Transactor[F] => F[Result]): F[Result] = {
-    Ce3Resource
+    implicit val useResource: UseResource[F] = Ce3UseResource.useResource[F]
+
+    ReleasableResource
       .fromAutoCloseable(effectOf(AutoDeletingFile(Files.createTempDirectory("pg-test").toFile)))
       .use { autoDeletingWorkingDir =>
         val workingDir = autoDeletingWorkingDir.file
-        Ce3Resource
+        ReleasableResource
           .fromAutoCloseable(
             effectOf(
               EmbeddedPostgres
