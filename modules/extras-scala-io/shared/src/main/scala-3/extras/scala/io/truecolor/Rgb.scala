@@ -133,7 +133,7 @@ object Rgb {
   def unsafeFromHexString(hex: String): Rgb =
     fromHexString(hex).fold(err => sys.error(err), identity)
 
-  def unapply(rgb: Rgb): Option[(Red, Green, Blue)] = Some((rgb.red, rgb.green, rgb.blue))
+  def unapply(rgb: Rgb): Some[(Red, Green, Blue)] = Some((rgb.red, rgb.green, rgb.blue))
 
   extension (rgb: Rgb) {
     def red: Rgb.Red     = Rgb.Red((rgb.value & Rgb.RedBits) >> 16)
