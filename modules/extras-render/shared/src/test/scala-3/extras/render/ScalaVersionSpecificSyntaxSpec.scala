@@ -79,7 +79,7 @@ object ScalaVersionSpecificSyntaxSpec {
     }
 
     given renderMyUnionType: Render[MyUnionType] with {
-      override def render(a: MyUnionType): String = a match {
+      override def render(a: MyUnionType): String = a.value match {
         case CaseA(n) => n.render
         case CaseB(name) => name.render
         case CaseC => "CaseC"

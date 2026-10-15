@@ -28,4 +28,4 @@ addSbtPlugin("io.kevinlee" % "sbt-devoops-github"    % sbtDevOopsVersion)
 
 addSbtPlugin("io.kevinlee" % "sbt-devoops-starter" % sbtDevOopsVersion)
 
-addSbtPlugin("org.typelevel" % "sbt-tpolecat" % "0.5.2")
+addSbtPlugin("org.typelevel" % "sbt-tpolecat" % "0.5.7")
