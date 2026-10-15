@@ -44,7 +44,8 @@ object RoundTripTesterSpec extends Properties {
           .log("something")
     } yield {
       RoundTripTester.roundTripTest(something, 2) match {
-        case Result.Failure(actual) =>
+        case Result.Failure(actualLogs) =>
+          val actual = actualLogs.filterNot(_.isInstanceOf[core.SourceLocation])
           import io.circe.syntax._
           val json = something.asJson
           Decoder[SomethingWithCustomDecoding].decodeJson(json) match {
@@ -86,7 +87,8 @@ object RoundTripTesterSpec extends Properties {
                      .log("something")
     } yield {
       RoundTripTester.roundTripTest(something, 2) match {
-        case Result.Failure(actual) =>
+        case Result.Failure(actualLogs) =>
+          val actual = actualLogs.filterNot(_.isInstanceOf[core.SourceLocation])
           import io.circe.syntax._
 
           val err = io
