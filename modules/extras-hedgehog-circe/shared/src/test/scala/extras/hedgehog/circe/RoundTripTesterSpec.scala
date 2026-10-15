@@ -44,7 +44,7 @@ object RoundTripTesterSpec extends Properties {
           .log("something")
     } yield {
       RoundTripTester.roundTripTest(something, 2) match {
-        case Result.Failure(actual) =>
+        case Result.Failure(core.SourceLocation(_) :: actual) =>
           import io.circe.syntax._
           val json = something.asJson
           Decoder[SomethingWithCustomDecoding].decodeJson(json) match {
@@ -73,6 +73,9 @@ object RoundTripTesterSpec extends Properties {
               Result.failure.log(s"Decoding ${json.spaces2} for testing failed with error: ${err.show}.")
           }
 
+        case Result.Failure(other) =>
+          Result.failure.log(s"Expected the first log to be a SourceLocation but got: $other")
+
         case Result.Success =>
           Result.failure.log("Test failure was expected but it succeeded.")
       }
@@ -86,7 +89,7 @@ object RoundTripTesterSpec extends Properties {
                      .log("something")
     } yield {
       RoundTripTester.roundTripTest(something, 2) match {
-        case Result.Failure(actual) =>
+        case Result.Failure(core.SourceLocation(_) :: actual) =>
           import io.circe.syntax._
 
           val err = io
@@ -98,6 +101,9 @@ object RoundTripTesterSpec extends Properties {
           actual ==== List(
             core.Info(RoundTripTester.decodeFailureMessage(something, json, err, io.circe.Printer.spaces2))
           )
+        case Result.Failure(other) =>
+          Result.failure.log(s"Expected the first log to be a SourceLocation but got: $other")
+
         case Result.Success =>
           Result.failure.log("Test failure was expected but it succeeded.")
       }
